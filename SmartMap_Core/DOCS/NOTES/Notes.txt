@@ -1,0 +1,71 @@
+Version 0.50 (Alpha)								--=SmartMap=--
+																
+																													
+SmartMap is originally designed for use with the Axiom3D project and might be ported later to a C++ project depending
+how well something like Boost Graph Library would convert.
+Mainly this is an attempt to be Object Orientated and efficient using the QuickGraph library and other pathfinding libraries
+and too create a useful automation/procedural device for hardware and software environments.
+(an A.I SceneManeger relying heavily on QuickGraph which was inspired originally by the C++ Boost Graph Library).
+It also uses the Wintillect.PowerCollections library for the MultiDictionary class.
+
+(Installation)
+This will compile with .NET 3.5 and above installed. Visual Studio 2008. The latest Managed DirectX SDK should be installed
+for compiling. Basic DX update for the binary release.
+- Unzip the SmartMap source code into your selected location on disk.
+- If needed, redo references to the /SmartMap/Library/ dll files on your disk.
+- If needed, link references in the EngineConfig.xml and Terrain.xml located in the Debug and Release folders.
+	(Links should point to the Media folder.)
+#### CHECK AxiomExample.log FOR ERRORS #########
+
+(Links)
+Peli's Farm on QuickGraph maze creation:
+http://blog.dotnetwiki.org/SearchView.aspx?q=maze
+IBM aims to make chips more autonomous
+http://news.com.com/IBM+aims+to+make+chips+more+autonomous/2100-1006_3-5290809.html?tag=nefd.top
+'Brain' In A Dish Acts As Autopilot, Living Computer
+http://www.sciencedaily.com/releases/2004/10/041022104658.htm
+
+UPGRADE INFO:
+# This a a pure Alpha release. Most stuff intended for SmartMap final is working but it's buggy for now.
+# Fully upgraded QuickGraph for .NET 3.5 using Generics
+# Recognition of outer wall meshes. NearbyEdgesEmpty() can be set to recognize more meshes. Keep experimenting.
+# A third Y height added to the Vertex struct and hence SmartMap is now fully 3D.
+# FLOAT and INT32 are being used for Point and Vector structs to have a 2D and 3D element for the prime Generic for more accuracy and speed.
+# Automated terrain deformation is now in using Set HeightAt(). Terrain is re-molded but not re-loaded through LoadWorldGeometry()
+	as that makes it almost black. Needs to be fixed, even for planet to planet terrain changes. 
+# Check the SmartMap thread on the Axion boards for SetHeightAt() code release. Should be implemented in next releases of Axiom Crickhollow later.
+
+DONE:
+# Y-Height aspect added for Vertex navigation.
+# AI Pathfinding is in although a little buggy with the rotation and terrain navigation.
+# Automated terrain deformation is now in!
+# Updated to QuickGraph w/Generics (.NET 3.5)
+# Outer and inner wall recognition plus more 
+# Octree type terrain. Can be used for zoning as well.
+# Complex GUI
+# Random flat (X, Z) mesh creation in an organized way (a labyrinth using about 5-10 different meshes to create rooms and walls)
+# Random structures wrap around terrain with added UI settings support.
+# A paging 3D labyrinth creator that is infinite. (uses QuickGraph for maze creation).
+# A complete basic 2D GDI+ based graphics engine. Used as a GUI right now for maze and location detection.
+
+TODO:
+# Automatic terrain deformation reload needs to be fixed. Molding could be better as triangles are too large in some areas to mold well.
+# Mesh batching is in for the next Crickhollow release of SmartMap
+# Add better 'minimalist' error handling
+# Zones will be created from Octree Nodes.
+# Add in XML support for saving and loading of maps.
+# Only dynamically load in meshes that are dynamic as you move for Draw4D. This will include items and NPCs.
+# Use CEGUI and Render To Texture for aspects of Draw2D.
+# Add more media types in Draw4D to associate with types found in other open source projects. 
+
+Check out the Axiom3D boards as well!
+
+For questions, updates, and downloads goto: www.codeplex.com/smartmap and the Axiom3D boards.
+
+QuickGraph is provided within the MbUnit Framework.
+http://www.codeplex.com/quickgraph
+http://www.testdriven.net
+
+Made by:
+Mark V Madsen
+(ioncycle)

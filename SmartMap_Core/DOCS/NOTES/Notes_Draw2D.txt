@@ -1,0 +1,38 @@
+Version 0.38 (Alpha - UNSTABLE)					-=The Dream Machine=-
+
+
+The Draw2D class consists of a 2D graphical readout for SmartMap as well as a 2D graphics engine 
+started called: "The Dream Machine"
+
+(Installation)
+Not working now for induvidual installation on its own. 
+
+The Readout panel displays the last created 3D tile-set
+
+		TileSets 
+-------------------
+|			|			|
+|			|			|
+|	  1	    |	  2 	|
+|			|			|
+-------------------
+|			|			|
+|			|			|
+|	  3 	|	  4	    |
+|			|			|
+-------------------
+For Zones: (with zones 1 to 36)
+
+"The Dream Machine" is the creation of Mark Madsen ominysteriously known as "ioncycle." No Bitmaps are utilized in this program.
+It is strictly based off of GDI+ Graphics Path.
+
+TODO:
+- Look at Paint.NET sourcecode to see how to splice a canonocial spline into 2 splines easily
+This so the path can break apart easily creating multiple Splines for a fluid enviromnet.
+- Have Spline bend where it hits and then break when it reaches a certain tension point according
+to the malleability set for the graphics object.
+
+www.codeplex.com/smartmap
+
+Mark V Madsen
+(ioncycle)

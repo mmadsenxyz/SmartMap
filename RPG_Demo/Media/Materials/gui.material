@@ -1,0 +1,610 @@
+material GUI/CursorFree
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture CursorFree.png
+			}
+		}
+	}
+}
+material GUI/CursorOver
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture CursorOver.png
+			}
+		}
+	}
+}
+material GUI/PanelDebug
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture PanelDebug.png
+			}
+		}
+	}
+}
+material GUI/PanelCharacters
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture PanelCharacters.png
+				//scroll_anim 0.01 0.01
+			}
+		}
+	}
+}
+
+material GUI/PanelConsole
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture PanelConsole.png
+			}
+		}
+	}
+}
+
+material GUI/PanelSkills
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture PanelSkills.png
+			}
+		}
+	}
+}
+
+material GUI/SelectionButtonMedium
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture SelectionButtonMedium.png
+			}
+		}
+	}
+}
+
+material GUI/SelectionCheckboxMedium
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture SelectionCheckboxMedium.png
+			}
+		}
+	}
+}
+
+material GUI/ButtonMenuInventory
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture ButtonMenuInventory.png
+			}
+		}
+	}
+}
+
+material GUI/ButtonMenuMap
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture ButtonMenuMap.png
+			}
+		}
+	}
+}
+
+material GUI/ButtonMenuOptions
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture ButtonMenuOptions.png
+			}
+		}
+	}
+}
+
+material GUI/ButtonSkillHandDefault
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture ButtonSkillHandDefault.png
+			}
+		}
+	}
+}
+
+material GUI/ButtonSkillFootDefault
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture ButtonSkillFootDefault.png
+			}
+		}
+	}
+}
+
+material GUI/ButtonSkillAttackDefault
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture ButtonSkillAttackDefault.png
+			}
+		}
+	}
+}
+
+material GUI/ButtonSkillDefendDefault
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture ButtonSkillDefendDefault.png
+			}
+		}
+	}
+}
+
+material GUI/ButtonSkillTalkDefault
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture ButtonSkillTalkDefault.png
+			}
+		}
+	}
+}
+
+material GUI/ButtonSkillDefault
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture ButtonSkillDefault.png
+			}
+		}
+	}
+}
+
+material GUI/ButtonLevelNow
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture ButtonLevelNow.png
+			}
+		}
+	}
+}
+
+material GUI/ButtonLevelUp
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture ButtonLevelUp.png
+			}
+		}
+	}
+}
+
+material GUI/ButtonStatDefault
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture ButtonStatDefault.png
+			}
+		}
+	}
+}
+
+material GUI/ButtonStatStrength
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture ButtonStatStrength.png
+			}
+		}
+	}
+}
+
+material GUI/ButtonStatVitality
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture ButtonStatVitality.png
+			}
+		}
+	}
+}
+
+material GUI/ButtonStatAgility
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture ButtonStatAgility.png
+			}
+		}
+	}
+}
+
+material GUI/ButtonStatCharm
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture ButtonStatCharm.png
+			}
+		}
+	}
+}
+
+
+material GUI/PanelTooltipBorder
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture PanelTooltipBorder.png
+			}
+		}
+	}
+}
+
+material GUI/PanelTooltipCenter
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture PanelToolTipR2C2.png
+			}
+		}
+	}
+}
+
+material GUI/PanelTooltipTopLeft
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture PanelToolTipR1C1.png
+			}
+		}
+	}
+}
+
+material GUI/PanelTooltipTop
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture PanelToolTipR1C2.png
+			}
+		}
+	}
+}
+
+material GUI/PanelTooltipTopRight
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture PanelToolTipR1C3.png
+			}
+		}
+	}
+}
+
+material GUI/PanelTooltipLeft
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture PanelToolTipR2C1.png
+			}
+		}
+	}
+}
+
+material GUI/PanelTooltipRight
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture PanelToolTipR2C3.png
+			}
+		}
+	}
+}
+
+material GUI/PanelTooltipBottomLeft
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture PanelToolTipR3C1.png
+			}
+		}
+	}
+}
+
+material GUI/PanelTooltipBottom
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture PanelToolTipR3C2.png
+			}
+		}
+	}
+}
+
+material GUI/PanelTooltipBottomRight
+{
+	technique
+	{
+		pass
+		{
+			lighting off
+			scene_blend alpha_blend
+			depth_check off
+
+			texture_unit
+			{
+				texture PanelToolTipR3C3.png
+			}
+		}
+	}
+}

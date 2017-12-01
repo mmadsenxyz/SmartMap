@@ -1,0 +1,16 @@
+material RPG/Floor/Indoor/Wood01
+{
+	technique
+	{
+		pass
+		{
+			hardware_culling none
+			software_culling none
+
+			texture_unit
+			{
+				texture Texture_Floor_Wood_01.png
+			}
+		}
+	}
+}

@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="SmartMap.Draw2D">
+    <Position X="2.5" Y="1.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>xAQApAEAgiAF0GIAgACAJAAOQBCAcAAWIyAAAADrAUQ=</HashCode>
+      <FileName>Graphics\Draw2D\Draw2D.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmartMap.Draw4D">
+    <Position X="6" Y="1.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAQCgAgAAAAAEAQAAAIECA=</HashCode>
+      <FileName>Graphics\Draw4D\Draw4D.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmartMap.SmartMap_Core">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAhIQAgAAQBCAEAAAAAOJAGAAEAAAACYQARBIgEYg=</HashCode>
+      <FileName>SmartMap_Core.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SmartMap.EngineSetup" Collapsed="true">
+    <Position X="4.25" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>gAACAAAASLAEICAKAABQACEANAAAAAsACggmiEEEMQY=</HashCode>
+      <FileName>EngineSetup.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="SmartMap.Draw3D" BaseTypeListCollapsed="true">
+    <Position X="4.25" Y="1.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>CDYAoAIFAJAyAAAABABMYAACYBpCUAqQBCAICBAAoQM=</HashCode>
+      <FileName>Graphics\Draw3D\Draw3D.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Orientation="Bottom" Position="0.372" Collapsed="true" />
+  </Class>
+  <Interface Name="SmartMap.IDraw">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAAAA=</HashCode>
+      <FileName>Graphics\IDraw.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Tahoma" Size="8.25" />
+</ClassDiagram>

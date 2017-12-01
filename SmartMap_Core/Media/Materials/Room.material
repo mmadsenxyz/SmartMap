@@ -1,0 +1,13 @@
+material TileSet/Room	
+{
+    technique
+	{
+		pass
+		{
+			texture_unit
+			{
+				texture Concrete.jpg
+			}
+		}
+	}
+}
