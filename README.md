@@ -1,6 +1,5 @@
-# smartmap
+# SmartMap
 SmartMap
-A World / An AI / A Game. Please help contribute
-I am also working on organizing the project
+SmartMap is an easy desktop random world creator
 Thank you
 Mark V Madsen
