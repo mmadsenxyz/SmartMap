@@ -98,16 +98,17 @@ namespace SmartMap
             // Here we adjust a bit yet so user value tweaking that is part of the demo 
             // doesn't clip the object immediately
             float nearDist = GetNearClippingDistance(_areaHeight, Camera.FieldOfView);
-            
+
             Camera.Position = Vector3.UnitZ * (nearDist + 300);
             Camera.LookAt(Vector3.Zero);
             Camera.ProjectionType = Axiom.Graphics.Projection.Orthographic;
 
             // init variable
-            _fov = Utility.RadiansToDegrees(Camera.FieldOfView);        
+            //_fov = Utility.RadiansToDegrees(Camera.FieldOfView);
+            _fov = Convert.ToSingle(Camera.FieldOfView * (180 / Math.PI));
         }
 
-        protected override bool OnFrameStarted(object source, FrameEventArgs e)
+        protected override void OnFrameStarted(object source, FrameEventArgs e)
         {
             Input.Capture();
 
@@ -134,7 +135,7 @@ namespace SmartMap
 
             debugText = "FOV=" + _fov + " Near=" + Camera.Near + " AreaHeight=" + _areaHeight;
 
-            return base.OnFrameStarted(source, e);
+            //return base.OnFrameStarted(source, e);
         }
 
         private float GetNearClippingDistance(float areaHeight, float fovInRadians)
@@ -157,19 +158,22 @@ namespace SmartMap
 
             return aabb;
         }
-        
+
         [STAThread]
         public static void Main()
         {
             //Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
 
-            try {
-                using (Draw3D d3d = new Draw3D()) {
+            try
+            {
+                using (Draw3D d3d = new Draw3D())
+                {
                     d3d.Run();
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 Debug.Assert(false, ex.ToString(), Environment.StackTrace.ToString());
             }
         }
