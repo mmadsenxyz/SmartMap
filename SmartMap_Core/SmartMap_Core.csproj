@@ -519,6 +519,9 @@
     <Reference Include="Axiom.RenderSystems.DirectX9">
       <HintPath>Libraries\Axiom.RenderSystems.DirectX9.dll</HintPath>
     </Reference>
+    <Reference Include="Axiom">
+      <HintPath>Libraries\Axiom.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Libraries\" />
