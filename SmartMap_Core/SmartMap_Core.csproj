@@ -10,7 +10,6 @@
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
-    <DelaySign>false</DelaySign>
     <OutputType>Exe</OutputType>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
@@ -431,51 +430,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Axiom, Version=0.8.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Axiom.Platforms.Win32, Version=0.8.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Axiom.Plugins.CgProgramManager, Version=0.8.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Axiom.Plugins.DevILCodecs, Version=0.8.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Axiom.Plugins.ParticleFX, Version=0.8.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Axiom.RenderSystems.DirectX9, Version=0.8.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Axiom.RenderSystems.OpenGL.Win32, Version=0.8.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Axiom.SceneManagers.Bsp, Version=0.8.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Axiom.SceneManagers.Octree, Version=0.8.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.84.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.DirectX, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.DirectX.Direct3D, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.DirectX.DirectDraw, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.DirectX.DirectInput, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.DirectX.DirectSound, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
     <Reference Include="PowerCollections, Version=1.0.2141.24679, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\PowerCollections.dll</HintPath>
@@ -493,6 +447,78 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
+    <Reference Include="Axiom.Framework">
+      <HintPath>Libraries\Axiom.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="Axiom.Platforms.OpenTK">
+      <HintPath>Libraries\Axiom.Platforms.OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="Axiom.Platforms.SDL">
+      <HintPath>Libraries\Axiom.Platforms.SDL.dll</HintPath>
+    </Reference>
+    <Reference Include="Axiom.Platforms.Win32">
+      <HintPath>Libraries\Axiom.Platforms.Win32.dll</HintPath>
+    </Reference>
+    <Reference Include="Axiom.Plugins.CGProgramManager">
+      <HintPath>Libraries\Axiom.Plugins.CGProgramManager.dll</HintPath>
+    </Reference>
+    <Reference Include="Axiom.Plugins.DevILCodecs">
+      <HintPath>Libraries\Axiom.Plugins.DevILCodecs.dll</HintPath>
+    </Reference>
+    <Reference Include="Axiom.Plugins.FreeImageCodecs">
+      <HintPath>Libraries\Axiom.Plugins.FreeImageCodecs.dll</HintPath>
+    </Reference>
+    <Reference Include="Axiom.Plugins.OctreeZone">
+      <HintPath>Libraries\Axiom.Plugins.OctreeZone.dll</HintPath>
+    </Reference>
+    <Reference Include="Axiom.Plugins.ParticleFX">
+      <HintPath>Libraries\Axiom.Plugins.ParticleFX.dll</HintPath>
+    </Reference>
+    <Reference Include="Axiom.Plugins.SystemDrawingCodecs">
+      <HintPath>Libraries\Axiom.Plugins.SystemDrawingCodecs.dll</HintPath>
+    </Reference>
+    <Reference Include="Axiom.RenderSystems.OpenGL">
+      <HintPath>Libraries\Axiom.RenderSystems.OpenGL.dll</HintPath>
+    </Reference>
+    <Reference Include="Axiom.RenderSystems.OpenGL.Sdl">
+      <HintPath>Libraries\Axiom.RenderSystems.OpenGL.Sdl.dll</HintPath>
+    </Reference>
+    <Reference Include="Axiom.RenderSystems.OpenGL.Win32">
+      <HintPath>Libraries\Axiom.RenderSystems.OpenGL.Win32.dll</HintPath>
+    </Reference>
+    <Reference Include="Axiom.SceneManagers.BSP">
+      <HintPath>Libraries\Axiom.SceneManagers.BSP.dll</HintPath>
+    </Reference>
+    <Reference Include="Axiom.SceneManagers.Octree">
+      <HintPath>Libraries\Axiom.SceneManagers.Octree.dll</HintPath>
+    </Reference>
+    <Reference Include="Axiom.SceneManagers.PortalConnected">
+      <HintPath>Libraries\Axiom.SceneManagers.PortalConnected.dll</HintPath>
+    </Reference>
+    <Reference Include="FreeImageNET">
+      <HintPath>Libraries\FreeImageNET.dll</HintPath>
+    </Reference>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>Libraries\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Interop.Shell32">
+      <HintPath>Libraries\Interop.Shell32.dll</HintPath>
+    </Reference>
+    <Reference Include="OctreeZone">
+      <HintPath>Libraries\OctreeZone.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.Compatibility">
+      <HintPath>Libraries\OpenTK.Compatibility.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK">
+      <HintPath>Libraries\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl">
+      <HintPath>Libraries\OpenTK.GLControl.dll</HintPath>
+    </Reference>
+    <Reference Include="Axiom.RenderSystems.DirectX9">
+      <HintPath>Libraries\Axiom.RenderSystems.DirectX9.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Libraries\" />
