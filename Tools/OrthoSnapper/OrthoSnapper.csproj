@@ -148,6 +148,15 @@
     <Reference Include="Tao.Sdl">
       <HintPath>Lib\Tao.Sdl.dll</HintPath>
     </Reference>
+    <Reference Include="SharpInputSystem.Core">
+      <HintPath>Lib\SharpInputSystem.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpInputSystem">
+      <HintPath>Lib\SharpInputSystem.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpInputSystem.X11">
+      <HintPath>Lib\SharpInputSystem.X11.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="OrthoSnapper.cs" />
