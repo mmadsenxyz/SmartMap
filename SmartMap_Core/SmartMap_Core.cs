@@ -232,7 +232,8 @@ namespace SmartMap
             this.pop.StateChanged += new EventHandler(this.StateStatus);
           
             try { // create a Random Tree Maze with exit root. Creates new edges for you.
-                pop.RandomTreeWithRootBranch(new Point<int>(branchX, branchZ), new Point<int>(rootX, rootZ));           
+                //pop.RandomTreeWithRootBranch(new Point<int>(branchX, branchZ), new Point<int>(rootX, rootZ));  
+                pop.RandomTreeWithRoot(new Point<int>(branchX, branchZ));
             }
             catch (Exception ex) {
                     Console.WriteLine("{0} Module couldn't be searched... SKIPPING", ex.ToString());

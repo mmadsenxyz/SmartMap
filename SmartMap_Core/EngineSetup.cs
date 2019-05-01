@@ -42,7 +42,7 @@ namespace SmartMap
         {
             _currentSystem = Root.Instance.RenderSystems[0];
             _renderSystems = new ConfigOption("Render System", _currentSystem.Name, false);
-            foreach (Axiom.Framework.Configuration.RenderSystem rs in Root.Instance.RenderSystems)
+            foreach (Axiom.Graphics.RenderSystem rs in Root.Instance.RenderSystems)
             {
                 _renderSystems.PossibleValues.Add(_renderSystems.PossibleValues.Count, rs.ToString());
             }
