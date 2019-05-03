@@ -13,7 +13,6 @@ using Axiom.Math;
 using Axiom.Graphics;
 using Axiom.Platforms.OpenTK;
 using MouseButtons = Axiom.Input.MouseButtons;
-using Axiom.Framework.Configuration;
 
 namespace SmartMap
 {

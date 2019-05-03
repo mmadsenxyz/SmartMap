@@ -85,7 +85,7 @@ namespace SmartMap
         protected override void CreateScene()
         {
             CreateEnvironment();
-
+            /*
             // =Draw 3D= - SmartMap's 3D window (Axiom3D)            
             // ==== WARNING :: Keep 'count' variables consistant with resource number changes 
             CreateGraphics(interiorTile, "Room_Side", "Room_Side.mesh", "TileSet/Room", 4000, 4000, true);
@@ -102,7 +102,7 @@ namespace SmartMap
 
             // for loops creating new settings for each tile-set - add 2 more tiles for map perimeter
             CreateObjects(tileSetDispersion, this.tileAmountNorth, this.tileAmountEast, tilesetNorth, tilesetEast);
-
+            */
             // =Draw 4D= - For dynamic objects in scene
             // TODO: set up clipping regions for 4 tileSets
             this.d4d = new Draw4D(SceneManager);
@@ -164,6 +164,29 @@ namespace SmartMap
 
             MaterialManager.Instance.SetDefaultTextureFiltering(TexFilter);
             MaterialManager.Instance.DefaultAnisotropy = anisoNumber;
+            // water plane setup
+            Plane waterPlane = new Plane(Vector3.UnitY, 1.5f);
+
+            MeshManager.Instance.CreatePlane(
+                                             "WaterPlane",
+                                             ResourceGroupManager.DefaultResourceGroupName,
+                                             waterPlane,
+                                             2800, 2800,
+                                             20, 20,
+                                             true, 1,
+                                             10, 10,
+                                             Vector3.UnitZ);
+
+            Entity waterEntity = SceneManager.CreateEntity("Water", "WaterPlane");
+            waterEntity.MaterialName = "Terrain/WaterPlane";
+
+            var waterNode = SceneManager.RootSceneNode.CreateChildSceneNode("WaterNode");
+            waterNode.AttachObject(waterEntity);
+            waterNode.Translate(new Vector3(1000, 0, 1000));
+
+            this.frustumNode.Position = new Vector3(128, 25, 128);
+            Camera.LookAt(new Vector3(0, 0, -300));
+            
         }
 
         /// <summary>

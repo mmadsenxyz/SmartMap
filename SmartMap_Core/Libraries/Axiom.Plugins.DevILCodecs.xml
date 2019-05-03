@@ -1,0 +1,241 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Axiom.Plugins.DevILCodecs</name>
+    </assembly>
+    <members>
+        <member name="T:Axiom.Plugins.DevILCodecs.BMPCodec">
+            <summary>
+               BMP image file codec.
+            </summary>
+        </member>
+        <member name="M:Axiom.Plugins.DevILCodecs.BMPCodec.Encode(System.IO.Stream,System.IO.Stream,System.Object[])">
+             <summary>
+            
+             </summary>
+             <param name="source"></param>
+             <param name="dest"></param>
+             <param name="args"></param>
+        </member>
+        <member name="P:Axiom.Plugins.DevILCodecs.BMPCodec.Type">
+            <summary>
+               Returns the BMP file extension.
+            </summary>
+        </member>
+        <member name="P:Axiom.Plugins.DevILCodecs.BMPCodec.ILType">
+            <summary>
+               Returns BMP enum.
+            </summary>
+        </member>
+        <member name="T:Axiom.Plugins.DevILCodecs.DDSCodec">
+            <summary>
+               Microsoft's DDS file format codec.
+            </summary>
+        </member>
+        <member name="P:Axiom.Plugins.DevILCodecs.DDSCodec.ILType">
+            <summary>
+               DDS enum value.
+            </summary>
+        </member>
+        <member name="P:Axiom.Plugins.DevILCodecs.DDSCodec.Type">
+            <summary>
+               Returns that this codec handles dds files.
+            </summary>
+        </member>
+        <member name="T:Axiom.Plugins.DevILCodecs.ILImageCodec">
+            <summary>
+               Base DevIL (OpenIL) implementation for loading images.
+            </summary>
+        </member>
+        <member name="F:Axiom.Plugins.DevILCodecs.ILImageCodec.isInitialized">
+            <summary>
+               Flag used to ensure DevIL gets initialized once.
+            </summary>
+        </member>
+        <member name="M:Axiom.Plugins.DevILCodecs.ILImageCodec.InitializeIL">
+            <summary>
+               One time DevIL initialization.
+            </summary>
+        </member>
+        <member name="P:Axiom.Plugins.DevILCodecs.ILImageCodec.ILType">
+            <summary>
+               Implemented by subclasses to return the IL type enum value for this
+               images file type.
+            </summary>
+        </member>
+        <member name="T:Axiom.Plugins.DevILCodecs.ILUtil.ILFormat">
+            <summary>
+            Structure that encapsulates a devIL image format definition
+            </summary>
+        </member>
+        <member name="P:Axiom.Plugins.DevILCodecs.ILUtil.ILFormat.Channels">
+            <summary>
+            Number of channels, usually 3 or 4
+            </summary>
+        </member>
+        <member name="P:Axiom.Plugins.DevILCodecs.ILUtil.ILFormat.Format">
+            <summary>
+            IL_RGBA,IL_BGRA,IL_DXTx, ...
+            </summary>
+        </member>
+        <member name="P:Axiom.Plugins.DevILCodecs.ILUtil.ILFormat.Type">
+            <summary>
+            IL_UNSIGNED_BYTE, IL_UNSIGNED_SHORT, ... may be -1 for compressed formats
+            </summary>
+        </member>
+        <member name="M:Axiom.Plugins.DevILCodecs.ILUtil.ILFormat.#ctor">
+            <summary>
+            Construct an invalidated ILFormat structure
+            </summary>
+        </member>
+        <member name="M:Axiom.Plugins.DevILCodecs.ILUtil.ILFormat.#ctor(System.Int32,System.Int32)">
+            <summary>
+            Construct a ILFormat from parameters
+            </summary>
+            <param name="channels"></param>
+            <param name="format"></param>
+        </member>
+        <member name="M:Axiom.Plugins.DevILCodecs.ILUtil.ILFormat.#ctor(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Construct a ILFormat from parameters
+            </summary>
+            <param name="channels"></param>
+            <param name="format"></param>
+            <param name="type"></param>
+        </member>
+        <member name="P:Axiom.Plugins.DevILCodecs.ILUtil.ILFormat.IsValid">
+            <summary>
+            Return wether this structure represents a valid DevIL format
+            </summary>
+        </member>
+        <member name="M:Axiom.Plugins.DevILCodecs.ILUtil.Convert(Axiom.Media.PixelFormat)">
+            <summary>
+               Converts a PixelFormat enum to a pair with DevIL format enum and bytesPerPixel.
+            </summary>
+            <param name="format"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Axiom.Plugins.DevILCodecs.ILUtil.Convert(System.Int32,System.Int32)">
+            <summary>
+               Converts a DevIL format enum to a PixelFormat enum.
+            </summary>
+            <param name="format"></param>
+            <param name="bytesPerPixel"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Axiom.Plugins.DevILCodecs.ILUtil.ILabs(System.Int32)">
+            Utility function to convert IL data types to UNSIGNED_
+        </member>
+        <member name="T:Axiom.Plugins.DevILCodecs.JPGCodec">
+            <summary>
+               JPG image file codec.
+            </summary>
+        </member>
+        <member name="M:Axiom.Plugins.DevILCodecs.JPGCodec.Decode(System.IO.Stream,System.IO.Stream,System.Object[])">
+            <summary>
+               Passthrough implementation, no special code needed.
+            </summary>
+            <param name="input"></param>
+            <param name="output"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Axiom.Plugins.DevILCodecs.JPGCodec.Encode(System.IO.Stream,System.IO.Stream,System.Object[])">
+             <summary>
+            
+             </summary>
+             <param name="source"></param>
+             <param name="dest"></param>
+             <param name="args"></param>
+        </member>
+        <member name="P:Axiom.Plugins.DevILCodecs.JPGCodec.Type">
+            <summary>
+               Returns the JPG file extension.
+            </summary>
+        </member>
+        <member name="P:Axiom.Plugins.DevILCodecs.JPGCodec.ILType">
+            <summary>
+               Returns JPG enum.
+            </summary>
+        </member>
+        <member name="T:Axiom.Plugins.DevILCodecs.Plugin">
+            <summary>
+               Main plugin class.
+            </summary>
+        </member>
+        <member name="M:Axiom.Plugins.DevILCodecs.Plugin.Initialize">
+            <summary>
+               Called when the plugin is started.
+            </summary>
+        </member>
+        <member name="M:Axiom.Plugins.DevILCodecs.Plugin.Shutdown">
+            <summary>
+               Called when the plugin is stopped.
+            </summary>
+        </member>
+        <member name="T:Axiom.Plugins.DevILCodecs.PNGCodec">
+            <summary>
+               PNG image file codec.
+            </summary>
+        </member>
+        <member name="M:Axiom.Plugins.DevILCodecs.PNGCodec.Decode(System.IO.Stream,System.IO.Stream,System.Object[])">
+            <summary>
+               Passthrough implementation, no special code needed.
+            </summary>
+            <param name="input"></param>
+            <param name="output"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Axiom.Plugins.DevILCodecs.PNGCodec.Encode(System.IO.Stream,System.IO.Stream,System.Object[])">
+             <summary>
+            
+             </summary>
+             <param name="source"></param>
+             <param name="dest"></param>
+             <param name="args"></param>
+        </member>
+        <member name="P:Axiom.Plugins.DevILCodecs.PNGCodec.Type">
+            <summary>
+               Returns the PNG file extension.
+            </summary>
+        </member>
+        <member name="P:Axiom.Plugins.DevILCodecs.PNGCodec.ILType">
+            <summary>
+               Returns PNG enum.
+            </summary>
+        </member>
+        <member name="T:Axiom.Plugins.DevILCodecs.TGACodec">
+            <summary>
+               TGA image file codec.
+            </summary>
+        </member>
+        <member name="M:Axiom.Plugins.DevILCodecs.TGACodec.Decode(System.IO.Stream,System.IO.Stream,System.Object[])">
+            <summary>
+               Passthrough implementation, no special code needed.
+            </summary>
+            <param name="input"></param>
+            <param name="output"></param>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Axiom.Plugins.DevILCodecs.TGACodec.Encode(System.IO.Stream,System.IO.Stream,System.Object[])">
+             <summary>
+            
+             </summary>
+             <param name="source"></param>
+             <param name="dest"></param>
+             <param name="args"></param>
+        </member>
+        <member name="P:Axiom.Plugins.DevILCodecs.TGACodec.Type">
+            <summary>
+               Returns the JPG file extension.
+            </summary>
+        </member>
+        <member name="P:Axiom.Plugins.DevILCodecs.TGACodec.ILType">
+            <summary>
+               Returns JPG enum.
+            </summary>
+        </member>
+    </members>
+</doc>
