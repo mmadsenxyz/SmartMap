@@ -805,7 +805,7 @@ namespace SmartMap
         protected override void OnFrameStarted(object source, FrameEventArgs e)
         {
             //timeSinceLastFrame = e.TimeSinceLastFrame;
-
+            base.OnFrameStarted(source, e);
             #region Camera Clipping Events and CREATING PATHS
             /*
                 // ZONE SYSTEM (dependant on pure engine coordinates)
