@@ -139,7 +139,6 @@
     <Compile Include="SmartMap_Core.cs">
       <SubType>Code</SubType>
     </Compile>
-    <None Include="app.config" />
     <None Include="ClassDiagram.cd" />
     <None Include="DOCS\PowerCollections.chm" />
     <None Include="DOCS\QuickGraph.Documentation.chm" />
