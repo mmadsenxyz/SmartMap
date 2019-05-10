@@ -117,7 +117,7 @@ namespace SmartMap
             
             if (type == "TILESET")
             { 
-                // initialize MultiDictionary for easier tileset creation   
+                // initialize GLOABAL MultiDictionary to be used each time creating or manipulating tilset
                 this.md = new MultiDictionary<Point<int>, Edge<Point<int>>>(true);
                 foreach (Edge<Point<int>> e in this.graph.Edges)
                 {      
@@ -189,16 +189,20 @@ namespace SmartMap
         /// <param name="rootZ">Root z: Must be less than tileAmount</param>
         public bool GeneratePath(string type, bool automated, int branchX, int branchZ, int rootX, int rootZ)
         {
+            //Console.WriteLine("Vertex: {0} is the entrence for this module", this.pointFirst); // TODO
+            Console.WriteLine("Point: {0} : {1} is the entrance for this module", rootX, rootZ);
+            //Console.WriteLine("Vertex: {0} : {1} is the exit for this module", branchX, branchZ);
+
             this.vedSuccessors = new Dictionary<Point<int>, Edge<Point<int>>>();
                             
             // create cross edges for better maze making 
-            foreach (Edge<Point<int>> e in this.graph.Edges) {  
+            /*foreach (Edge<Point<int>> e in this.graph.Edges) {  
                 this.edge = new Edge<Point<int>>(e.Target, e.Source);
                 this.graph.AddEdge(edge);
-             }
+             }*/
              
              if (automated) {
-                // find a branch(entrance) and root(exit) that exists on the borders
+                // find a branch(entrence) and root(exit) that exists on the borders
                 int tick = 0;
                 foreach (Point<int> v in this.graph.Vertices) {   
                     if (this.graph.ContainsVertex(v) & this.graph.Degree(v) > 0) { // if it has edges
@@ -216,53 +220,64 @@ namespace SmartMap
                 }
             }
             // fill in the entrance vertex for searcher
-            pointFirst.Width = branchX;
-            pointFirst.Length = branchZ;
+            pointFirst.Width = rootX;
+            pointFirst.Length = rootZ;
             
-             // weight the out-edges
-            Dictionary<Edge<Point<int>>, double> weights = new Dictionary<Edge<Point<int>>, double>();
+             // weight the out-edges - POSSIBILITY
+            /*Dictionary<Edge<Point<int>>, double> weights = new Dictionary<Edge<Point<int>>, double>();
             foreach (Edge<Point<int>> e in this.graph.Edges) {
                 weights[e] = 4;
-            }
+            }*/
             
             // maze with path from the uniform graph            
-            this.pop = new CyclePoppingRandomTreeAlgorithm<Point<int>, Edge<Point<int>>>
-                (this.graph);//, new WeightedMarkovEdgeChain<Point<int>, Edge<Point<int>>>(weights));
+            this.pop = new CyclePoppingRandomTreeAlgorithm<Point<int>, Edge<Point<int>>>(this.graph);
+                //, new WeightedMarkovEdgeChain<Point<int>, Edge<Point<int>>>(weights));
                 
             this.pop.StateChanged += new EventHandler(this.StateStatus);
           
             try { // create a Random Tree Maze with exit root. Creates new edges for you.
                 //pop.RandomTreeWithRootBranch(new Point<int>(branchX, branchZ), new Point<int>(rootX, rootZ));  
-                pop.RandomTreeWithRoot(new Point<int>(branchX, branchZ));
+                pop.RandomTreeWithRoot(new Point<int>(rootX, rootZ));    
             }
             catch (Exception ex) {
                     Console.WriteLine("{0} Module couldn't be searched... SKIPPING", ex.ToString());
                 return false;    
             }
-                Console.WriteLine("--------SEARCHING MODULE PATH-------");
-                Console.WriteLine("Vertex: {0}:{1} is the exit for this module", 9, 1);
             this.vedSuccessors = pop.Successors;
-        
-            // delete all edges before edge re-population 
+            Console.WriteLine("Initial Graph Edge Count is : {0}", graph.EdgeCount);
+            // delete all edges before edge re-population -- doesn't seem to be needed
             foreach (Point<int> v in this.graph.Vertices) {
                    this.graph.ClearEdges(v);
             }
+            Console.WriteLine("Cleared Graph Edge Count is : {0}", graph.EdgeCount);
 
-             if (type == "TILESET")
+            Console.WriteLine("Initial MD Edge Count is : {0}", this.md.Count);
+            Console.WriteLine("Initial MD Edges are : {0}", this.md.KeyValuePairs);
+            Console.WriteLine("VEDSuccesors Count : {0}", this.vedSuccessors.Count);
+
+
+            if (type == "TILESET")
             {
+                Console.WriteLine("--------Adding mazed RandomTreeWithRootBranch graph to dictionary--------");
                 // put graph in MultiDictionary for map creation (populate edges) 
                 foreach (Edge<Point<int>> e in this.vedSuccessors.Values)
                 {
                     if (e == null)   // if empty, skip and continue the edge search
+                    {
+                        Console.WriteLine("--------EDGE IS EMPTY--------");
                         continue;
-                        //Console.WriteLine("{0} was successfull.", e.ID); 
+                    }
+                    //Console.WriteLine("{0} was successfull.", e.ID); 
                     // grab these mazed vertex/edges for vertex/edge print-out in CreateTileset()
                     this.md.Add(e.Source, e); // out-edge
                     this.md.Add(e.Target, e); // in-edge
-                        //Console.WriteLine("Edge {0}", e.Target, e.Source);
+                    //Console.WriteLine("Edge {0}", e.Target, e.Source);
                     // redo the cleared graph with new random edges
                     this.graph.AddEdge(e);
                 }
+                Console.WriteLine("FINAL Graph Edge Count is : {0}", graph.EdgeCount);
+                Console.WriteLine("FINAL MD Edge Count is : {0}", this.md.Count);
+                Console.WriteLine("Final MD Edges are : {0}", this.md.KeyValuePairs);
             }
             
             if (type == "MAP")
@@ -288,9 +303,10 @@ namespace SmartMap
                     if (this.graph.ContainsVertex(new Point<int>(x, z)))
                         if (this.graph.Degree(new Point<int>(x, z)) == 0)
                             this.graph.RemoveVertex(new Point<int>(x, z));
-                   
+            Console.WriteLine("--------Cleaned up edgeless vertices--------");
+
             // GC.Collect(); // could probably be used. Not too slow.
-                        
+
             return true;
         }
 
@@ -301,10 +317,9 @@ namespace SmartMap
         /// <param name="module">Module to search</param>
         public void SearchPath(string searchType, SceneNode mod)
         {
+            Console.WriteLine("--------SEARCHING MODULE PATH-------");
             this.module = mod;
             
-            this.path_module = new List<Vertex<float>>(); // create a new List and add it to path_modules
-        
             // BreadthFirstSearch Search - Shortest path 
             if (searchType == "BFS")
             {
@@ -314,20 +329,21 @@ namespace SmartMap
                 this.bfs.ExamineVertex += new VertexAction<Point<int>>(this.RecordVertex);
                 
                 try { 
-                    this.bfs.Compute(pointFirst);
+                    this.bfs.Compute(this.pointFirst);
                 }
                 catch (Exception ex) {
                         Console.WriteLine("{0} Can't find entrance...Module can't be pathed", ex.ToString());
                 }
-                    //Console.WriteLine("Vertex: {0} is the entrence for this module", this.pointFirst);
-                    Console.WriteLine("Point: {0} is the entrance for this module", new Point<int>(1, 1));
-                    Console.WriteLine("Module solution path is:");
-                  
-                // add to multi-dictiionary to store all module paths                
-                this.path_modules.Add(path_module);         
+
+                //Console.WriteLine("Module solution path is: TODO");
+
+                // add to multi-dictiionary to store all module paths for console readout
+                this.path_module = new List<Vertex<float>>(); // create a new List and add it to path_modules
+                this.path_modules.Add(this.path_module);         
                                   
-                foreach (List<Vertex<float>> list in this.path_modules) {
-                    foreach (Vertex<float> v in list) {
+                foreach (List<Vertex<float>> m in this.path_modules) {
+                    foreach (Vertex<float> v in m) {
+                        Console.WriteLine("Printing out module vertices");
                         Console.WriteLine("{0} vertex", v.ToString());
                     }
                 }  
@@ -374,18 +390,18 @@ namespace SmartMap
         }
         
         ///<summary>
-        /// DFS Search Algorithm: Record vertexes
+        /// DFS Search Algorithm: Record verteces
         ///</summary>
         private void RecordVertex(Point<int> point)
         { // all module nodes are same height
             Vertex<float> vertex = new Vertex<float>();
-            vertex.Width = module.Position.x + (point.Width *  Draw3D.MeshSize); 
-            vertex.Length = module.Position.z + (point.Length * Draw3D.MeshSize);
-            vertex.Height = module.Position.y;
+            vertex.Width = this.module.Position.x + (point.Width *  Draw3D.MeshSize); 
+            vertex.Length = this.module.Position.z + (point.Length * Draw3D.MeshSize);
+            vertex.Height = this.module.Position.y;
             this.path_module.Add(vertex);           
         }
         
-        // don't  this for now
+        // don't do this for now
         private void RecordStartVertex(Point<int> point)
         {
             this.pointFirst = point;
