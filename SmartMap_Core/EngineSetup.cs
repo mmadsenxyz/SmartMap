@@ -349,7 +349,7 @@ namespace SmartMap
         {
             // instantiate the Root singleton
             Root = new Root("AxiomEngine.log");
-
+           
             // this actually loads the resource information
             // stored in EngineConfig.xml
             SetupResources();
