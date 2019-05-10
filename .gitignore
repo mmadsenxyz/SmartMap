@@ -3,3 +3,8 @@
 ################################################################################
 
 /.vs
+/RPG_Demo/obj
+/RPG_World/obj
+/RPG_WorldEditor/obj
+/Tools/OrthoSnapper/obj
+/SmartMap_Core/obj
