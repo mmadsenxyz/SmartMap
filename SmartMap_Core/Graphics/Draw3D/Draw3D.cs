@@ -247,9 +247,11 @@ namespace SmartMap
         /// <summary>
         /// Create and manipulate tileSets as needed
         /// </summary>
-        /// <param name="tilesetDispersion">Distance of dispersed Tilesets</param>
-        /// <param name="tilesetNorth">Amount of Tilests North - At least 1</param>
-        /// <param name="tilesetEast">Amount of Tilesets East - At least 1</param>
+        /// <param name="tilesetDispersion">TODO: Distance of dispersed Tilesets</param>
+        /// <param name="tileAmountNorth">Amount of Tiles North - At least 1</param>
+        /// <param name="tileAmountEast">Amount of Tiles East - At least 1</param>
+        /// <param name="tilesetNorth">TODO: Amount of Tilesets North - At least 1</param>
+        /// <param name="tilesetEast">TODO: Amount of Tilesets East - At least 1</param>
         public void CreateObjects(int tilesetDispersion, int tileAmountNorth, int tileAmountEast, int tilesetNorth, int tilesetEast)
         {
             float moveEast = 0, moveNorth = 0, moveUp = 0;
@@ -257,6 +259,7 @@ namespace SmartMap
             bool tilesetDestroyed = false;
 
             this.sm.GenerateGraph("TILESET", false, tileAmountNorth, tileAmountEast);
+            this.sm.GeneratePath("TILESET", false, 1, 1, 3, 1);
             CreateTileset(interiorTile, 0, 0, 0); // create generic tileset to adjust it to terrain
             //// REFINE TILESETS ////
             // get terrain height - search in center of module - clipping doesn't work as well if oblong map
@@ -305,23 +308,24 @@ namespace SmartMap
             { // RECREATE EXISTING OPEN FLOOR MODULES AS MAZES FITTING TERRAIN
                 Console.WriteLine("...Re-Creating " + moduleNode[moduleCount].Name + "'s tile-set into maze that fits terrain.");
                 // reset node arrays
-                SceneManager.DestroySceneNode(moduleNode[moduleCount].Name);
+                //SceneManager.DestroySceneNode(moduleNode[moduleCount].Name);
+                Console.WriteLine("{0} has {1} verteces left after being destroyed", moduleNode[moduleCount].Name, moduleNode[moduleCount].ChildCount);
                 Console.WriteLine("Destroyed {0} for re-creation", moduleNode[moduleCount].Name);
                 //if (!this.sm.GeneratePath("TILESET", false, 0, 0, 0, 0))
                 //{ // generate maze with auto or manual path - if it zonks out skip :-)   
-                //    return;
-                //}
+                  //  return;
+               // }
                 //this.sm.SearchPath("BFS", moduleNode[moduleCount]); // Creates and searches logical path through module (shortest-path)
-                CreateTileset(interiorTile, 0, 0, 0);
+                //CreateTileset(interiorTile, 0, 0, 0);
                 Console.WriteLine(moduleNode[moduleCount].Name + " REMODELED");
                 // translate new module node                 
                 this.moduleNode[moduleCount].Translate(new Vector3(moveEast, moveUp + this.tileSetHeight, moveNorth), TransformSpace.World);
                 // EXTRA: mold terrain to fit around tileset
-                /*foreach (SceneNode node in moduleNode[moduleCount].Children)
+                /****foreach (SceneNode node in moduleNode[moduleCount].Children)
                 { // bring up or lower terrain (terrain deformation) to match all tileNode heights 
                         Console.WriteLine("New Set {0} {1}", node.DerivedPosition.x, node.DerivedPosition.z);
                     SceneManager.SetHeightAt(node.DerivedPosition.x, node.DerivedPosition.y - 135, node.DerivedPosition.z);
-                }*/
+                }****/
                 moduleCount++; // next module only if not destroyed
             }
             // reset variables
@@ -375,14 +379,14 @@ namespace SmartMap
                 // find current edge values. Verteces remain the same
                 Wintellect.PowerCollections.CollectionBase<Edge<Point<int>>> ec =
                     (Wintellect.PowerCollections.CollectionBase<Edge<Point<int>>>)sm.md[v];
-                // do edges 
-                foreach (Edge<Point<int>> e in ec) // edges per vertex, 1-4
+                // go through all of the MD vertices and populate many tilesets with edges.
+                // use TileCount variables to find "place in line." IE: Where each new tileset starts in MD
+                foreach (Edge<Point<int>> e in ec) // CREATE NEW EDGE PACK per VERTEX, 1-4, Leave loop when created
                 {
-                    Console.WriteLine("Edge Count: {0}", ec.Count);
                     // END
                     if (ec.Count == 1) // one edge for End tile
                     {
-                        Console.WriteLine("New END Tile");
+                        Console.WriteLine("Manufacturing END Tile");
                         tileNode[nodeCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Tile " + nodeCount);
                         tileNode[nodeCount].ResetToInitialState(); // set mesh North as created in modeler
                         tileNode[nodeCount].Position = new Vector3(x, 0, z);
@@ -416,7 +420,7 @@ namespace SmartMap
                     // HALL 
                     if (ec.Count == 2)
                     { // set 2nd edge to compare both edges for: Hall or Corner
-                        Console.WriteLine("New HALL Tile");
+                        Console.WriteLine("Manufacturing HALL Tile");
                         if (passes == 0)
                         { // record 2nd edge for next pass
                             this.sew2 = e.Source.Width;
@@ -445,7 +449,7 @@ namespace SmartMap
                         }
                         else
                         { // CORNER
-                            Console.WriteLine("New CORNER Tile");
+                            Console.WriteLine("Manufacturing CORNER Tile");
                             tileNode[nodeCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Tile " + nodeCount);
                             tileNode[nodeCount].ResetToInitialState();
                             tileNode[nodeCount].Position = new Vector3(x, 0, z);
@@ -483,7 +487,7 @@ namespace SmartMap
                     // SIDE
                     if (ec.Count == 3) // 3 edges to calculate side tile
                     {
-                        Console.WriteLine("New SIDE Tile");
+                        Console.WriteLine("Manufacturing SIDE Tile");
                         if (passes == 0)
                         { // record 2nd edge
                             this.sew2 = e.Source.Width;
@@ -535,7 +539,7 @@ namespace SmartMap
                     // FLOOR
                     if ((ec.Count == 4) & (passes == 0)) // 4 on the floor :)
                     {
-                        Console.WriteLine("New FLOOR Tile");
+                        Console.WriteLine("Manufacturing FLOOR Tile");
                         tileNode[nodeCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Tile " + nodeCount);
                         tileNode[nodeCount].ResetToInitialState();
                         tileNode[nodeCount].Position = new Vector3(x, 0, z);
@@ -551,11 +555,13 @@ namespace SmartMap
                     } /*Debug:*/  //Console.WriteLine("Vertex: {0} -- Edges Source: {1} Target: {2}", v, e.Source, e.Target); Console.WriteLine("{0} {1}", v, ec.Count);        
                 }
                 if (tileNode[nodeCount] != null)
+                {
                     this.moduleNode[moduleCount].AddChild(tileNode[nodeCount]);
+                    Console.WriteLine("[][][] New tile {0} has been created [][][]", nodeCount);
+                }
                 nodeCount++;
             }
-            Console.WriteLine("MD Key Count {0}", this.sm.md.Keys.Count);
-            Console.WriteLine("Tile Count {0}", this.moduleNode[moduleCount].ChildCount);
+            Console.WriteLine("Total amount of tiles created {0}", this.moduleNode[moduleCount].ChildCount);
         }
 
         /// <summary>
