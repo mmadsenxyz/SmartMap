@@ -193,6 +193,10 @@ namespace SmartMap
             Console.WriteLine("Point: {0} : {1} is the entrance for this module", rootX, rootZ);
             //Console.WriteLine("Vertex: {0} : {1} is the exit for this module", branchX, branchZ);
 
+            // fill in the entrance vertex for searcher
+            pointFirst.Width = rootX;
+            pointFirst.Length = rootZ;
+
             this.vedSuccessors = new Dictionary<Point<int>, Edge<Point<int>>>();
                             
             // create cross edges for better maze making 
@@ -201,7 +205,7 @@ namespace SmartMap
                 this.graph.AddEdge(edge);
              }*/
              
-             if (automated) {
+             if (automated) { // TODO
                 // find a branch(entrence) and root(exit) that exists on the borders
                 int tick = 0;
                 foreach (Point<int> v in this.graph.Vertices) {   
@@ -219,47 +223,43 @@ namespace SmartMap
                     }
                 }
             }
-            // fill in the entrance vertex for searcher
-            pointFirst.Width = rootX;
-            pointFirst.Length = rootZ;
-            
-             // weight the out-edges - POSSIBILITY
-            /*Dictionary<Edge<Point<int>>, double> weights = new Dictionary<Edge<Point<int>>, double>();
+
+            // weight the out-edges - POSSIBILITY
+            Dictionary<Edge<Point<int>>, double> weights = new Dictionary<Edge<Point<int>>, double>();
             foreach (Edge<Point<int>> e in this.graph.Edges) {
-                weights[e] = 4;
-            }*/
-            
-            // maze with path from the uniform graph            
-            this.pop = new CyclePoppingRandomTreeAlgorithm<Point<int>, Edge<Point<int>>>(this.graph);
-                //, new WeightedMarkovEdgeChain<Point<int>, Edge<Point<int>>>(weights));
-                
+                weights[e] = 1;
+            }
+
+            // creates mazed edges from the uniform graphs vertices
+            this.pop = new CyclePoppingRandomTreeAlgorithm<Point<int>, Edge<Point<int>>>(this.graph/*, new WeightedMarkovEdgeChain<Point<int>, Edge<Point<int>>>(weights)*/);
+
             this.pop.StateChanged += new EventHandler(this.StateStatus);
-          
-            try { // create a Random Tree Maze with exit root. Creates new edges for you.
-                //pop.RandomTreeWithRootBranch(new Point<int>(branchX, branchZ), new Point<int>(rootX, rootZ));  
-                pop.RandomTreeWithRoot(new Point<int>(rootX, rootZ));    
+                
+            try { // create a Random Tree Maze with entrence root. Creates new edges for you.
+                pop.RandomTreeWithRoot(new Point<int>(rootX, rootZ));
+                //pop.RandomTreeWithRootBranch(new Point<int>(branchX, branchZ), new Point<int>(rootX, rootZ));
             }
             catch (Exception ex) {
                     Console.WriteLine("{0} Module couldn't be searched... SKIPPING", ex.ToString());
                 return false;    
             }
+
             this.vedSuccessors = pop.Successors;
-            Console.WriteLine("Initial Graph Edge Count is : {0}", graph.EdgeCount);
+
             // delete all edges before edge re-population -- doesn't seem to be needed
             foreach (Point<int> v in this.graph.Vertices) {
                    this.graph.ClearEdges(v);
             }
-            Console.WriteLine("Cleared Graph Edge Count is : {0}", graph.EdgeCount);
 
-            Console.WriteLine("Initial MD Edge Count is : {0}", this.md.Count);
-            Console.WriteLine("Initial MD Edges are : {0}", this.md.KeyValuePairs);
-            Console.WriteLine("VEDSuccesors Count : {0}", this.vedSuccessors.Count);
-
+            Console.WriteLine("Initial MD Edge Count is: {0}", this.md.Values.Count);
+            Console.WriteLine("Initial MD Edges details are: {0}", this.md.KeyValuePairs);
+            this.md.Clear();
 
             if (type == "TILESET")
             {
                 Console.WriteLine("--------Adding mazed RandomTreeWithRootBranch graph to dictionary--------");
-                // put graph in MultiDictionary for map creation (populate edges) 
+                Console.WriteLine("VEDSuccesors Count is: {0}", this.vedSuccessors.Count);
+                // put vedSuccessors in MultiDictionary for mazed map creation (populate edges) 
                 foreach (Edge<Point<int>> e in this.vedSuccessors.Values)
                 {
                     if (e == null)   // if empty, skip and continue the edge search
@@ -267,17 +267,18 @@ namespace SmartMap
                         Console.WriteLine("--------EDGE IS EMPTY--------");
                         continue;
                     }
-                    //Console.WriteLine("{0} was successfull.", e.ID); 
+                    
                     // grab these mazed vertex/edges for vertex/edge print-out in CreateTileset()
                     this.md.Add(e.Source, e); // out-edge
                     this.md.Add(e.Target, e); // in-edge
-                    //Console.WriteLine("Edge {0}", e.Target, e.Source);
+                    Console.WriteLine("Edge {0}", e.Target, e.Source);
                     // redo the cleared graph with new random edges
                     this.graph.AddEdge(e);
                 }
-                Console.WriteLine("FINAL Graph Edge Count is : {0}", graph.EdgeCount);
-                Console.WriteLine("FINAL MD Edge Count is : {0}", this.md.Count);
-                Console.WriteLine("Final MD Edges are : {0}", this.md.KeyValuePairs);
+                Console.WriteLine("FINAL Graph Edge Count is: {0}", graph.EdgeCount);
+                Console.WriteLine("FINAL MD VERTEX Count is: {0}", this.md.Keys.Count);
+                Console.WriteLine("FINAL MD TOTAL Edge COUNT is: {0}", this.md.Values.Count);
+                Console.WriteLine("FINAL MD Edges details are: {0}", this.md.KeyValuePairs);
             }
             
             if (type == "MAP")
@@ -328,7 +329,7 @@ namespace SmartMap
                 //this.bfs.StartVertex += new VertexAction<Point<int>>(this.RecordStartVertex);
                 this.bfs.ExamineVertex += new VertexAction<Point<int>>(this.RecordVertex);
                 
-                try { 
+                try { // compute SEARCH
                     this.bfs.Compute(this.pointFirst);
                 }
                 catch (Exception ex) {
@@ -361,7 +362,7 @@ namespace SmartMap
                 //this.dfs.Finished += new VertexAction<Point<int>>(this.RecordLastVertex);
                 
                 // start the search
-                this.dfs.Compute(new Point<int>(2, 0, 2));  
+                this.dfs.Compute(this.pointFirst);  
                     Console.WriteLine("Verteces: {0} is the entrence for this module", this.pointFirst);*/
             }
 
