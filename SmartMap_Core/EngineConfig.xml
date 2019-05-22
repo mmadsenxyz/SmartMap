@@ -1,16 +1,16 @@
 <?xml version="1.0" standalone="yes"?>
 <EngineConfig xmlns="http://tempuri.org/EngineConfig.xsd">
-  <FilePath group="bootstrap" src="../../../Media/Archives/AxiomCore.zip" type="ZipFile" />
-  <FilePath group="General" src="../../../Media/Configuration" type="Folder" />
-  <FilePath group="General" src="../../../Media/Textures" type="Folder" />
-  <FilePath group="General" src="../../../Media/Icons" type="Folder" />
-  <FilePath group="General" src="../../../Media/Fonts" type="Folder" />
-  <FilePath group="General" src="../../../Media/Meshes" type="Folder" />
-  <FilePath group="General" src="../../../Media/PCZAppMedia" type="Folder" />
-  <FilePath group="General" src="../../../Media/Skeletons" type="Folder" />
-  <FilePath group="General" src="../../../Media/Materials" type="Folder" />
-  <FilePath group="General" src="../../../Media/Overlays" type="Folder" />
-  <FilePath group="General" src="../../../Media/GpuPrograms" type="Folder" />
+  <FilePath group="bootstrap" src="../../Media/Archives/AxiomCore.zip" type="ZipFile" />
+  <FilePath group="General" src="../../Media/Configuration" type="Folder" />
+  <FilePath group="General" src="../../Media/Textures" type="Folder" />
+  <FilePath group="General" src="../../Media/Icons" type="Folder" />
+  <FilePath group="General" src="../../Media/Fonts" type="Folder" />
+  <FilePath group="General" src="../../Media/Meshes" type="Folder" />
+  <FilePath group="General" src="../../Media/PCZAppMedia" type="Folder" />
+  <FilePath group="General" src="../../Media/Skeletons" type="Folder" />
+  <FilePath group="General" src="../../Media/Materials" type="Folder" />
+  <FilePath group="General" src="../../Media/Overlays" type="Folder" />
+  <FilePath group="General" src="../../Media/GpuPrograms" type="Folder" />
   <ConfigOption RenderSystem="Axiom.RenderSystems.OpenGL.GLRenderSystem" Name="Video Mode" Value="1280 x 720" />
   <ConfigOption RenderSystem="Axiom.RenderSystems.OpenGL.GLRenderSystem" Name="Color Depth" Value="32" />
   <ConfigOption RenderSystem="Axiom.RenderSystems.OpenGL.GLRenderSystem" Name="Display Frequency" Value="N/A" />

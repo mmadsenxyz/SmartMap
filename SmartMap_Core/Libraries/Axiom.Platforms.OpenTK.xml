@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Axiom.Platforms.OpenTK</name>
+    </assembly>
+    <members>
+        <member name="T:Axiom.Platforms.OpenTK.OpenTKInputReader">
+            <summary>
+            	Platform management specialization
+            </summary>
+        </member>
+        <member name="F:Axiom.Platforms.OpenTK.OpenTKInputReader.isVisible">
+            <summary>
+            	Is the opentk window currently visible?
+            </summary>
+        </member>
+        <member name="F:Axiom.Platforms.OpenTK.OpenTKInputReader.WheelStep">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:Axiom.Platforms.OpenTK.OpenTKInputReader.BufferSize">
+            <summary>
+             Size of the arrays used to hold buffered input data.
+            </summary>
+        </member>
+        <member name="M:Axiom.Platforms.OpenTK.OpenTKInputReader.#ctor">
+            <summary>
+            	Constructor.
+            </summary>
+        </member>
+        <member name="M:Axiom.Platforms.OpenTK.OpenTKInputReader.Finalize">
+            <summary>
+            	Destructor.
+            </summary>
+        </member>
+        <member name="M:Axiom.Platforms.OpenTK.OpenTKInputReader.Capture">
+            <summary>
+            	Capture the current state of input.
+            </summary>
+        </member>
+        <member name="M:Axiom.Platforms.OpenTK.OpenTKInputReader.Initialize(Axiom.Graphics.RenderWindow,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+             <summary>
+            
+             </summary>
+             <param name="parent"></param>
+             <param name="useKeyboard"></param>
+             <param name="useMouse"></param>
+             <param name="useGamepad"></param>
+             <param name="ownMouse"></param>
+        </member>
+        <member name="M:Axiom.Platforms.OpenTK.OpenTKInputReader.IsKeyPressed(Axiom.Input.KeyCodes)">
+            <summary>
+            	Checks the current keyboard state to see if the specified key is pressed.
+            </summary>
+            <param name="key">KeyCode to check.</param>
+            <returns>true if the key is down, false otherwise.</returns>
+        </member>
+        <member name="M:Axiom.Platforms.OpenTK.OpenTKInputReader.ConvertKeyEnum(Axiom.Input.KeyCodes)">
+            <summary>
+            	Used to convert an Axiom.Input.KeyCodes enum val to a OpenTK enum val.
+            </summary>
+            <param name="key">Axiom keyboard code to query.</param>
+            <returns>The equivalent enum value in the OpenTK enum.</returns>
+        </member>
+        <member name="F:Axiom.Platforms.OpenTK.OpenTKPlatformManager.inputReader">
+            <summary>
+            	Reference to the current input reader.
+            </summary>
+        </member>
+        <member name="M:Axiom.Platforms.OpenTK.OpenTKPlatformManager.CreateInputReader">
+            <summary>
+            	Creates an InputReader
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
