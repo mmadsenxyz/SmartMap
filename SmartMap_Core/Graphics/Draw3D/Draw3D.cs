@@ -263,7 +263,7 @@ namespace SmartMap
             CreateTileset(interiorTile, 0, 0, 0); // create generic tileset to adjust it to terrain
             //// REFINE TILESETS ////
             // get terrain height - search in center of module - clipping doesn't work as well if oblong map
-            //moveUp = SceneManager.GetHeightAt(new Vector3(moveEast + (mapSizeEast / 2), 0, moveNorth + (mapSizeNorth / 2)), 0);
+            moveUp = SceneManager.GetHeightAt(new Vector3(moveEast + (mapSizeEast / 2), 0, moveNorth + (mapSizeNorth / 2)), 0);
             Console.WriteLine("Map Location: {0}, {1}", moveEast, moveNorth);
             // translate module node                 
             this.moduleNode[moduleCount].Translate(new Vector3(moveEast, moveUp, moveNorth), TransformSpace.World);
