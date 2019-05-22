@@ -1,0 +1,12 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/RPG_Demo/obj
+/RPG_World/obj
+/RPG_WorldEditor/obj
+/Tools/OrthoSnapper/obj
+/SmartMap_Core/obj
+/SmartMap_Core/.vs/SmartMap_Core/v15
+/SmartMap_Core/bin/x86/Release
