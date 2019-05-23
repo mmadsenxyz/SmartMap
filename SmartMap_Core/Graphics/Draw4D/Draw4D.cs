@@ -17,8 +17,8 @@ namespace SmartMap
 		// IDraw interface
 		public IDraw idraw;
 		private SceneManager scene;
-		// Zones
-		public Dictionary<int, Entity> zone;
+        // Zones
+        public Dictionary<int, Entity> zone;
 		public Dictionary<int, SceneNode> zoneNode;
 		public Dictionary<int, SceneNode> zoneGroup;
 		private int zoneCount;
@@ -30,12 +30,13 @@ namespace SmartMap
 		{
 			this.scene = man;
 
-			this.zone = new Dictionary<int, Entity>(36);
+            this.zone = new Dictionary<int, Entity>(36);
 			this.zoneNode = new Dictionary<int, SceneNode>(36);
 			this.zoneGroup = new Dictionary<int, SceneNode> (4);
 			this.model = new Dictionary<int, Entity>(10);
 			this.modelNode = new Dictionary<int, SceneNode>(10);
-		}
+        }
+
 		public void CreateModel()
 		{
             idraw.CreateGraphics(model, "Model", "ogrehead.mesh", "Ogre/Skin", 1, 1, true);

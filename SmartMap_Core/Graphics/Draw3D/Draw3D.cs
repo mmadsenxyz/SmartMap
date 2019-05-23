@@ -39,7 +39,7 @@ namespace SmartMap
         //private int nextPathnode = 0;
         // user will choose sizeing and quantity of structures.
         public int tileAmountNorth = 5, tileAmountEast = 5;
-        private int tileThreshhold = 80, tileClippingAngle = 300;
+        private int /*tileThreshhold = 80,*/ tileClippingAngle = 300;
         // quantity of structures
         private int tilesetNorth = 1, tilesetEast = 1, tileSetDispersion = 7;
         private float mapSizeNorth = 0, mapSizeEast = 0, tileSetHeight = 150;
@@ -125,11 +125,11 @@ namespace SmartMap
             
             // =Draw 4D= - For dynamic objects in scene
             // TODO: set up clipping regions for 4 tileSets
-            this.d4d = new Draw4D(SceneManager);
-            d4d.idraw = this;
+            this.d4d = new Draw4D(base.SceneManager);
+            this.d4d.idraw = this;
             // Tileset
-            d4d.CreateModel();
-            d4d.modelNode[0].Position = new Vector3(0, tileSetHeight + 500, 0);
+            this.d4d.CreateModel();
+            this.d4d.modelNode[0].Position = new Vector3(0, tileSetHeight + 500, 0);
 
             // Object animation. Set idle animation
             //modelAnimationState = d4d.model[0].GetAnimationState("Idle");
@@ -254,12 +254,12 @@ namespace SmartMap
         /// <param name="tilesetEast">TODO: Amount of Tilesets East - At least 1</param>
         public void CreateObjects(int tilesetDispersion, int tileAmountNorth, int tileAmountEast, int tilesetNorth, int tilesetEast)
         {
-            float moveEast = 0, moveNorth = 0, moveUp = 0;
+            float moveEast = 5000, moveNorth = 5000, moveUp = 0;
             int clippedTileCount = 0;
             bool tilesetDestroyed = false;
 
             this.sm.GenerateGraph("TILESET", false, tileAmountNorth, tileAmountEast);
-            this.sm.GeneratePath("TILESET", false, 1, 1, 3, 1);
+            //this.sm.GeneratePath("TILESET", false, 1, 1, 3, 1);
             CreateTileset(interiorTile, 0, 0, 0); // create generic tileset to adjust it to terrain
             //// REFINE TILESETS ////
             // get terrain height - search in center of module - clipping doesn't work as well if oblong map
@@ -268,15 +268,15 @@ namespace SmartMap
             // translate module node                 
             this.moduleNode[moduleCount].Translate(new Vector3(moveEast, moveUp, moveNorth), TransformSpace.World);
             // check each tileNode verses module node's height and remove edges and tiles that are burried inside terrain. 
-            //Console.WriteLine("{0}", moduleNode[moduleCount].Name + "'s nodes are being searched for terrain clipping...");
-            /*foreach (SceneNode node in moduleNode[moduleCount].Children) // go through tiles
+            /*Console.WriteLine("{0}", moduleNode[moduleCount].Name + "'s nodes are being searched for terrain clipping...");
+            foreach (SceneNode node in moduleNode[moduleCount].Children) // go through tiles
             { //// TRIM TILESET AROUND TERRAIN ////
                 Console.WriteLine("{0}", node.Name + " is being checked..."); // derivedPosition for real world tileNode position - (derived) very important.
-                //float tileHeight = SceneManager.GetHeightAt(new Vector3(node.DerivedPosition.x, 0, node.DerivedPosition.z), 0);
+                float tileHeight = SceneManager.GetHeightAt(new Vector3(node.DerivedPosition.x, 0, node.DerivedPosition.z), 0);
                 if (1000 > (moveUp - MeshSize) + tileClippingAngle) // if tile is in terrain 
                 {
                     clippedTileCount++;
-                    if (clippedTileCount == tileThreshhold)
+                    if (clippedTileCount == (tileAmountNorth * tileAmountEast) * 0.8)
                     { // if removed tile count equals tileThreshold, remove entire module
                         SceneManager.DestroySceneNode(moduleNode[moduleCount].Name);
                         tilesetDestroyed = true;
@@ -308,24 +308,26 @@ namespace SmartMap
             { // RECREATE EXISTING OPEN FLOOR MODULES AS MAZES FITTING TERRAIN
                 Console.WriteLine("...Re-Creating " + moduleNode[moduleCount].Name + "'s tile-set into maze that fits terrain.");
                 // reset node arrays
-                //SceneManager.DestroySceneNode(moduleNode[moduleCount].Name);
+                SceneManager.DestroySceneNode(moduleNode[moduleCount].Name);
                 Console.WriteLine("{0} has {1} verteces left after being destroyed", moduleNode[moduleCount].Name, moduleNode[moduleCount].ChildCount);
                 Console.WriteLine("Destroyed {0} for re-creation", moduleNode[moduleCount].Name);
-                //if (!this.sm.GeneratePath("TILESET", false, 0, 0, 0, 0))
-                //{ // generate maze with auto or manual path - if it zonks out skip :-)   
-                  //  return;
-               // }
-                //this.sm.SearchPath("BFS", moduleNode[moduleCount]); // Creates and searches logical path through module (shortest-path)
-                //CreateTileset(interiorTile, 0, 0, 0);
+                if (!this.sm.GeneratePath("TILESET", false, 0, 0, 0, 0))
+                { // generate maze with auto or manual path - if it zonks out skip :-)   
+                    return;
+                }
+                this.sm.SearchPath("BFS", moduleNode[moduleCount]); // Creates and searches logical path through module (shortest-path)
+                CreateTileset(interiorTile, 0, 0, 0);
                 Console.WriteLine(moduleNode[moduleCount].Name + " REMODELED");
                 // translate new module node                 
                 this.moduleNode[moduleCount].Translate(new Vector3(moveEast, moveUp + this.tileSetHeight, moveNorth), TransformSpace.World);
-                // EXTRA: mold terrain to fit around tileset
-                /****foreach (SceneNode node in moduleNode[moduleCount].Children)
+                // AUTO-MOLD TERRAIN to fit around tileset. Usefull for a "Foundation" under module
+                foreach (SceneNode node in moduleNode[moduleCount].Children)
                 { // bring up or lower terrain (terrain deformation) to match all tileNode heights 
                         Console.WriteLine("New Set {0} {1}", node.DerivedPosition.x, node.DerivedPosition.z);
-                    SceneManager.SetHeightAt(node.DerivedPosition.x, node.DerivedPosition.y - 135, node.DerivedPosition.z);
-                }****/
+                    //SceneManager.SetHeightAt(node.DerivedPosition.x, node.DerivedPosition.y - 135, node.DerivedPosition.z);
+                    //this.d4d.terrainMold.SetHeightAtPoint((long)node.DerivedPosition.x, (long)node.DerivedPosition.z, node.DerivedPosition.y - 135);
+                    //this.d4d.terrainMold.SetHeightAtPoint(5000, 5000, 500);
+                }
                 moduleCount++; // next module only if not destroyed
             }
             // reset variables
@@ -364,7 +366,7 @@ namespace SmartMap
             float x = 0, /*y = 0,*/ z = 0;
             int passes = 0;
 
-            // create modules per Tileset
+            // create new Tileset Modules
             this.moduleNode[moduleCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Module " + moduleCount);
 
             // MAKE TILES - transfer graph to Axiom 
