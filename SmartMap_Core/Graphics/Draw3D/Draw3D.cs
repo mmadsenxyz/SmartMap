@@ -324,7 +324,7 @@ namespace SmartMap
                 foreach (SceneNode node in moduleNode[moduleCount].Children)
                 { // bring up or lower terrain (terrain deformation) to match all tileNode heights 
                         Console.WriteLine("New Set {0} {1}", node.DerivedPosition.x, node.DerivedPosition.z);
-                    //SceneManager.SetHeightAt(node.DerivedPosition.x, node.DerivedPosition.y - 135, node.DerivedPosition.z);
+                    SceneManager.SetHeightAt(node.DerivedPosition, node.DerivedPosition.y - 135);
                     //this.d4d.terrainMold.SetHeightAtPoint((long)node.DerivedPosition.x, (long)node.DerivedPosition.z, node.DerivedPosition.y - 135);
                     //this.d4d.terrainMold.SetHeightAtPoint(5000, 5000, 500);
                 }
