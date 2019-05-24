@@ -42,7 +42,7 @@ namespace SmartMap
         public IDictionary<Point<int>, Edge<Point<int>>> vedSuccessors; 
         // Search     
         private BreadthFirstSearchAlgorithm<Point<int>, Edge<Point<int>>> bfs;
-        //private DepthFirstSearchAlgorithm<Point<int>, Edge<Point<int>>> dfs;
+        private DepthFirstSearchAlgorithm<Point<int>, Edge<Point<int>>> dfs;
         //private ConnectedComponentsAlgorithm<Point<int>, Edge<Point<int>>> cca;
         private CyclePoppingRandomTreeAlgorithm<Point<int>, Edge<Point<int>>> pop;
          // Save
@@ -189,21 +189,19 @@ namespace SmartMap
         /// <param name="rootZ">Root z: Must be less than tileAmount</param>
         public bool GeneratePath(string type, bool automated, int branchX, int branchZ, int rootX, int rootZ)
         {
-            //Console.WriteLine("Vertex: {0} is the entrence for this module", this.pointFirst); // TODO
             Console.WriteLine("Point: {0} : {1} is the entrance for this module", rootX, rootZ);
-            //Console.WriteLine("Vertex: {0} : {1} is the exit for this module", branchX, branchZ);
 
             // fill in the entrance vertex for searcher
-            pointFirst.Width = rootX;
-            pointFirst.Length = rootZ;
+            //pointFirst.Width = rootX;
+            //pointFirst.Length = rootZ;
 
             this.vedSuccessors = new Dictionary<Point<int>, Edge<Point<int>>>();
                             
-            // create cross edges for better maze making 
-            /*foreach (Edge<Point<int>> e in this.graph.Edges) {  
+            // create cross edges to avoid missing edges 
+            foreach (Edge<Point<int>> e in this.graph.Edges) {  
                 this.edge = new Edge<Point<int>>(e.Target, e.Source);
                 this.graph.AddEdge(edge);
-             }*/
+             }
              
              if (automated) { // TODO
                 // find a branch(entrence) and root(exit) that exists on the borders
@@ -237,16 +235,15 @@ namespace SmartMap
                 
             try { // create a Random Tree Maze with entrence root. Creates new edges for you.
                 pop.RandomTreeWithRoot(new Point<int>(rootX, rootZ));
-                //pop.RandomTreeWithRootBranch(new Point<int>(branchX, branchZ), new Point<int>(rootX, rootZ));
             }
             catch (Exception ex) {
-                    Console.WriteLine("{0} Module couldn't be searched... SKIPPING", ex.ToString());
+                    Console.WriteLine("{0} Module could not be pathed... SKIPPING", ex.ToString());
                 return false;    
             }
 
             this.vedSuccessors = pop.Successors;
 
-            // delete all edges before edge re-population -- doesn't seem to be needed
+            // delete all edges before edge re-population -- helps remove edgeless vertices
             foreach (Point<int> v in this.graph.Vertices) {
                    this.graph.ClearEdges(v);
             }
@@ -326,9 +323,10 @@ namespace SmartMap
             {
                 this.bfs = new BreadthFirstSearchAlgorithm<Point<int>, Edge<Point<int>>>(this.graph);
                 
-                //this.bfs.StartVertex += new VertexAction<Point<int>>(this.RecordStartVertex);
+                this.bfs.StartVertex += new VertexAction<Point<int>>(this.RecordStartVertex);
                 this.bfs.ExamineVertex += new VertexAction<Point<int>>(this.RecordVertex);
-                
+
+                Console.WriteLine("Vertex: {0} is the entrance for this module", this.pointFirst);
                 try { // compute SEARCH
                     this.bfs.Compute(this.pointFirst);
                 }
@@ -349,10 +347,10 @@ namespace SmartMap
                     }
                 }  
             }
-            
-            // DepthFirstSearch Search - Searches all verteces and orders them
+
+            // DepthFirstSearch Search - Shortest path. Search just one path (fastest)
             if (searchType == "DFS")
-            {/*
+            {
                 // DFS Search
                 this.dfs = new DepthFirstSearchAlgorithm<Point<int>, Edge<Point<int>>>(this.graph);
                 
@@ -363,7 +361,11 @@ namespace SmartMap
                 
                 // start the search
                 this.dfs.Compute(this.pointFirst);  
-                    Console.WriteLine("Verteces: {0} is the entrence for this module", this.pointFirst);*/
+                Console.WriteLine("Vertex: {0} is the entrance for this module", this.pointFirst);
+
+                // add to multi-dictiionary to store all module paths for console readout
+                this.path_module = new List<Vertex<float>>(); // create a new List and add it to path_modules
+                this.path_modules.Add(this.path_module);
             }
 
             // ConnectedComponents search
@@ -387,7 +389,7 @@ namespace SmartMap
         
         private void StateStatus(object obj, EventArgs ea)
         {
-            Console.WriteLine("Maze creator: {0}", pop.State.ToString());         
+            Console.WriteLine("Maze creator status: {0}", pop.State.ToString());         
         }
         
         ///<summary>
@@ -402,7 +404,7 @@ namespace SmartMap
             this.path_module.Add(vertex);           
         }
         
-        // don't do this for now
+        //
         private void RecordStartVertex(Point<int> point)
         {
             this.pointFirst = point;

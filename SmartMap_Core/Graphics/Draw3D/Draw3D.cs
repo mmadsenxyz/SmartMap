@@ -259,7 +259,6 @@ namespace SmartMap
             bool tilesetDestroyed = false;
 
             this.sm.GenerateGraph("TILESET", false, tileAmountNorth, tileAmountEast);
-            //this.sm.GeneratePath("TILESET", false, 1, 1, 3, 1);
             CreateTileset(interiorTile, 0, 0, 0); // create generic tileset to adjust it to terrain
             //// REFINE TILESETS ////
             // get terrain height - search in center of module - clipping doesn't work as well if oblong map
@@ -309,13 +308,11 @@ namespace SmartMap
                 Console.WriteLine("...Re-Creating " + moduleNode[moduleCount].Name + "'s tile-set into maze that fits terrain.");
                 // reset node arrays
                 SceneManager.DestroySceneNode(moduleNode[moduleCount].Name);
-                Console.WriteLine("{0} has {1} verteces left after being destroyed", moduleNode[moduleCount].Name, moduleNode[moduleCount].ChildCount);
-                Console.WriteLine("Destroyed {0} for re-creation", moduleNode[moduleCount].Name);
-                if (!this.sm.GeneratePath("TILESET", false, 0, 0, 0, 0))
-                { // generate maze with auto or manual path - if it zonks out skip :-)   
-                    return;
-                }
-                this.sm.SearchPath("BFS", moduleNode[moduleCount]); // Creates and searches logical path through module (shortest-path)
+                Console.WriteLine("{0} has {1} children left after being destroyed for re-creation", moduleNode[moduleCount].Name, moduleNode[moduleCount].ChildCount);
+                // generate maze with auto or manual path - if it zonks out skip :-)
+                if (!this.sm.GeneratePath("TILESET", false, 0, 0, 0, 0)) { return; }
+                // Creates and searches logical path through module (shortest-path)
+                this.sm.SearchPath("BFS", moduleNode[moduleCount]);
                 CreateTileset(interiorTile, 0, 0, 0);
                 Console.WriteLine(moduleNode[moduleCount].Name + " REMODELED");
                 // translate new module node                 
@@ -323,15 +320,11 @@ namespace SmartMap
                 // AUTO-MOLD TERRAIN to fit around tileset. Usefull for a "Foundation" under module
                 foreach (SceneNode node in moduleNode[moduleCount].Children)
                 { // bring up or lower terrain (terrain deformation) to match all tileNode heights 
-                        Console.WriteLine("New Set {0} {1}", node.DerivedPosition.x, node.DerivedPosition.z);
                     SceneManager.SetHeightAt(node.DerivedPosition, node.DerivedPosition.y - (MeshSize/2));
-                    //this.d4d.terrainMold.SetHeightAtPoint((long)node.DerivedPosition.x, (long)node.DerivedPosition.z, node.DerivedPosition.y - 135);
-                    //this.d4d.terrainMold.SetHeightAtPoint(5000, 5000, 500);
                 }
                 moduleCount++; // next module only if not destroyed
             }
-            // reset variables
-            clippedTileCount = 0;
+            clippedTileCount = 0; // reset variables
         }
 
         /// <summary>
@@ -846,7 +839,8 @@ namespace SmartMap
             base.OnFrameStarted(source, e);
             #region Camera Clipping Events and CREATING PATHS
             /*
-                // ZONE SYSTEM (dependant on pure engine coordinates)
+                // PAGING ZONE SYSTEM (dependant on pure engine coordinates, meant for massive worlds)
+                // Essentially a Random Zone creator as you explore
                 //////////////////////////////////////
 
              * if ((d4d.modelNode[0].WorldAABB.Intersects(d4d.zoneNode[0].WorldAABB)) & (camClipped != 1))
@@ -1311,9 +1305,9 @@ namespace SmartMap
 
             #endregion Camera Clipping Events
 
-            #region OBJECT ANIMATION
+            #region OBJECT PATHFINDING
 
-            ////// MODEL ANIMATIONS //////
+            ////// MODEL PATHFINDING //////
             //modelAnimationState.AddTime(timeSinceLastFrame);
             /*float move = 0.0f;
  
