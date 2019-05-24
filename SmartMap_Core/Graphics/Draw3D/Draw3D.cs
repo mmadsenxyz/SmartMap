@@ -193,7 +193,7 @@ namespace SmartMap
                                              "WaterPlane",
                                              ResourceGroupManager.DefaultResourceGroupName,
                                              waterPlane,
-                                             12800, 12800,
+                                             256000, 256000,
                                              20, 20,
                                              true, 1,
                                              10, 10,
@@ -202,9 +202,9 @@ namespace SmartMap
             Entity waterEntity = SceneManager.CreateEntity("Water", "WaterPlane");
             waterEntity.MaterialName = "Terrain/WaterPlane";
 
-            //var waterNode = SceneManager.RootSceneNode.CreateChildSceneNode("WaterNode");
-            //waterNode.AttachObject(waterEntity);
-            //waterNode.Translate(new Vector3(1000, 1000, 1000));
+            var waterNode = SceneManager.RootSceneNode.CreateChildSceneNode("WaterNode");
+            waterNode.AttachObject(waterEntity);
+            waterNode.Translate(new Vector3(-999, 10, -999));
 
             this.frustumNode.Position = new Vector3(128, 500, 128);
             Camera.LookAt(new Vector3(0, 0, -300));
