@@ -115,7 +115,7 @@ namespace SmartMap
                 } 
             }
             
-            if (type == "TILESET")
+            if (type == "MODULE")
             { 
                 // initialize GLOABAL MultiDictionary to be used each time creating or manipulating tilset
                 this.md = new MultiDictionary<Point<int>, Edge<Point<int>>>(true);
@@ -123,11 +123,11 @@ namespace SmartMap
                 {      
                     this.md.Add(e.Source, e); // out-edge
                     this.md.Add(e.Target, e); // in-edge
-                        //Console.WriteLine("The vertices are: {0} {1}", e.Source, e);
+                    //Console.WriteLine("The vertices are: {0} {1}", e.Source, e);
                 }
             }
             
-            if (type == "MAP")
+            if (type == "QUADRANT")
             {
                 // initialize MultiDictionary 2 for easier map creation   
                 this.md2 = new MultiDictionary<Point<int>, Edge<Point<int>>>(true);
@@ -135,7 +135,7 @@ namespace SmartMap
                 {      
                     this.md2.Add(e.Source, e); // out-edge
                     this.md2.Add(e.Target, e); // in-edge
-                        //Console.WriteLine("The vertices are: {0} {1}", e.Source, e);
+                    //Console.WriteLine("The vertices are: {0} {1}", e.Source, e);
                 }
             }
         }
@@ -187,13 +187,14 @@ namespace SmartMap
         /// </summary>
         /// <param name="rootX">Root x: Must be less than tileAmount</param>
         /// <param name="rootZ">Root z: Must be less than tileAmount</param>
-        public bool GeneratePath(string type, bool automated, int branchX, int branchZ, int rootX, int rootZ)
+        public bool GeneratePath(string type, bool automated, int rootX, int rootZ)
         {
             Console.WriteLine("Point: {0} : {1} is the entrance for this module", rootX, rootZ);
+            Console.ReadLine();
 
             // fill in the entrance vertex for searcher
-            //pointFirst.Width = rootX;
-            //pointFirst.Length = rootZ;
+            pointFirst.Width = rootX;
+            pointFirst.Length = rootZ;
 
             this.vedSuccessors = new Dictionary<Point<int>, Edge<Point<int>>>();
                             
@@ -209,8 +210,8 @@ namespace SmartMap
                 foreach (Point<int> v in this.graph.Vertices) {   
                     if (this.graph.ContainsVertex(v) & this.graph.Degree(v) > 0) { // if it has edges
                         if (tick == 0) {  
-                            branchX = v.Width;
-                            branchZ = v.Length;
+                            //branchX = v.Width;
+                            //branchZ = v.Length;
                             tick++;  
                         }
                         rootX = v.Width;
@@ -238,6 +239,7 @@ namespace SmartMap
             }
             catch (Exception ex) {
                     Console.WriteLine("{0} Module could not be pathed... SKIPPING", ex.ToString());
+                Console.ReadLine();
                 return false;    
             }
 
@@ -246,14 +248,11 @@ namespace SmartMap
             // delete all edges before edge re-population -- helps remove edgeless vertices
             foreach (Point<int> v in this.graph.Vertices) {
                    this.graph.ClearEdges(v);
-            }
+            }       
 
-            Console.WriteLine("Initial MD Edge Count is: {0}", this.md.Values.Count);
-            Console.WriteLine("Initial MD Edges details are: {0}", this.md.KeyValuePairs);
-            this.md.Clear();
-
-            if (type == "TILESET")
+            if (type == "MODULE")
             {
+                this.md.Clear();
                 Console.WriteLine("--------Adding mazed RandomTreeWithRootBranch graph to dictionary--------");
                 Console.WriteLine("VEDSuccesors Count is: {0}", this.vedSuccessors.Count);
                 // put vedSuccessors in MultiDictionary for mazed map creation (populate edges) 
@@ -278,8 +277,9 @@ namespace SmartMap
                 Console.WriteLine("FINAL MD Edges details are: {0}", this.md.KeyValuePairs);
             }
             
-            if (type == "MAP")
+            if (type == "QUADRANT")
             {
+                this.md2.Clear();
                 // put graph in MultiDictionary for map creation (populate edges) 
                 foreach (Edge<Point<int>> e in this.vedSuccessors.Values)
                 {
@@ -302,6 +302,7 @@ namespace SmartMap
                         if (this.graph.Degree(new Point<int>(x, z)) == 0)
                             this.graph.RemoveVertex(new Point<int>(x, z));
             Console.WriteLine("--------Cleaned up edgeless vertices--------");
+            Console.ReadLine();
 
             // GC.Collect(); // could probably be used. Not too slow.
 
@@ -323,7 +324,7 @@ namespace SmartMap
             {
                 this.bfs = new BreadthFirstSearchAlgorithm<Point<int>, Edge<Point<int>>>(this.graph);
                 
-                this.bfs.StartVertex += new VertexAction<Point<int>>(this.RecordStartVertex);
+                //this.bfs.StartVertex += new VertexAction<Point<int>>(this.RecordStartVertex);
                 this.bfs.ExamineVertex += new VertexAction<Point<int>>(this.RecordVertex);
 
                 Console.WriteLine("Vertex: {0} is the entrance for this module", this.pointFirst);
@@ -333,8 +334,6 @@ namespace SmartMap
                 catch (Exception ex) {
                         Console.WriteLine("{0} Can't find entrance...Module can't be pathed", ex.ToString());
                 }
-
-                //Console.WriteLine("Module solution path is: TODO");
 
                 // add to multi-dictiionary to store all module paths for console readout
                 this.path_module = new List<Vertex<float>>(); // create a new List and add it to path_modules
@@ -389,9 +388,10 @@ namespace SmartMap
         
         private void StateStatus(object obj, EventArgs ea)
         {
-            Console.WriteLine("Maze creator status: {0}", pop.State.ToString());         
+            Console.WriteLine("Maze creator status: {0}", pop.State.ToString());
+            Console.ReadLine();
         }
-        
+
         ///<summary>
         /// DFS Search Algorithm: Record verteces
         ///</summary>

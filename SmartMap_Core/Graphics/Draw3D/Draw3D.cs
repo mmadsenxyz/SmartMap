@@ -1,6 +1,7 @@
 /*
  * Code by Mark V Madsen
  * License BSD
+ * Starport Media llc
 */
 using System;
 using System.Windows.Forms;
@@ -14,6 +15,7 @@ using Axiom.Collections;
 using Axiom.Math;
 using Axiom.Graphics;
 using Axiom.Input;
+using Axiom;
 
 namespace SmartMap
 {
@@ -28,13 +30,13 @@ namespace SmartMap
         private Draw4D d4d;
         public Dictionary<int, Entity> interiorTile;
         public Dictionary<int, Entity> exteriorTile;
-        public SceneNode[] tileNode;
-        public SceneNode[] moduleNode;
-        public SceneNode[] quadrantNode;
         public SceneNode[] mapNode;
+        public SceneNode[] quadrantNode;
+        public SceneNode[] moduleNode;
+        public SceneNode[] tileNode;
         private int meshCount = 0, textureCount = 0;
         private int nodeCount = 0;
-        private int moduleCount = 0, quadrantCount = 0, mapCount = 0;
+        private int mapCount = 0;
         private int newModuleCount = 0;//, newQuadrantCount = 0, newMapCount = 0;
         //private int nextPathnode = 0;
         // user will choose sizeing and quantity of structures.
@@ -42,8 +44,8 @@ namespace SmartMap
         private int /*tileThreshhold = 80,*/ tileClippingAngle = 300;
         // quantity of structures
         private int tilesetNorth = 1, tilesetEast = 1, tileSetDispersion = 7;
-        private float mapSizeNorth = 0, mapSizeEast = 0, tileSetHeight = 150;
-        // the amount of tiles created must match the tile counts to increment through. 
+        private float moduleSizeNorth = 0, moduleSizeEast = 0, tileSetHeight = 150;
+        // object resource counts.The amount of tiles created must be less then the tile counts. 
         //private int sideTileCount = 1000, hallTileCount = 5000, cornerTileCount = 9000, endTileCount = 13000, floorTileCount = 17000;
         //private int outSideTileCount = 500, outHallTileCount = 2500, outCornerTileCount = 4500, outEndTileCount = 6500, outFloorTileCount = 8500;
         private int sideTileCount = 50, hallTileCount = 250, cornerTileCount = 450, endTileCount = 750, floorTileCount = 950;
@@ -71,15 +73,15 @@ namespace SmartMap
         {
             this.sm = new SmartMap_Core();
 
-            this.mapSizeEast = MeshSize * tileAmountEast;
-            this.mapSizeNorth = MeshSize * tileAmountNorth;
+            this.interiorTile = new Dictionary<int, Entity>(3200000); // an Interior style tile will have indoor textures
+            this.exteriorTile = new Dictionary<int, Entity>(3200000); // an Exterior style tile will have outdoor textures
+            this.mapNode = new SceneNode[100]; // a map is an overall region of the world encapsulating Quadrants, Modules and Tiles
+            this.quadrantNode = new SceneNode[1000000]; // a Quadrant is a large section of modules in a Map
+            this.moduleNode = new SceneNode[1000000]; // a Module is a Tileset represeting a myriad of interchangeable tiles
+            this.tileNode = new SceneNode[1000000]; // a tile is a singular interchangeable puzzle-piece within a Tileset Module 
 
-            this.interiorTile = new Dictionary<int, Entity>(3200000);
-            this.exteriorTile = new Dictionary<int, Entity>(3200000);
-            this.tileNode = new SceneNode[1000000];
-            this.moduleNode = new SceneNode[1000000];
-            this.quadrantNode = new SceneNode[1000000];
-            this.mapNode = new SceneNode[100];
+            this.moduleSizeEast = MeshSize * tileAmountEast; // size map east
+            this.moduleSizeNorth = MeshSize * tileAmountNorth; // size of map north
         }
 
         #region Properties
@@ -120,9 +122,8 @@ namespace SmartMap
             CreateGraphics(exteriorTile, "Wall_End", "Room_End.mesh", "TileSet/Wall", 100, 100, false);
             CreateGraphics(exteriorTile, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 100, 100, false);
 
-            // for loops creating new settings for each tile-set - add 2 more tiles for map perimeter
-            CreateObjects(tileSetDispersion, this.tileAmountNorth, this.tileAmountEast, tilesetNorth, tilesetEast);
-            
+            CreateWorld(0, 0, 0, 0, 0);
+
             // =Draw 4D= - For dynamic objects in scene
             // TODO: set up clipping regions for 4 tileSets
             this.d4d = new Draw4D(base.SceneManager);
@@ -207,8 +208,7 @@ namespace SmartMap
             waterNode.Translate(new Vector3(-999, 10, -999));
 
             this.frustumNode.Position = new Vector3(128, 500, 128);
-            Camera.LookAt(new Vector3(0, 0, -300));
-            
+            Camera.LookAt(new Vector3(0, 0, -300)); 
         }
 
         /// <summary>
@@ -239,122 +239,35 @@ namespace SmartMap
             textureCount += textureAmount;
         }
 
-        public void AddModule()
-        {
-            // don't reset terrain
-        }
-
         /// <summary>
-        /// Create and manipulate tileSets as needed
+        /// Create Quadrants for Maps
         /// </summary>
-        /// <param name="tilesetDispersion">TODO: Distance of dispersed Tilesets</param>
-        /// <param name="tileAmountNorth">Amount of Tiles North - At least 1</param>
-        /// <param name="tileAmountEast">Amount of Tiles East - At least 1</param>
-        /// <param name="tilesetNorth">TODO: Amount of Tilesets North - At least 1</param>
-        /// <param name="tilesetEast">TODO: Amount of Tilesets East - At least 1</param>
-        public void CreateObjects(int tilesetDispersion, int tileAmountNorth, int tileAmountEast, int tilesetNorth, int tilesetEast)
-        {
-            float moveEast = 5000, moveNorth = 5000, moveUp = 0;
-            int clippedTileCount = 0;
-            bool tilesetDestroyed = false;
-
-            this.sm.GenerateGraph("TILESET", false, tileAmountNorth, tileAmountEast);
-            CreateTileset(interiorTile, 0, 0, 0); // create generic tileset to adjust it to terrain
-            //// REFINE TILESETS ////
-            // get terrain height - search in center of module - clipping doesn't work as well if oblong map
-            moveUp = SceneManager.GetHeightAt(new Vector3(moveEast + (mapSizeEast / 2), 0, moveNorth + (mapSizeNorth / 2)), 0);
-            Console.WriteLine("Map Location: {0}, {1}", moveEast, moveNorth);
-            // translate module node                 
-            this.moduleNode[moduleCount].Translate(new Vector3(moveEast, moveUp, moveNorth), TransformSpace.World);
-            // check each tileNode verses module node's height and remove edges and tiles that are burried inside terrain. 
-            /*Console.WriteLine("{0}", moduleNode[moduleCount].Name + "'s nodes are being searched for terrain clipping...");
-            foreach (SceneNode node in moduleNode[moduleCount].Children) // go through tiles
-            { //// TRIM TILESET AROUND TERRAIN ////
-                Console.WriteLine("{0}", node.Name + " is being checked..."); // derivedPosition for real world tileNode position - (derived) very important.
-                float tileHeight = SceneManager.GetHeightAt(new Vector3(node.DerivedPosition.x, 0, node.DerivedPosition.z), 0);
-                if (1000 > (moveUp - MeshSize) + tileClippingAngle) // if tile is in terrain 
-                {
-                    clippedTileCount++;
-                    if (clippedTileCount == (tileAmountNorth * tileAmountEast) * 0.8)
-                    { // if removed tile count equals tileThreshold, remove entire module
-                        SceneManager.DestroySceneNode(moduleNode[moduleCount].Name);
-                        tilesetDestroyed = true;
-                        Console.WriteLine("Too many tiles clipped so module removed. Searching next module.\n\n\n");
-                    }
-                    else if (!tilesetDestroyed)
-                    { // remove tile 
-                        Console.WriteLine("{0}", node.Name + " is too far in terrain.");
-                        // remove trimmed tileNodes' vertex from graph
-                        for (int x = 0; x < this.sm.Width; x++)
-                        {
-                            for (int z = 0; z < this.sm.Length; z++)
-                            {
-                                // check vertex against tileNode vertex
-                                if (x * MeshSize == node.Position.x & z * MeshSize == node.Position.z)
-                                {
-                                    if (this.sm.graph.ContainsVertex(new Point<int>(x, z)))
-                                    {
-                                        Console.WriteLine("Found tilenode's buried Readout vertex: " + x + "," + z + " ...Removing vertex.");
-                                        this.sm.graph.RemoveVertex(new Point<int>(x, z)); // remove vertices to search valid graph. 
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }*/
-            if (tilesetDestroyed == false)
-            { // RECREATE EXISTING OPEN FLOOR MODULES AS MAZES FITTING TERRAIN
-                Console.WriteLine("...Re-Creating " + moduleNode[moduleCount].Name + "'s tile-set into maze that fits terrain.");
-                // reset node arrays
-                SceneManager.DestroySceneNode(moduleNode[moduleCount].Name);
-                Console.WriteLine("{0} has {1} children left after being destroyed for re-creation", moduleNode[moduleCount].Name, moduleNode[moduleCount].ChildCount);
-                // generate maze with auto or manual path - if it zonks out skip :-)
-                if (!this.sm.GeneratePath("TILESET", false, 0, 0, 0, 0)) { return; }
-                // Creates and searches logical path through module (shortest-path)
-                this.sm.SearchPath("BFS", moduleNode[moduleCount]);
-                CreateTileset(interiorTile, 0, 0, 0);
-                Console.WriteLine(moduleNode[moduleCount].Name + " REMODELED");
-                // translate new module node                 
-                this.moduleNode[moduleCount].Translate(new Vector3(moveEast, moveUp + this.tileSetHeight, moveNorth), TransformSpace.World);
-                // AUTO-MOLD TERRAIN to fit around tileset. Usefull for a "Foundation" under module
-                foreach (SceneNode node in moduleNode[moduleCount].Children)
-                { // bring up or lower terrain (terrain deformation) to match all tileNode heights 
-                    SceneManager.SetHeightAt(node.DerivedPosition, node.DerivedPosition.y - (MeshSize/2));
-                }
-                moduleCount++; // next module only if not destroyed
-            }
-            clippedTileCount = 0; // reset variables
-        }
-
-        /// <summary>
-        /// TODO: Create Quadrants for Map (Each Vertex is a Quadrant and not a Module)
-        /// </summary>
-        /// <param name="tilesetDispersion">Distance of dispersed Tilesets</param>
-        /// <param name="tilesetNorth">Amount of Tilests North - At least 1</param>
-        /// <param name="tilesetEast">Amount of Tilesets East - At least 1</param>
+        /// <param name="quadrantDispersion">Distance of dispersed Tilesets</param>
+        /// <param name="quadrantAmountNorth"></param>
+        /// <param name="quadtrantAmountEast"></param>
+        /// <param name="quadrantNorth"></param>
+        /// <param name="quadrantEast"></param>
         public void CreateWorld(int quadrantDispersion, int quadrantAmountNorth, int quadtrantAmountEast, int quadrantNorth, int quadrantEast)
         {
-            this.sm.GenerateGraph("MAP", false, 2, 2);
-            this.sm.GeneratePath("MAP", false, 1, 1, 9, 0); // generate maze with auto or manual path - has error handling   
-
-            CreateMap(0, 0, 0);
+            this.sm.GenerateGraph("QUADRANT", false, 2, 2);
+            this.sm.GeneratePath("QUADRANT", false, 0, 0); // generate maze with auto or manual path - has error handling   
+            Console.WriteLine("--------EXITING PATH GENERATION FOR QUADRANT--------");
+            Console.ReadLine();
+            CreateMap(0, 0, 0, 0);
         }
 
         #endregion Create Scene
 
-        #region Tileset
+        #region Map, Quadrants, Modules and Tiles
 
         /// <summary>
-        /// Prints to screen a tileset as a 3D Axiom "moduleNode" SceneNode 
+        /// Print Modules (Tilesets) with Tiles
         /// </summary>
-        /// <param name="tile">An array of tile entites to create</param>
-        /// <param name="recreate">Recreate the tile-set or it creates a new one</param>
-        /// <param name="skew">Skewing of tile tile-set dispersion</param>
-        /// <param name="xPosition">Where to place the tile-set in the scene X</param>
-        /// <param name="yPosition">Where to place the tile-set in the scene Y</param>
-        /// <param name="zPosition">Where to place the tile-set in the scene Z</param>
-        public void CreateTileset(Dictionary<int, Entity> tile, /*int skew,*/ float xPosition, float yPosition, float zPosition)
+        /// <param name="tile">Attach mesh objects</param>
+        /// <param name="xPosition"></param>
+        /// <param name="yPosition"></param>
+        /// <param name="zPosition"></param>
+        public void CreateModule(Dictionary<int, Entity> tile, /*int skew,*/ int moduleCount,  float xPosition, float yPosition, float zPosition)
         {
             float x = 0, /*y = 0,*/ z = 0;
             int passes = 0;
@@ -560,31 +473,29 @@ namespace SmartMap
         }
 
         /// <summary>
-        /// Print Map of tileSets 
+        /// Print a Map of Quadrants containing Modules
         /// </summary>
-        /// <param name="tile">An array of tile entites to create</param>
-        /// <param name="recreate">Recreate the map or it creates a new one</param>
-        /// <param name="skew">Skewing of tile quadrant dispersion</param>
-        /// <param name="xPosition">Where to place the map in the scene X</param>
-        /// <param name="yPosition">Where to place the map in the scene Y</param>
-        /// <param name="zPosition">Where to place the map in the scene Z</param>
-        public void CreateMap(/*int skew,*/ float xPosition, float yPosition, float zPosition)
+        /// <param name="quadrantCount"></param>
+        /// <param name="xPosition"></param>
+        /// <param name="yPosition"></param>
+        /// <param name="zPosition"></param>
+        public void CreateMap(/*int skew,*/ int quadrantCount, float xPosition, float yPosition, float zPosition)
         {
             float x = 0, /*y = 0,*/ z = 0;
             int passes = 0;
-            moduleCount = 0;
+            int moduleCount = 0;
 
-            // create modules per Tileset
-            this.mapNode[mapCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Map " + mapCount);
+            //this.mapNode[mapCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Map " + mapCount);
+            quadrantNode[quadrantCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Quadrant " + quadrantCount);
 
-            // MAKE TILES - transfer graph to Axiom
+            // MAKE MODULES - transfer graph to Axiom
             // do vertices
-            foreach (Point<int> v in sm.md2.Keys) // taken from mazed MultiDictionary+
+            foreach (Point<int> v in sm.md2.Keys) // taken from mazed MultiDictionary
             {
-                passes = 0; // must complete edge amount to create tileNode
-                // get the initial vertex size of world map.
-                x = (v.Width * MeshSize) + xPosition;
-                z = (v.Length * MeshSize) + zPosition;
+                passes = 0; // must complete edge amount to create correct module
+                // get the initial vertex location of world map plus any additional distance.
+                x = (v.Width * moduleSizeEast) + xPosition;
+                z = (v.Length * moduleSizeNorth) + zPosition;
 
                 // find current edge values. Verteces remain the same
                 Wintellect.PowerCollections.CollectionBase<Edge<Point<int>>> ec =
@@ -593,37 +504,28 @@ namespace SmartMap
                 foreach (Edge<Point<int>> e in ec) // edges per vertex, 1-4
                 {
                     // END
-                    if (ec.Count == 1) // one edge for End tile`
+                    if (ec.Count == 1) // one edge for End tile
                     {
-                        quadrantNode[quadrantCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Quadrant " + quadrantCount);
-                        //quadrantNode[quadrantCount].ResetToInitialState(); // set mesh North as created in modeler
-                        quadrantNode[quadrantCount].Position = new Vector3(x, 0, z);
+                        ManufactureModule(moduleCount);
+                        //moduleNode[moduleCount].ResetToInitialState(); // set module North as created in modeler
+                        moduleNode[moduleCount].Position = new Vector3(x, 0, z);
 
-                        quadrantNode[quadrantCount].AddChild(moduleNode[moduleCount]);
-                        moduleNode[moduleCount].Position = quadrantNode[quadrantCount].Position;
-                        moduleCount++;
-                        quadrantNode[quadrantCount].AddChild(moduleNode[moduleCount]);
-                        moduleNode[moduleCount].Position = quadrantNode[quadrantCount].Position;
-                        moduleCount++;
-                        quadrantNode[quadrantCount].AddChild(moduleNode[moduleCount]);
-                        moduleNode[moduleCount].Position = quadrantNode[quadrantCount].Position;
-                        moduleCount++;
                         // yaw
                         if ((e.Source.Width < v.Width) || (e.Target.Width < v.Width))
                         {
-                            quadrantNode[quadrantCount].Yaw(90);
+                            moduleNode[moduleCount].Yaw(90);
                         }
                         else if ((e.Source.Width > v.Width) || (e.Target.Width > v.Width))
                         {
-                            quadrantNode[quadrantCount].Yaw(270);
+                            moduleNode[moduleCount].Yaw(270);
                         }
                         else if ((e.Source.Length < v.Length) || (e.Target.Length < v.Length))
                         {
-                            quadrantNode[quadrantCount].Yaw(0);
+                            moduleNode[moduleCount].Yaw(0);
                         }
                         else if ((e.Source.Length > v.Length) || (e.Target.Length > v.Length))
                         {
-                            quadrantNode[quadrantCount].Yaw(180);
+                            moduleNode[moduleCount].Yaw(180);
                         }
                     }
                     // HALL 
@@ -640,60 +542,48 @@ namespace SmartMap
                         else if ((((e.Source.Width != v.Width) | (e.Target.Width != v.Width)) & ((sew2 != v.Width) | (tew2 != v.Width)))
                           | (((e.Source.Length != v.Length) | (e.Target.Length != v.Length)) & ((sel2 != v.Length) | (tel2 != v.Length))))
                         {
-                            quadrantNode[quadrantCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Quadrant " + quadrantCount);
-                            //quadrantNode[quadrantCount].ResetToInitialState();
-                            quadrantNode[quadrantCount].Position = new Vector3(x, 0, z);
+                            ManufactureModule(moduleCount);
+                            //moduleNode[moduleCount].ResetToInitialState(); // set module North as created in modeler
+                            moduleNode[moduleCount].Position = new Vector3(x, 0, z);
                             /*if (this.sm.NearbyVerticesEmpty(v) == "empty_corner") {
                                 quadrantNode[quadrantCount].AttachObject(exteriorTile[outHallTileCount]);
                                 outHallTileCount++; 
                             }  
                             else*/
-                            quadrantNode[quadrantCount].AddChild(moduleNode[moduleCount]);
-                            moduleNode[moduleCount].Position = quadrantNode[quadrantCount].Position;
-                            moduleCount++;
-                            quadrantNode[quadrantCount].AddChild(moduleNode[moduleCount]);
-                            moduleNode[moduleCount].Position = quadrantNode[quadrantCount].Position;
-                            moduleCount++;
                             // yaw 
                             if ((sew2 != v.Width) | (tew2 != v.Width))
-                                quadrantNode[quadrantCount].Yaw(90);
+                                moduleNode[moduleCount].Yaw(90);
                         }
                         else
                         { // CORNER
-                            quadrantNode[quadrantCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Quadrant " + quadrantCount);
-                            //quadrantNode[quadrantCount].ResetToInitialState();                            
-                            quadrantNode[quadrantCount].Position = new Vector3(x, 0, z);
+                            ManufactureModule(moduleCount);
+                            //moduleNode[moduleCount].ResetToInitialState(); // set module North as created in modeler
+                            moduleNode[moduleCount].Position = new Vector3(x, 0, z);
                             /*if (this.sm.NearbyVerticesEmpty(v) == "empty_corner") {
                                 quadrantNode[quadrantCount].AttachObject(exteriorTile[outCornerTileCount]);
                                 outCornerTileCount++; 
                             }
                             else*/
-                            quadrantNode[quadrantCount].AddChild(moduleNode[moduleCount]);
-                            moduleNode[moduleCount].Position = quadrantNode[quadrantCount].Position;
-                            moduleCount++;
-                            quadrantNode[quadrantCount].AddChild(moduleNode[moduleCount]);
-                            moduleNode[moduleCount].Position = quadrantNode[quadrantCount].Position;
-                            moduleCount++;
                             // yaw 
                             if ((((e.Source.Width > v.Width) | (e.Target.Width > v.Width)) & ((sel2 < v.Length) | (tel2 < v.Length)))
                             || (((e.Source.Length < v.Length) | (e.Target.Length < v.Length)) & ((sew2 > v.Width) | (tew2 > v.Width))))
                             {
-                                quadrantNode[quadrantCount].Yaw(0);
+                                moduleNode[moduleCount].Yaw(0);
                             }
                             else if ((((e.Source.Width < v.Width) | (e.Target.Width < v.Width)) & ((sel2 > v.Length) | (tel2 > v.Length)))
                           || (((e.Source.Length > v.Length) | (e.Target.Length > v.Length)) & ((sew2 < v.Width) | (tew2 < v.Width))))
                             {
-                                quadrantNode[quadrantCount].Yaw(180);
+                                moduleNode[moduleCount].Yaw(180);
                             }
                             else if ((((e.Source.Width > v.Width) | (e.Target.Width > v.Width)) & ((sel2 > v.Length) | (tel2 > v.Length)))
                           || (((e.Source.Length > v.Length) | (e.Target.Length > v.Length)) & ((sew2 > v.Width) | (tew2 > v.Width))))
                             {
-                                quadrantNode[quadrantCount].Yaw(270);
+                                moduleNode[moduleCount].Yaw(270);
                             }
                             else if ((((e.Source.Width < v.Width) | (e.Target.Width < v.Width)) & ((sel2 < v.Length) | (tel2 < v.Length)))
                           || (((e.Source.Length < v.Length) | (e.Target.Length < v.Length)) & ((sew2 < v.Width) | (tew2 < v.Width))))
                             {
-                                quadrantNode[quadrantCount].Yaw(90);
+                                moduleNode[moduleCount].Yaw(90);
                             }
                         }
                     }
@@ -718,74 +608,141 @@ namespace SmartMap
                         }
                         else
                         {
-                            quadrantNode[quadrantCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Quadrant " + quadrantCount);
-                            //quadrantNode[quadrantCount].ResetToInitialState();
-                            quadrantNode[quadrantCount].Position = new Vector3(x, 0, z);
+                            ManufactureModule(moduleCount);
+                            //moduleNode[moduleCount].ResetToInitialState(); // set module North as created in modeler
+                            moduleNode[moduleCount].Position = new Vector3(x, 0, z);
                             /*if (this.sm.NearbyVerticesEmpty(v) == "empty_corner") {
-                                quadrantNode[quadrantCount].AttachObject(exteriorTile[outSideTileCount]);
                                 outSideTileCount++; 
                             }
                             else*/
-                            quadrantNode[quadrantCount].AddChild(moduleNode[moduleCount]);
-                            moduleNode[moduleCount].Position = quadrantNode[quadrantCount].Position;
-                            moduleCount++;
-                            quadrantNode[quadrantCount].AddChild(moduleNode[moduleCount]);
-                            moduleNode[moduleCount].Position = quadrantNode[quadrantCount].Position;
-                            moduleCount++;
                             // yaw 
                             if (!(e.Source.Length < v.Length) & !(e.Target.Length < v.Length) & !(sel2 < v.Length) & !(tel2 < v.Length) & !(sel3 < v.Length) & !(tel3 < v.Length))
                             {
-                                quadrantNode[quadrantCount].Yaw(180);
+                                moduleNode[moduleCount].Yaw(180);
                             }
                             else if (!(e.Source.Length > v.Length) & !(e.Target.Length > v.Length) & !(sel2 > v.Length) & !(tel2 > v.Length) & !(sel3 > v.Length) & !(tel3 > v.Length))
                             {
-                                quadrantNode[quadrantCount].Yaw(0);
+                                moduleNode[moduleCount].Yaw(0);
                             }
                             else if (!(e.Source.Width < v.Width) & !(e.Target.Width < v.Width) & !(sew2 < v.Width) & !(tew2 < v.Width) & !(sew3 < v.Width) & !(tew3 < v.Width))
                             {
-                                quadrantNode[quadrantCount].Yaw(270);
+                                moduleNode[moduleCount].Yaw(270);
                             }
                             else if (!(e.Source.Width > v.Width) & !(e.Target.Width > v.Width) & !(sew2 > v.Width) & !(tew2 > v.Width) & !(sew3 > v.Width) & !(tew3 > v.Width))
                             {
-                                quadrantNode[quadrantCount].Yaw(90);
+                                moduleNode[moduleCount].Yaw(90);
                             }
                         }
                     }
                     // FLOOR
                     if ((ec.Count == 4) & (passes == 0)) // 4 on the floor :)
                     {
-                        quadrantNode[quadrantCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Quadrant " + quadrantCount);
-                        //quadrantNode[quadrantCount].ResetToInitialState();
-                        quadrantNode[quadrantCount].Position = new Vector3(x, 0, z);
+                        ManufactureModule(moduleCount);
+                        //moduleNode[moduleCount].ResetToInitialState(); // set module North as created in modeler
+                        moduleNode[moduleCount].Position = new Vector3(x, 0, z);
                         /*if (this.sm.NearbyVerticesEmpty(v) == "empty_corner") {
                             quadrantNode[quadrantCount].AttachObject(exteriorTile[outFloorTileCount]);
                             outFloorTileCount++;
                         } 
                         else*/
-                        quadrantNode[quadrantCount].AddChild(moduleNode[moduleCount]);
-                        moduleNode[moduleCount].Position = quadrantNode[quadrantCount].Position;
-                        moduleCount++;
-                        quadrantNode[quadrantCount].AddChild(moduleNode[moduleCount]);
-                        moduleNode[moduleCount].Position = quadrantNode[quadrantCount].Position;
-                        moduleCount++;
                         passes = 1;
                     } /*Debug:*/  //Console.WriteLine("Vertex: {0} -- Edges Source: {1} Target: {2}", v, e.Source, e.Target); Console.WriteLine("{0} {1}", v, ec.Count);        
                 } // add your created quadrant to the map 
-                if (quadrantNode[quadrantCount] != null)
-                    this.mapNode[mapCount].AddChild(quadrantNode[quadrantCount]);
-                quadrantCount++;
+                if (moduleNode[moduleCount] != null)
+                {
+                    this.quadrantNode[quadrantCount].AddChild(moduleNode[moduleCount]);
+                    Console.WriteLine("[][][] New Module {0} has been created for Quadrant [][][]", nodeCount);
+                    Console.ReadLine();
+                }
+                moduleCount++;
             }
+        }
+
+        public void ManufactureModule(int moduleCount)
+        {
+            float moveEast = 0, moveNorth = 0, moveUp = 0;
+            //int clippedTileCount = 0;
+            bool tilesetDestroyed = false;
+
+            //// REFINE MODULES ////
+            this.sm.GenerateGraph("MODULE", false, tileAmountNorth, tileAmountEast);
+            CreateModule(interiorTile, moduleCount, 0, 0, 0); // create generic tileset to adjust it to terrain
+            // get terrain height - search in center of module - clipping doesn't work as well if oblong map
+            moveUp = SceneManager.GetHeightAt(new Vector3(moveEast + (moduleSizeEast / 2), 0, moveNorth + (moduleSizeNorth / 2)), 0);
+            Console.WriteLine("Map Location: {0}, {1}", moveEast, moveNorth);
+            // translate module node                 
+            this.moduleNode[moduleCount].Translate(new Vector3(moveEast, moveUp, moveNorth), TransformSpace.World);
+            // check each tileNode verses module node's height and remove edges and tiles that are burried inside terrain. 
+            /*Console.WriteLine("{0}", moduleNode[moduleCount].Name + "'s nodes are being searched for terrain clipping...");
+            foreach (SceneNode node in moduleNode[moduleCount].Children) // go through tiles
+            { //// TRIM TILESET AROUND TERRAIN ////
+                Console.WriteLine("{0}", node.Name + " is being checked..."); // derivedPosition for real world tileNode position - (derived) very important.
+                float tileHeight = SceneManager.GetHeightAt(new Vector3(node.DerivedPosition.x, 0, node.DerivedPosition.z), 0);
+                if (1000 > (moveUp - MeshSize) + tileClippingAngle) // if tile is in terrain 
+                {
+                    clippedTileCount++;
+                    if (clippedTileCount == (tileAmountNorth * tileAmountEast) * 0.8)
+                    { // if removed tile count equals tileThreshold, remove entire module
+                        SceneManager.DestroySceneNode(moduleNode[moduleCount].Name);
+                        tilesetDestroyed = true;
+                        Console.WriteLine("Too many tiles clipped so module removed. Searching next module.\n\n\n");
+                    }
+                    else if (!tilesetDestroyed)
+                    { // remove tile 
+                        Console.WriteLine("{0}", node.Name + " is too far in terrain.");
+                        // remove trimmed tileNodes' vertex from graph
+                        for (int x = 0; x < this.sm.Width; x++)
+                        {
+                            for (int z = 0; z < this.sm.Length; z++)
+                            {
+                                // check vertex against tileNode vertex
+                                if (x * MeshSize == node.Position.x & z * MeshSize == node.Position.z)
+                                {
+                                    if (this.sm.graph.ContainsVertex(new Point<int>(x, z)))
+                                    {
+                                        Console.WriteLine("Found tilenode's buried Readout vertex: " + x + "," + z + " ...Removing vertex.");
+                                        this.sm.graph.RemoveVertex(new Point<int>(x, z)); // remove vertices to search valid graph. 
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }*/
+            if (tilesetDestroyed == false)
+            { // RECREATE EXISTING OPEN FLOOR MODULES AS MAZES FITTING TERRAIN
+                Console.WriteLine("...Re-Creating " + moduleNode[moduleCount].Name + "'s tile-set into maze that fits terrain.");
+                // reset node arrays
+                SceneManager.DestroySceneNode(moduleNode[moduleCount].Name);
+                Console.WriteLine("{0} has {1} children left after being destroyed for re-creation", moduleNode[moduleCount].Name, moduleNode[moduleCount].ChildCount);
+                // generate maze with auto or manual path - if it zonks out skip :-)
+                if (!this.sm.GeneratePath("MODULE", false, 0, 0)) { return; }
+                // creates and searches logical path through module (shortest-path)
+                //this.sm.SearchPath("BFS", moduleNode[moduleCount]);
+                CreateModule(interiorTile, moduleCount, 0, 0, 0);
+                Console.WriteLine(moduleNode[moduleCount].Name + " REMODELED");
+                // translate new module node                 
+                this.moduleNode[moduleCount].Translate(new Vector3(moveEast, moveUp + this.tileSetHeight, moveNorth), TransformSpace.World);
+                // AUTO-MOLD TERRAIN to fit around tileset. Usefull for a "Foundation" under module
+                Console.WriteLine("{0}", moduleNode[moduleCount].Children.Count);
+                Console.ReadLine();
+                foreach (SceneNode node in moduleNode[moduleCount].Children)
+                { // bring up or lower terrain (terrain deformation) to match all tileNode heights 
+                    //SceneManager.SetHeightAt(node.DerivedPosition, node.DerivedPosition.y - (MeshSize / 2));
+                }
+            }
+            //clippedTileCount = 0; // reset variables
         }
 
         #endregion TileSet
 
-        protected virtual void GenerateTiles()
+        protected virtual void ResetTiles(int moduleCount)
         {
             //this.nextPathnode = 0;
 
             // reset map variables 
-            this.mapSizeEast = MeshSize * tileAmountEast;
-            this.mapSizeNorth = MeshSize * tileAmountNorth;
+            this.moduleSizeEast = MeshSize * tileAmountEast;
+            this.moduleSizeNorth = MeshSize * tileAmountNorth;
 
             for (; newModuleCount < moduleCount; newModuleCount++)
             {
@@ -799,12 +756,12 @@ namespace SmartMap
             }
             GC.Collect();
 
-            // reset variables 
+            // reset object resource variables 
             sideTileCount = 1000; hallTileCount = 5000; cornerTileCount = 9000; endTileCount = 13000; floorTileCount = 17000;
             outSideTileCount = 500; outHallTileCount = 2500; outCornerTileCount = 4500; outEndTileCount = 6500; outFloorTileCount = 8500;
             // refresh terrain
             //SceneManager.ResetTerrain();
-            CreateObjects(tileSetDispersion, tileAmountNorth, tileAmountEast, tilesetNorth, tilesetEast);
+            CreateWorld(0, 0, 0, 0, 0);
 
             // needs to stop frame animation to build tiles properly
             //Window.DebugText = string.Format("Press E to enter Edit Mode");
@@ -853,7 +810,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10); // wont need to do this every time
                         this.sm.SearchPath();
                         RemoveTileset(4);
-                        CreateTileset(4, true, tileNode[0].Position.x - mapSize, 0, tileNode[0].Position.z - mapSize);
+                        CreateModule(4, true, tileNode[0].Position.x - mapSize, 0, tileNode[0].Position.z - mapSize);
                         d4d.zoneGroup[3].Position = new Vector3(d4d.zoneGroup[0].Position.x - mapSize*2, 0, d4d.zoneGroup[0].Position.z - mapSize*2);
                     }
                 } else
@@ -866,7 +823,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(3);
-                        CreateTileset(3, true, tileNode[0].Position.x, 0, tileNode[0].Position.z - mapSize);
+                        CreateModule(3, true, tileNode[0].Position.x, 0, tileNode[0].Position.z - mapSize);
                         d4d.zoneGroup[2].Position = new Vector3(d4d.zoneGroup[0].Position.x, 0, d4d.zoneGroup[0].Position.z - mapSize*2);
                     }
                 } else
@@ -879,7 +836,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(4);
-                        CreateTileset(4, true, tileNode[0].Position.x + mapSize, 0, tileNode[0].Position.z - mapSize);
+                        CreateModule(4, true, tileNode[0].Position.x + mapSize, 0, tileNode[0].Position.z - mapSize);
                         d4d.zoneGroup[3].Position = new Vector3(d4d.zoneGroup[0].Position.x, 0, d4d.zoneGroup[0].Position.z - mapSize*2);
                     }
                 } else
@@ -892,7 +849,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(3);
-                        CreateTileset(3, true, tileNode[0].Position.x, 0, tileNode[0].Position.z - mapSize);
+                        CreateModule(3, true, tileNode[0].Position.x, 0, tileNode[0].Position.z - mapSize);
                         d4d.zoneGroup[2].Position = new Vector3(d4d.zoneGroup[1].Position.x, 0, d4d.zoneGroup[1].Position.z - mapSize*2);
                     }
                 } else
@@ -905,7 +862,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(4);
-                        CreateTileset(4, true, tileNode[900].Position.x, 0, tileNode[900].Position.z - mapSize);
+                        CreateModule(4, true, tileNode[900].Position.x, 0, tileNode[900].Position.z - mapSize);
                         d4d.zoneGroup[3].Position = new Vector3(d4d.zoneGroup[1].Position.x, 0, d4d.zoneGroup[1].Position.z - mapSize*2);
                     }
                 } else
@@ -918,7 +875,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(3);
-                        CreateTileset(3, true, tileNode[900].Position.x + mapSize, 0, tileNode[900].Position.z - mapSize);
+                        CreateModule(3, true, tileNode[900].Position.x + mapSize, 0, tileNode[900].Position.z - mapSize);
                         d4d.zoneGroup[2].Position = new Vector3(d4d.zoneGroup[1].Position.x + mapSize*2, 0, d4d.zoneGroup[1].Position.z - mapSize*2);
                     }
                 } else
@@ -931,7 +888,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(2);
-                        CreateTileset(2, true, tileNode[0].Position.x - mapSize, 0, tileNode[0].Position.z);
+                        CreateModule(2, true, tileNode[0].Position.x - mapSize, 0, tileNode[0].Position.z);
                         d4d.zoneGroup[1].Position = new Vector3(d4d.zoneGroup[0].Position.x - mapSize*2, 0, d4d.zoneGroup[0].Position.z);
                     }
                 } else
@@ -948,7 +905,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(2);
-                        CreateTileset(2, true, tileNode[0].Position.x + mapSize, 0, tileNode[0].Position.z);
+                        CreateModule(2, true, tileNode[0].Position.x + mapSize, 0, tileNode[0].Position.z);
                         d4d.zoneGroup[1].Position = new Vector3(d4d.zoneGroup[0].Position.x, 0, d4d.zoneGroup[0].Position.z);
                     }
                 } else
@@ -961,7 +918,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(1);
-                        CreateTileset(1, true, tileNode[900].Position.x - mapSize, 0, tileNode[900].Position.z);
+                        CreateModule(1, true, tileNode[900].Position.x - mapSize, 0, tileNode[900].Position.z);
                         d4d.zoneGroup[0].Position = new Vector3(d4d.zoneGroup[1].Position.x, 0, d4d.zoneGroup[1].Position.z);
                     }
                 } else
@@ -979,7 +936,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(1);
-                        CreateTileset(1, true, tileNode[900].Position.x + mapSize, 0, tileNode[0].Position.z);
+                        CreateModule(1, true, tileNode[900].Position.x + mapSize, 0, tileNode[0].Position.z);
                         d4d.zoneGroup[0].Position = new Vector3(d4d.zoneGroup[1].Position.x + mapSize*2, 0, d4d.zoneGroup[1].Position.z);
                     }
                 } else
@@ -992,7 +949,7 @@ namespace SmartMap
                             this.sm.GeneratePath(10, 10);
                             this.sm.SearchPath();
                             RemoveTileset(4);
-                            CreateTileset(4, true, tileNode[0].Position.x - mapSize, 0, tileNode[0].Position.z + mapSize);
+                            CreateModule(4, true, tileNode[0].Position.x - mapSize, 0, tileNode[0].Position.z + mapSize);
                             d4d.zoneGroup[3].Position =  new Vector3(d4d.zoneGroup[0].Position.x - mapSize*2, 0, d4d.zoneGroup[0].Position.z);
                         }
                 } else
@@ -1005,7 +962,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(3);
-                        CreateTileset(3, true, tileNode[0].Position.x, 0, tileNode[0].Position.z + mapSize);
+                        CreateModule(3, true, tileNode[0].Position.x, 0, tileNode[0].Position.z + mapSize);
                         d4d.zoneGroup[2].Position = new Vector3(d4d.zoneGroup[0].Position.x, 0, d4d.zoneGroup[0].Position.z);
                     }
                 } else
@@ -1018,7 +975,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(4);
-                        CreateTileset(4, true, tileNode[0].Position.x + mapSize, 0, tileNode[0].Position.z + mapSize);
+                        CreateModule(4, true, tileNode[0].Position.x + mapSize, 0, tileNode[0].Position.z + mapSize);
                         d4d.zoneGroup[3].Position = new Vector3(d4d.zoneGroup[0].Position.x, 0, d4d.zoneGroup[0].Position.z);
                     }
                 } else
@@ -1031,7 +988,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(3);
-                        CreateTileset(3, true, tileNode[900].Position.x - mapSize, 0, tileNode[900].Position.z + mapSize);
+                        CreateModule(3, true, tileNode[900].Position.x - mapSize, 0, tileNode[900].Position.z + mapSize);
                         d4d.zoneGroup[2].Position = new Vector3(d4d.zoneGroup[1].Position.x, 0, d4d.zoneGroup[1].Position.z);
                     }
                 } else
@@ -1044,7 +1001,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(4);
-                        CreateTileset(4, true, tileNode[900].Position.x, 0, tileNode[900].Position.z + mapSize);
+                        CreateModule(4, true, tileNode[900].Position.x, 0, tileNode[900].Position.z + mapSize);
                         d4d.zoneGroup[3].Position = new Vector3(d4d.zoneGroup[1].Position.x, 0, d4d.zoneGroup[1].Position.z);
                     }
                 } else
@@ -1057,7 +1014,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(3);
-                        CreateTileset(3, true, tileNode[900].Position.x + mapSize, 0, tileNode[900].Position.z + mapSize);
+                        CreateModule(3, true, tileNode[900].Position.x + mapSize, 0, tileNode[900].Position.z + mapSize);
                         d4d.zoneGroup[2].Position = new Vector3(d4d.zoneGroup[1].Position.x + mapSize*2, 0, d4d.zoneGroup[1].Position.z);
                     }
                 } else
@@ -1070,7 +1027,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(2);
-                        CreateTileset(2, true, tileNode[1800].Position.x - mapSize, 0, tileNode[1800].Position.z - mapSize);
+                        CreateModule(2, true, tileNode[1800].Position.x - mapSize, 0, tileNode[1800].Position.z - mapSize);
                         d4d.zoneGroup[1].Position = new Vector3(d4d.zoneGroup[2].Position.x - mapSize*2, 0, d4d.zoneGroup[2].Position.z);
                     }
                 } else
@@ -1083,7 +1040,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(1);
-                        CreateTileset(1, true, tileNode[1800].Position.x, 0, tileNode[1800].Position.z - mapSize);
+                        CreateModule(1, true, tileNode[1800].Position.x, 0, tileNode[1800].Position.z - mapSize);
                         d4d.zoneGroup[0].Position = new Vector3(d4d.zoneGroup[2].Position.x, 0, d4d.zoneGroup[2].Position.z);
                     }
                 } else
@@ -1096,7 +1053,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(2);
-                        CreateTileset(2, true, tileNode[1800].Position.x + mapSize, 0, tileNode[1800].Position.z - mapSize);
+                        CreateModule(2, true, tileNode[1800].Position.x + mapSize, 0, tileNode[1800].Position.z - mapSize);
                         d4d.zoneGroup[1].Position = new Vector3(d4d.zoneGroup[2].Position.x, 0, d4d.zoneGroup[2].Position.z);
                     }
                 } else
@@ -1108,7 +1065,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(1);
-                        CreateTileset(1, true, tileNode[2700].Position.x - mapSize, 0, tileNode[2700].Position.z - mapSize);
+                        CreateModule(1, true, tileNode[2700].Position.x - mapSize, 0, tileNode[2700].Position.z - mapSize);
                         d4d.zoneGroup[0].Position = new Vector3(d4d.zoneGroup[3].Position.x, 0, d4d.zoneGroup[3].Position.z);
                     }
                 } else
@@ -1121,7 +1078,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(2);
-                        CreateTileset(2, true, tileNode[2700].Position.x, 0, tileNode[2700].Position.z - mapSize);
+                        CreateModule(2, true, tileNode[2700].Position.x, 0, tileNode[2700].Position.z - mapSize);
                         d4d.zoneGroup[1].Position = new Vector3(d4d.zoneGroup[3].Position.x, 0, d4d.zoneGroup[3].Position.z);
                     }
                 } else
@@ -1134,7 +1091,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(1);
-                        CreateTileset(1, true, tileNode[2700].Position.x + mapSize, 0, tileNode[2700].Position.z - mapSize);
+                        CreateModule(1, true, tileNode[2700].Position.x + mapSize, 0, tileNode[2700].Position.z - mapSize);
                         d4d.zoneGroup[0].Position = new Vector3(d4d.zoneGroup[3].Position.x + mapSize*2, 0, d4d.zoneGroup[3].Position.z);
                     }
                 } else
@@ -1147,7 +1104,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(4);
-                        CreateTileset(4, true, tileNode[1800].Position.x - mapSize, 0, tileNode[0].Position.z);
+                        CreateModule(4, true, tileNode[1800].Position.x - mapSize, 0, tileNode[0].Position.z);
                         d4d.zoneGroup[3].Position = new Vector3(d4d.zoneGroup[2].Position.x - mapSize*2, 0, d4d.zoneGroup[2].Position.z);
                     }
                 } else
@@ -1165,7 +1122,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(4);
-                        CreateTileset(4, true, tileNode[1800].Position.x + mapSize, 0, tileNode[1800].Position.z);
+                        CreateModule(4, true, tileNode[1800].Position.x + mapSize, 0, tileNode[1800].Position.z);
                         d4d.zoneGroup[3].Position = new Vector3(d4d.zoneGroup[2].Position.x, 0, d4d.zoneGroup[2].Position.z);
                     }
                 } else
@@ -1178,7 +1135,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(3);
-                        CreateTileset(3, true, tileNode[2700].Position.x - mapSize, 0, tileNode[2700].Position.z);
+                        CreateModule(3, true, tileNode[2700].Position.x - mapSize, 0, tileNode[2700].Position.z);
                         d4d.zoneGroup[2].Position = new Vector3(d4d.zoneGroup[3].Position.x, 0, d4d.zoneGroup[3].Position.z);
                     }
                 } else
@@ -1196,7 +1153,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(3);
-                        CreateTileset(3, true, tileNode[2700].Position.x + mapSize, 0, tileNode[2700].Position.z);
+                        CreateModule(3, true, tileNode[2700].Position.x + mapSize, 0, tileNode[2700].Position.z);
                         d4d.zoneGroup[2].Position = new Vector3(d4d.zoneGroup[3].Position.x + mapSize*2, 0, d4d.zoneGroup[3].Position.z);
                     }
                 } else
@@ -1209,7 +1166,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(2);
-                        CreateTileset(2, true, tileNode[1800].Position.x - mapSize, 0, tileNode[1800].Position.z + mapSize);
+                        CreateModule(2, true, tileNode[1800].Position.x - mapSize, 0, tileNode[1800].Position.z + mapSize);
                         d4d.zoneGroup[1].Position = new Vector3(d4d.zoneGroup[2].Position.x - mapSize*2, 0, d4d.zoneGroup[2].Position.z + mapSize*2);
                     }
                 } else
@@ -1222,7 +1179,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(1);
-                        CreateTileset(1, true, tileNode[1800].Position.x, 0, tileNode[1800].Position.z + mapSize);
+                        CreateModule(1, true, tileNode[1800].Position.x, 0, tileNode[1800].Position.z + mapSize);
                         d4d.zoneGroup[0].Position = new Vector3(d4d.zoneGroup[2].Position.x, 0, d4d.zoneGroup[2].Position.z);
                     }
                 } else
@@ -1235,7 +1192,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(2);
-                        CreateTileset(2, true, tileNode[1800].Position.x + mapSize, 0, tileNode[1800].Position.z + mapSize);
+                        CreateModule(2, true, tileNode[1800].Position.x + mapSize, 0, tileNode[1800].Position.z + mapSize);
                         d4d.zoneGroup[1].Position = new Vector3(d4d.zoneGroup[2].Position.x, 0, d4d.zoneGroup[2].Position.z + mapSize*2);
                     }
                 } else
@@ -1248,7 +1205,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(1);
-                        CreateTileset(1, true, tileNode[2700].Position.x - mapSize, 0, tileNode[2700].Position.z + mapSize);
+                        CreateModule(1, true, tileNode[2700].Position.x - mapSize, 0, tileNode[2700].Position.z + mapSize);
                         d4d.zoneGroup[0].Position = new Vector3(d4d.zoneGroup[3].Position.x, 0, d4d.zoneGroup[3].Position.z + mapSize*2);
                     }
                 } else
@@ -1261,7 +1218,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(2);
-                        CreateTileset(2, true, tileNode[2700].Position.x, 0, tileNode[2700].Position.z + mapSize);
+                        CreateModule(2, true, tileNode[2700].Position.x, 0, tileNode[2700].Position.z + mapSize);
                         d4d.zoneGroup[1].Position = new Vector3(d4d.zoneGroup[3].Position.x, 0, d4d.zoneGroup[3].Position.z + mapSize*2);
                     }
                 } else
@@ -1274,7 +1231,7 @@ namespace SmartMap
                         this.sm.GeneratePath(10, 10);
                         this.sm.SearchPath();
                         RemoveTileset(1);
-                        CreateTileset(1, true, tileNode[2700].Position.x + mapSize, 0, tileNode[2700].Position.z + mapSize);
+                        CreateModule(1, true, tileNode[2700].Position.x + mapSize, 0, tileNode[2700].Position.z + mapSize);
                         d4d.zoneGroup[0].Position = new Vector3(d4d.zoneGroup[3].Position.x + mapSize*2, 0, d4d.zoneGroup[3].Position.z + mapSize*2);
                     }
                 }
