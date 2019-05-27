@@ -252,7 +252,7 @@ namespace SmartMap
             this.sm.GenerateGraph("QUADRANT", false, 2, 2);
             this.sm.GeneratePath("QUADRANT", false, 0, 0); // generate maze with auto or manual path - has error handling   
             Console.WriteLine("--------EXITING PATH GENERATION FOR QUADRANT--------");
-            Console.ReadLine();
+            //Console.ReadLine();
             CreateMap(0, 0, 0, 0);
         }
 
@@ -652,7 +652,7 @@ namespace SmartMap
                 {
                     this.quadrantNode[quadrantCount].AddChild(moduleNode[moduleCount]);
                     Console.WriteLine("[][][] New Module {0} has been created for Quadrant [][][]", nodeCount);
-                    Console.ReadLine();
+                    //Console.ReadLine();
                 }
                 moduleCount++;
             }
@@ -725,7 +725,7 @@ namespace SmartMap
                 this.moduleNode[moduleCount].Translate(new Vector3(moveEast, moveUp + this.tileSetHeight, moveNorth), TransformSpace.World);
                 // AUTO-MOLD TERRAIN to fit around tileset. Usefull for a "Foundation" under module
                 Console.WriteLine("{0}", moduleNode[moduleCount].Children.Count);
-                Console.ReadLine();
+                //Console.ReadLine();
                 foreach (SceneNode node in moduleNode[moduleCount].Children)
                 { // bring up or lower terrain (terrain deformation) to match all tileNode heights 
                     //SceneManager.SetHeightAt(node.DerivedPosition, node.DerivedPosition.y - (MeshSize / 2));
