@@ -402,7 +402,6 @@ namespace SmartMap
         /// </summary>
         protected virtual void SetupInput()
         {
-
             // retreive and initialize the input system
             Input = PlatformManager.Instance.CreateInputReader();
             Input.Initialize(Window, true, true, false, false);
