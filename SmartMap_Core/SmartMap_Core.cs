@@ -216,8 +216,8 @@ namespace SmartMap
                 }
             }
             // fill in the entrance vertex for searcher
-            pointFirst.Width = branchX;
-            pointFirst.Length = branchZ;
+            pointFirst.Width = rootX;
+            pointFirst.Length = rootZ;
             
              // weight the out-edges
             Dictionary<Edge<Point<int>>, double> weights = new Dictionary<Edge<Point<int>>, double>();
