@@ -190,7 +190,7 @@ namespace SmartMap
         public bool GeneratePath(string type, bool automated, int rootX, int rootZ)
         {
             Console.WriteLine("Point: {0} : {1} is the entrance for this module", rootX, rootZ);
-            Console.ReadLine();
+            //Console.ReadLine();
 
             // fill in the entrance vertex for searcher
             pointFirst.Width = rootX;
@@ -239,7 +239,7 @@ namespace SmartMap
             }
             catch (Exception ex) {
                     Console.WriteLine("{0} Module could not be pathed... SKIPPING", ex.ToString());
-                Console.ReadLine();
+                //Console.ReadLine();
                 return false;    
             }
 
@@ -302,7 +302,7 @@ namespace SmartMap
                         if (this.graph.Degree(new Point<int>(x, z)) == 0)
                             this.graph.RemoveVertex(new Point<int>(x, z));
             Console.WriteLine("--------Cleaned up edgeless vertices--------");
-            Console.ReadLine();
+            //Console.ReadLine();
 
             // GC.Collect(); // could probably be used. Not too slow.
 
@@ -389,7 +389,7 @@ namespace SmartMap
         private void StateStatus(object obj, EventArgs ea)
         {
             Console.WriteLine("Maze creator status: {0}", pop.State.ToString());
-            Console.ReadLine();
+            //Console.ReadLine();
         }
 
         ///<summary>
