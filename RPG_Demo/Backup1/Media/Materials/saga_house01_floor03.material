@@ -1,0 +1,299 @@
+material lambert2
+{
+	technique
+	{
+		pass
+		{
+			ambient 1 1 1 1
+			diffuse 1 1 1 1
+			specular 0 0 0 1
+			emissive 0 0 0
+
+			texture_unit
+			{
+				texture Texture_Floor_Wood_01.png
+				tex_coord_set 0
+				colour_op modulate
+				scale 1 1
+				scroll 0 0
+				rotate 0
+			}
+		}
+	}
+}
+material lambert1
+{
+	technique
+	{
+		pass
+		{
+			ambient 1 1 1 1
+			diffuse 1 1 1 1
+			specular 0 0 0 1
+			emissive 0 0 0
+
+			texture_unit
+			{
+				texture Texture_Bed_Single_01.png
+				tex_coord_set 0
+				colour_op modulate
+				scale 1 1
+				scroll 0 0
+				rotate 0
+			}
+		}
+	}
+}
+material Misc_Book_Magic_01_lambert3
+{
+	technique
+	{
+		pass
+		{
+			ambient 1 1 1 1
+			diffuse 1 1 1 1
+			specular 0 0 0 1
+			emissive 0 0 0
+
+			texture_unit
+			{
+				texture Texture_Book_Big_01.png
+				tex_coord_set 0
+				colour_op modulate
+				scale 1 1
+				scroll 0 0
+				rotate 0
+			}
+		}
+	}
+}
+material Misc_Key_Gold_01_lambert3
+{
+	technique
+	{
+		pass
+		{
+			ambient 1 1 1 1
+			diffuse 1 1 1 1
+			specular 0 0 0 1
+			emissive 0 0 0
+
+			texture_unit
+			{
+				texture Texture_Book_Big_01.png
+				tex_coord_set 0
+				colour_op modulate
+				scale 1 1
+				scroll 0 0
+				rotate 0
+			}
+		}
+	}
+}
+material Store_Chest_Wood_02_lambert5
+{
+	technique
+	{
+		pass
+		{
+			ambient 1 1 1 1
+			diffuse 1 1 1 1
+			specular 0 0 0 1
+			emissive 0 0 0
+
+			texture_unit
+			{
+				texture Texture_Chest_Wood_01.png
+				tex_coord_set 0
+				colour_op modulate
+				scale 1 1
+				scroll 0 0
+				rotate 0
+			}
+		}
+	}
+}
+material Store_Chest_Wood_03_lambert5
+{
+	technique
+	{
+		pass
+		{
+			ambient 1 1 1 1
+			diffuse 1 1 1 1
+			specular 0 0 0 1
+			emissive 0 0 0
+
+			texture_unit
+			{
+				texture Texture_Chest_Wood_01.png
+				tex_coord_set 0
+				colour_op modulate
+				scale 1 1
+				scroll 0 0
+				rotate 0
+			}
+		}
+	}
+}
+material Wall_Middle_Wood_07_lambert4
+{
+	technique
+	{
+		pass
+		{
+			ambient 1 1 1 1
+			diffuse 1 1 1 1
+			specular 0 0 0 1
+			emissive 0 0 0
+
+			texture_unit
+			{
+				texture Texture_Wall_Interior_02.png
+				tex_coord_set 0
+				colour_op modulate
+				scale 1 1
+				scroll 0 0
+				rotate 0
+			}
+		}
+	}
+}
+material Wall_Middle_Wood_08_lambert4
+{
+	technique
+	{
+		pass
+		{
+			ambient 1 1 1 1
+			diffuse 1 1 1 1
+			specular 0 0 0 1
+			emissive 0 0 0
+
+			texture_unit
+			{
+				texture Texture_Wall_Interior_02.png
+				tex_coord_set 0
+				colour_op modulate
+				scale 1 1
+				scroll 0 0
+				rotate 0
+			}
+		}
+	}
+}
+material Wall_Double_Wood_04_lambert4
+{
+	technique
+	{
+		pass
+		{
+			ambient 1 1 1 1
+			diffuse 1 1 1 1
+			specular 0 0 0 1
+			emissive 0 0 0
+
+			texture_unit
+			{
+				texture Texture_Wall_Interior_02.png
+				tex_coord_set 0
+				colour_op modulate
+				scale 1 1
+				scroll 0 0
+				rotate 0
+			}
+		}
+	}
+}
+material Staircase_Full_Wood_01_Wall_Column_Wood_02_Wall_Column_Wood_01_lambert4
+{
+	technique
+	{
+		pass
+		{
+			ambient 1 1 1 1
+			diffuse 1 1 1 1
+			specular 0 0 0 1
+			emissive 0 0 0
+
+			texture_unit
+			{
+				texture Texture_Wall_Interior_02.png
+				tex_coord_set 0
+				colour_op modulate
+				scale 1 1
+				scroll 0 0
+				rotate 0
+			}
+		}
+	}
+}
+material Staircase_Full_Wood_01_Wall_Column_Wood_01_lambert4
+{
+	technique
+	{
+		pass
+		{
+			ambient 1 1 1 1
+			diffuse 1 1 1 1
+			specular 0 0 0 1
+			emissive 0 0 0
+
+			texture_unit
+			{
+				texture Texture_Wall_Interior_02.png
+				tex_coord_set 0
+				colour_op modulate
+				scale 1 1
+				scroll 0 0
+				rotate 0
+			}
+		}
+	}
+}
+material Staircase_Full_Wood_01_Wall_Column_Wood_03_Wall_Column_Wood_01_lambert4
+{
+	technique
+	{
+		pass
+		{
+			ambient 1 1 1 1
+			diffuse 1 1 1 1
+			specular 0 0 0 1
+			emissive 0 0 0
+
+			texture_unit
+			{
+				texture Texture_Wall_Interior_02.png
+				tex_coord_set 0
+				colour_op modulate
+				scale 1 1
+				scroll 0 0
+				rotate 0
+			}
+		}
+	}
+}
+material Wall_Middle_Wood_09_lambert4
+{
+	technique
+	{
+		pass
+		{
+			ambient 1 1 1 1
+			diffuse 1 1 1 1
+			specular 0 0 0 1
+			emissive 0 0 0
+
+			texture_unit
+			{
+				texture Texture_Wall_Interior_02.png
+				tex_coord_set 0
+				colour_op modulate
+				scale 1 1
+				scroll 0 0
+				rotate 0
+			}
+		}
+	}
+}
