@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -13,6 +13,26 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ApplicationIcon>Game.ico</ApplicationIcon>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,6 +42,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,55 +52,59 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Axiom, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Axiom\release\Axiom.dll</HintPath>
+      <HintPath>..\Tools\OrthoSnapper\Lib\Axiom.dll</HintPath>
     </Reference>
     <Reference Include="Axiom.Platforms.SDL, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Axiom\release\Axiom.Platforms.SDL.dll</HintPath>
+      <HintPath>..\Tools\OrthoSnapper\Lib\Axiom.Platforms.SDL.dll</HintPath>
     </Reference>
     <Reference Include="Axiom.Platforms.Win32, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Axiom\release\Axiom.Platforms.Win32.dll</HintPath>
+      <HintPath>..\Tools\OrthoSnapper\Lib\Axiom.Platforms.Win32.dll</HintPath>
     </Reference>
     <Reference Include="Axiom.Plugins.CgProgramManager, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Axiom\release\Axiom.Plugins.CgProgramManager.dll</HintPath>
+      <HintPath>..\Tools\OrthoSnapper\Lib\Axiom.Plugins.CgProgramManager.dll</HintPath>
     </Reference>
     <Reference Include="Axiom.Plugins.DevILCodecs, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Axiom\release\Axiom.Plugins.DevILCodecs.dll</HintPath>
+      <HintPath>..\Tools\OrthoSnapper\Lib\Axiom.Plugins.DevILCodecs.dll</HintPath>
     </Reference>
     <Reference Include="Axiom.Plugins.ParticleFX, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Axiom\release\Axiom.Plugins.ParticleFX.dll</HintPath>
+      <HintPath>..\Tools\OrthoSnapper\Lib\Axiom.Plugins.ParticleFX.dll</HintPath>
     </Reference>
     <Reference Include="Axiom.RenderSystems.DirectX9, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Axiom\release\Axiom.RenderSystems.DirectX9.dll</HintPath>
+      <HintPath>..\Tools\OrthoSnapper\Lib\Axiom.RenderSystems.DirectX9.dll</HintPath>
+    </Reference>
+    <Reference Include="Axiom.RenderSystems.OpenGL">
+      <HintPath>..\Tools\OrthoSnapper\Lib\Axiom.RenderSystems.OpenGL.dll</HintPath>
     </Reference>
     <Reference Include="Axiom.RenderSystems.OpenGL.Sdl, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Axiom\release\Axiom.RenderSystems.OpenGL.Sdl.dll</HintPath>
+      <HintPath>..\Tools\OrthoSnapper\Lib\Axiom.RenderSystems.OpenGL.Sdl.dll</HintPath>
     </Reference>
     <Reference Include="Axiom.RenderSystems.OpenGL.Win32, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Axiom\release\Axiom.RenderSystems.OpenGL.Win32.dll</HintPath>
+      <HintPath>..\Tools\OrthoSnapper\Lib\Axiom.RenderSystems.OpenGL.Win32.dll</HintPath>
     </Reference>
     <Reference Include="Axiom.SceneManagers.Bsp, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Axiom\release\Axiom.SceneManagers.Bsp.dll</HintPath>
+      <HintPath>..\Tools\OrthoSnapper\Lib\Axiom.SceneManagers.Bsp.dll</HintPath>
     </Reference>
     <Reference Include="Axiom.SceneManagers.Octree, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Axiom\release\Axiom.SceneManagers.Octree.dll</HintPath>
+      <HintPath>..\Tools\OrthoSnapper\Lib\Axiom.SceneManagers.Octree.dll</HintPath>
     </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.84.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Axiom\release\ICSharpCode.SharpZipLib.dll</HintPath>
+      <HintPath>..\Tools\OrthoSnapper\Lib\ICSharpCode.SharpZipLib.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -97,29 +123,34 @@
     <Reference Include="System.Xml" />
     <Reference Include="Tao.Cg, Version=2.0.0.0, Culture=neutral, PublicKeyToken=52fa5aba625fe731, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Axiom\release\Tao.Cg.dll</HintPath>
+      <HintPath>..\Tools\OrthoSnapper\Lib\Tao.Cg.dll</HintPath>
     </Reference>
     <Reference Include="Tao.DevIl, Version=1.6.8.3, Culture=neutral, PublicKeyToken=7ec4053013524957, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Axiom\release\Tao.DevIl.dll</HintPath>
+      <HintPath>..\Tools\OrthoSnapper\Lib\Tao.DevIl.dll</HintPath>
     </Reference>
     <Reference Include="Tao.OpenGl, Version=2.1.0.12, Culture=neutral, PublicKeyToken=1ca010269a4501ef, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Axiom\release\Tao.OpenGl.dll</HintPath>
+      <HintPath>..\Tools\OrthoSnapper\Lib\Tao.OpenGl.dll</HintPath>
+    </Reference>
+    <Reference Include="Tao.OpenGl.ExtensionLoader">
+      <HintPath>..\Tools\OrthoSnapper\Lib\Tao.OpenGl.ExtensionLoader.dll</HintPath>
+    </Reference>
+    <Reference Include="Tao.OpenGl.Glu">
+      <HintPath>..\Tools\OrthoSnapper\Lib\Tao.OpenGl.Glu.dll</HintPath>
     </Reference>
     <Reference Include="Tao.Platform.Windows, Version=1.0.0.5, Culture=neutral, PublicKeyToken=701104b2da67a104, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Axiom\release\Tao.Platform.Windows.dll</HintPath>
+      <HintPath>..\Tools\OrthoSnapper\Lib\Tao.Platform.Windows.dll</HintPath>
     </Reference>
     <Reference Include="Tao.Sdl, Version=1.2.13.0, Culture=neutral, PublicKeyToken=9c7a200e36c0094e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Lib\Axiom\release\Tao.Sdl.dll</HintPath>
+      <HintPath>..\Tools\OrthoSnapper\Lib\Tao.Sdl.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Configuration\EngineConfig.cs">
       <DependentUpon>EngineConfig.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Configuration\EngineConfig.Designer.cs">
       <DependentUpon>EngineConfig.cs</DependentUpon>
@@ -190,9 +221,9 @@
     <Content Include="Media\BrowserImages\TerrainSample04.png" />
     <Content Include="Media\BrowserImages\TerrainSample05.png" />
     <Content Include="Media\BrowserImages\TerrainSample06.png" />
-    <Content Include="Media\Fonts\Anime-Ace-10pt.png">
+    <!--<Content Include="Media\Fonts\Anime-Ace-10pt.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </Content>-->
     <Content Include="Media\Fonts\Arial.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -216,12 +247,12 @@
     <None Include="Media\Fonts\Arial.fontdef">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Include="Media\Fonts\sample.fontdef">
+    <!--<None Include="Media\Fonts\sample.fontdef">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Include="Media\Fonts\solo5.ttf">
+    </None>-->
+    <!--<None Include="Media\Fonts\solo5.ttf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    </None>-->
     <None Include="Media\Fonts\Verdana.fontdef">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -436,6 +467,13 @@
   <ItemGroup>
     <Folder Include="Media\GpuPrograms\" />
     <Folder Include="Media\Skeletons\" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
