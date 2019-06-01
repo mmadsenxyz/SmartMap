@@ -1,146 +1,130 @@
-[12:17:26] *********Axiom 3D Engine Log *************
+[12:34:49] *********Axiom 3D Engine Log *************
 Copyright Copyright ? 2003-2012 Axiom Rendering Engine Project Team.
 Version: 0.8.3101.12095
 Operating System: Microsoft Windows NT 6.2.9200.0
 .Net Framework: 2.0.50727.8941
 
-[12:17:26] *-*-* Axiom Initializing
-[12:17:26] ArchiveFactory for archive type ZipFile registered.
-[12:17:26] ArchiveFactory for archive type Folder registered.
-[12:17:27] Registering ResourceManager for type HighLevelGpuProgram
-[12:17:27] Creating resource group General
-[12:17:27] Creating resource group Internal
-[12:17:27] Creating resource group Bootstrap
-[12:17:27] Creating resource group AutoDetect
-[12:17:27] SceneManagerFactory for type 'DefaultSceneManager' registered
-[12:17:27] Registering ScriptLoader for patterns *.program *.material 
-[12:17:27] Registering ResourceManager for type Material
-[12:17:27] Registering ResourceManager for type Mesh
-[12:17:27] Registering ResourceManager for type Skeleton
-[12:17:27] Registering ScriptLoader for patterns *.particle 
-[12:17:30] Win32 Platform Manager Loaded.
-[12:17:30] Registering ScriptLoader for patterns *.fontdef 
-[12:17:30] Registering ResourceManager for type Font
-[12:17:30] Registering ScriptLoader for patterns *.overlay 
-[12:17:30] OverlayElementFactory for type 'BorderPanel' registered.
-[12:17:30] OverlayElementFactory for type 'TextArea' registered.
-[12:17:30] OverlayElementFactory for type 'Panel' registered.
-[12:17:30] Registering ScriptLoader for patterns *.compositor 
-[12:17:30] Registering ResourceManager for type Compositor
-[12:17:30] Registering ScriptLoader for patterns *.os 
-[12:17:32] Unable to load one or more of the requested types. Retrieve the LoaderExceptions property for more information.
+[12:34:49] *-*-* Axiom Initializing
+[12:34:49] ArchiveFactory for archive type ZipFile registered.
+[12:34:49] ArchiveFactory for archive type Folder registered.
+[12:34:49] Registering ResourceManager for type HighLevelGpuProgram
+[12:34:49] Creating resource group General
+[12:34:49] Creating resource group Internal
+[12:34:49] Creating resource group Bootstrap
+[12:34:49] Creating resource group AutoDetect
+[12:34:49] SceneManagerFactory for type 'DefaultSceneManager' registered
+[12:34:49] Registering ScriptLoader for patterns *.program *.material 
+[12:34:49] Registering ResourceManager for type Material
+[12:34:49] Registering ResourceManager for type Mesh
+[12:34:49] Registering ResourceManager for type Skeleton
+[12:34:49] Registering ScriptLoader for patterns *.particle 
+[12:34:50] Win32 Platform Manager Loaded.
+[12:34:50] Registering ScriptLoader for patterns *.fontdef 
+[12:34:50] Registering ResourceManager for type Font
+[12:34:50] Registering ScriptLoader for patterns *.overlay 
+[12:34:50] OverlayElementFactory for type 'BorderPanel' registered.
+[12:34:50] OverlayElementFactory for type 'TextArea' registered.
+[12:34:50] OverlayElementFactory for type 'Panel' registered.
+[12:34:50] Registering ScriptLoader for patterns *.compositor 
+[12:34:50] Registering ResourceManager for type Compositor
+[12:34:50] Registering ScriptLoader for patterns *.os 
+[12:34:50] Unable to load one or more of the requested types. Retrieve the LoaderExceptions property for more information.
    at System.Reflection.Module._GetTypesInternal(StackCrawlMark& stackMark)
    at System.Reflection.Assembly.GetTypes()
    at Axiom.Core.DynamicLoader.Find(Type baseType)
-[12:17:32] Loader Exceptions:
-[12:17:32] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
+[12:34:50] Loader Exceptions:
+[12:34:50] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
 
-[12:17:32] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
+[12:34:50] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
 
-[12:17:32] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
+[12:34:50] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
 
-[12:17:32] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
+[12:34:50] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
 
-[12:17:32] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
+[12:34:50] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
 
-[12:17:32] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
+[12:34:50] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
 
-[12:17:32] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
+[12:34:50] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
 
-[12:17:32] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
+[12:34:50] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
 
-[12:17:32] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
+[12:34:50] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
 
-[12:17:32] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
+[12:34:50] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
 
-[12:17:32] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
+[12:34:50] Could not load file or assembly 'SlimDX, Version=2.0.13.43, Culture=neutral, PublicKeyToken=b1b0c32fd1ffe4f9' or one of its dependencies. The system cannot find the file specified.
 
-[12:17:33] Unable to load one or more of the requested types. Retrieve the LoaderExceptions property for more information.
+[12:34:50] Unable to load one or more of the requested types. Retrieve the LoaderExceptions property for more information.
    at System.Reflection.Module._GetTypesInternal(StackCrawlMark& stackMark)
    at System.Reflection.Assembly.GetTypes()
    at Axiom.Core.DynamicLoader.Find(Type baseType)
-[12:17:33] Loader Exceptions:
-[12:17:33] Could not load type 'Axiom.Graphics.SoftwareBufferManager' from assembly 'Axiom, Version=0.8.3101.12095, Culture=neutral, PublicKeyToken=null'.
+[12:34:50] Loader Exceptions:
+[12:34:50] Could not load type 'Axiom.Graphics.SoftwareBufferManager' from assembly 'Axiom, Version=0.8.3101.12095, Culture=neutral, PublicKeyToken=null'.
 
-[12:17:33] Method 'Initialize' in type 'Axiom.RenderSystems.OpenGL.Plugin' from assembly 'Axiom.RenderSystems.OpenGL.Sdl, Version=0.8.0.0, Culture=neutral, PublicKeyToken=null' does not have an implementation.
+[12:34:50] Method 'Initialize' in type 'Axiom.RenderSystems.OpenGL.Plugin' from assembly 'Axiom.RenderSystems.OpenGL.Sdl, Version=0.8.0.0, Culture=neutral, PublicKeyToken=null' does not have an implementation.
 
-[12:17:33] Method 'get_MinimumDepthInputValue' in type 'Axiom.RenderSystems.OpenGL.GLRenderSystem' from assembly 'Axiom.RenderSystems.OpenGL.Sdl, Version=0.8.0.0, Culture=neutral, PublicKeyToken=null' does not have an implementation.
+[12:34:50] Method 'get_MinimumDepthInputValue' in type 'Axiom.RenderSystems.OpenGL.GLRenderSystem' from assembly 'Axiom.RenderSystems.OpenGL.Sdl, Version=0.8.0.0, Culture=neutral, PublicKeyToken=null' does not have an implementation.
 
-[12:17:33] Could not load type 'Axiom.Graphics.IHardwareOcclusionQuery' from assembly 'Axiom, Version=0.8.3101.12095, Culture=neutral, PublicKeyToken=null'.
+[12:34:50] Could not load type 'Axiom.Graphics.IHardwareOcclusionQuery' from assembly 'Axiom, Version=0.8.3101.12095, Culture=neutral, PublicKeyToken=null'.
 
-[12:17:33] Unable to load one or more of the requested types. Retrieve the LoaderExceptions property for more information.
+[12:34:51] Unable to load one or more of the requested types. Retrieve the LoaderExceptions property for more information.
    at System.Reflection.Module._GetTypesInternal(StackCrawlMark& stackMark)
    at System.Reflection.Assembly.GetTypes()
    at Axiom.Core.DynamicLoader.Find(Type baseType)
-[12:17:33] Loader Exceptions:
-[12:17:33] Could not load file or assembly 'Tao.Platform.Windows, Version=1.0.0.5, Culture=neutral, PublicKeyToken=701104b2da67a104' or one of its dependencies. The located assembly's manifest definition does not match the assembly reference. (Exception from HRESULT: 0x80131040)
+[12:34:51] Loader Exceptions:
+[12:34:51] Could not load file or assembly 'Tao.Platform.Windows, Version=1.0.0.5, Culture=neutral, PublicKeyToken=701104b2da67a104' or one of its dependencies. The located assembly's manifest definition does not match the assembly reference. (Exception from HRESULT: 0x80131040)
 
-[12:17:33] Could not load type 'Axiom.Graphics.SoftwareBufferManager' from assembly 'Axiom, Version=0.8.3101.12095, Culture=neutral, PublicKeyToken=null'.
+[12:34:51] Could not load type 'Axiom.Graphics.SoftwareBufferManager' from assembly 'Axiom, Version=0.8.3101.12095, Culture=neutral, PublicKeyToken=null'.
 
-[12:17:33] Method 'Initialize' in type 'Axiom.RenderSystems.OpenGL.Plugin' from assembly 'Axiom.RenderSystems.OpenGL.Win32, Version=0.8.0.0, Culture=neutral, PublicKeyToken=null' does not have an implementation.
+[12:34:51] Method 'Initialize' in type 'Axiom.RenderSystems.OpenGL.Plugin' from assembly 'Axiom.RenderSystems.OpenGL.Win32, Version=0.8.0.0, Culture=neutral, PublicKeyToken=null' does not have an implementation.
 
-[12:17:33] Method 'get_MinimumDepthInputValue' in type 'Axiom.RenderSystems.OpenGL.GLRenderSystem' from assembly 'Axiom.RenderSystems.OpenGL.Win32, Version=0.8.0.0, Culture=neutral, PublicKeyToken=null' does not have an implementation.
+[12:34:51] Method 'get_MinimumDepthInputValue' in type 'Axiom.RenderSystems.OpenGL.GLRenderSystem' from assembly 'Axiom.RenderSystems.OpenGL.Win32, Version=0.8.0.0, Culture=neutral, PublicKeyToken=null' does not have an implementation.
 
-[12:17:33] Could not load type 'Axiom.Graphics.IHardwareOcclusionQuery' from assembly 'Axiom, Version=0.8.3101.12095, Culture=neutral, PublicKeyToken=null'.
+[12:34:51] Could not load type 'Axiom.Graphics.IHardwareOcclusionQuery' from assembly 'Axiom, Version=0.8.3101.12095, Culture=neutral, PublicKeyToken=null'.
 
-[12:17:33] Could not load file or assembly 'file:///C:\Users\gemtr\Documents\Projects\Software\SmartMap\Test\RPG_Demo\bin\Release\cg.dll' or one of its dependencies. The module was expected to contain an assembly manifest.
-[12:17:34] Could not load file or assembly 'file:///C:\Users\gemtr\Documents\Projects\Software\SmartMap\Test\RPG_Demo\bin\Release\DevIL.dll' or one of its dependencies. The module was expected to contain an assembly manifest.
-[12:17:34] Could not load file or assembly 'file:///C:\Users\gemtr\Documents\Projects\Software\SmartMap\Test\RPG_Demo\bin\Release\SDL.dll' or one of its dependencies. The module was expected to contain an assembly manifest.
-[12:17:34] Could not load file or assembly 'file:///C:\Users\gemtr\Documents\Projects\Software\SmartMap\Test\RPG_Demo\bin\Release\SDL_gfx.dll' or one of its dependencies. The module was expected to contain an assembly manifest.
-[12:17:34] Could not load file or assembly 'file:///C:\Users\gemtr\Documents\Projects\Software\SmartMap\Test\RPG_Demo\bin\Release\SDL_image.dll' or one of its dependencies. The module was expected to contain an assembly manifest.
-[12:17:34] Could not load file or assembly 'file:///C:\Users\gemtr\Documents\Projects\Software\SmartMap\Test\RPG_Demo\bin\Release\SDL_mixer.dll' or one of its dependencies. The module was expected to contain an assembly manifest.
-[12:17:34] Could not load file or assembly 'file:///C:\Users\gemtr\Documents\Projects\Software\SmartMap\Test\RPG_Demo\bin\Release\SDL_net.dll' or one of its dependencies. The module was expected to contain an assembly manifest.
-[12:17:35] Could not load file or assembly 'file:///C:\Users\gemtr\Documents\Projects\Software\SmartMap\Test\RPG_Demo\bin\Release\SDL_ttf.dll' or one of its dependencies. The module was expected to contain an assembly manifest.
-[12:17:35] Could not load file or assembly 'file:///C:\Users\gemtr\Documents\Projects\Software\SmartMap\Test\RPG_Demo\bin\Release\smpeg.dll' or one of its dependencies. The module was expected to contain an assembly manifest.
-[12:17:36] Loaded plugin: Axiom nVidia Cg Plugin
-[12:17:37] Loaded plugin: Axiom DevIL Codecs Plugin
-[12:17:37] Particle Emitter type 'Box' registered.
-[12:17:37] Particle Emitter type 'Point' registered.
-[12:17:37] Particle Emitter type 'Cylinder' registered.
-[12:17:37] Particle Emitter type 'Ellipsoid' registered.
-[12:17:37] Particle Emitter type 'HollowEllipsoid' registered.
-[12:17:37] Particle Emitter type 'Ring' registered.
-[12:17:37] Particle Affector type 'LinearForce' registered.
-[12:17:37] Particle Affector type 'ColourFader' registered.
-[12:17:37] Particle Affector type 'ColourFader2' registered.
-[12:17:37] Particle Affector type 'ColourImage' registered.
-[12:17:37] Particle Affector type 'ColourInterpolator' registered.
-[12:17:37] Particle Affector type 'Scaler' registered.
-[12:17:37] Particle Affector type 'Rotator' registered.
-[12:17:37] Particle Affector type 'DeflectorPlane' registered.
-[12:17:37] Particle Affector type 'DirectionRandomizer' registered.
-[12:17:37] Loaded plugin: Axiom ParticleFX Plugin
-[12:17:37] Axiom OpenGL (OpenTK) Rendering Subsystem created.
-[12:17:37] Could not load file or assembly 'OpenTK, Version=1.0.0.201, Culture=neutral, PublicKeyToken=null' or one of its dependencies. The system cannot find the file specified.
+[12:34:51] Could not load file or assembly 'file:///C:\Users\gemtr\Documents\Projects\Software\SmartMap\Test\RPG_Demo\bin\Release\cg.dll' or one of its dependencies. The module was expected to contain an assembly manifest.
+[12:34:51] Could not load file or assembly 'file:///C:\Users\gemtr\Documents\Projects\Software\SmartMap\Test\RPG_Demo\bin\Release\DevIL.dll' or one of its dependencies. The module was expected to contain an assembly manifest.
+[12:34:51] Could not load file or assembly 'file:///C:\Users\gemtr\Documents\Projects\Software\SmartMap\Test\RPG_Demo\bin\Release\SDL.dll' or one of its dependencies. The module was expected to contain an assembly manifest.
+[12:34:51] Could not load file or assembly 'file:///C:\Users\gemtr\Documents\Projects\Software\SmartMap\Test\RPG_Demo\bin\Release\SDL_gfx.dll' or one of its dependencies. The module was expected to contain an assembly manifest.
+[12:34:51] Could not load file or assembly 'file:///C:\Users\gemtr\Documents\Projects\Software\SmartMap\Test\RPG_Demo\bin\Release\SDL_image.dll' or one of its dependencies. The module was expected to contain an assembly manifest.
+[12:34:51] Could not load file or assembly 'file:///C:\Users\gemtr\Documents\Projects\Software\SmartMap\Test\RPG_Demo\bin\Release\SDL_mixer.dll' or one of its dependencies. The module was expected to contain an assembly manifest.
+[12:34:51] Could not load file or assembly 'file:///C:\Users\gemtr\Documents\Projects\Software\SmartMap\Test\RPG_Demo\bin\Release\SDL_net.dll' or one of its dependencies. The module was expected to contain an assembly manifest.
+[12:34:51] Could not load file or assembly 'file:///C:\Users\gemtr\Documents\Projects\Software\SmartMap\Test\RPG_Demo\bin\Release\SDL_ttf.dll' or one of its dependencies. The module was expected to contain an assembly manifest.
+[12:34:51] Could not load file or assembly 'file:///C:\Users\gemtr\Documents\Projects\Software\SmartMap\Test\RPG_Demo\bin\Release\smpeg.dll' or one of its dependencies. The module was expected to contain an assembly manifest.
+[12:34:51] Loaded plugin: Axiom nVidia Cg Plugin
+[12:34:52] Loaded plugin: Axiom DevIL Codecs Plugin
+[12:34:52] Particle Emitter type 'Box' registered.
+[12:34:52] Particle Emitter type 'Point' registered.
+[12:34:52] Particle Emitter type 'Cylinder' registered.
+[12:34:52] Particle Emitter type 'Ellipsoid' registered.
+[12:34:52] Particle Emitter type 'HollowEllipsoid' registered.
+[12:34:52] Particle Emitter type 'Ring' registered.
+[12:34:52] Particle Affector type 'LinearForce' registered.
+[12:34:52] Particle Affector type 'ColourFader' registered.
+[12:34:52] Particle Affector type 'ColourFader2' registered.
+[12:34:52] Particle Affector type 'ColourImage' registered.
+[12:34:52] Particle Affector type 'ColourInterpolator' registered.
+[12:34:52] Particle Affector type 'Scaler' registered.
+[12:34:52] Particle Affector type 'Rotator' registered.
+[12:34:52] Particle Affector type 'DeflectorPlane' registered.
+[12:34:52] Particle Affector type 'DirectionRandomizer' registered.
+[12:34:52] Loaded plugin: Axiom ParticleFX Plugin
+[12:34:52] Axiom OpenGL (OpenTK) Rendering Subsystem created.
+[12:34:52] Could not load file or assembly 'OpenTK, Version=1.0.0.201, Culture=neutral, PublicKeyToken=null' or one of its dependencies. The system cannot find the file specified.
    at Axiom.RenderSystems.OpenGL.GLSupport.AddConfig()
    at Axiom.RenderSystems.OpenGL.GLRenderSystem..ctor()
    at Axiom.RenderSystems.OpenGL.Plugin.Initialize()
    at Axiom.Core.PluginManager.LoadPlugin(ObjectCreator creator)
-[12:17:37] SceneManagerFactory for type 'BspSceneManager' registered
-[12:17:37] Loaded plugin: Axiom BSP Scene Manager Plugin
-[12:17:37] SceneManagerFactory for type 'OctreeSceneManager' registered
-[12:17:37] SceneManagerFactory for type 'TerrainSceneManager' registered
-[12:17:37] Loaded plugin: Axiom Octree SceneManager Plugin
-[12:17:37] Factory EntityFactory registered for MovableObjectType 'Entity'.
-[12:17:37] Factory LightFactory registered for MovableObjectType 'Light'.
-[12:17:37] Factory BillboardSetFactory registered for MovableObjectType 'BillboardSet'.
-[12:17:37] Factory ManualObjectFactory registered for MovableObjectType 'ManualObject'.
-[12:17:37] Factory BillboardChainFactory registered for MovableObjectType 'BillboardChain'.
-[12:17:37] Factory RibbonTrailFactory registered for MovableObjectType 'RibbonTrail'.
-[12:17:37] Factory MovableTextFactory registered for MovableObjectType 'MovableText'.
-[12:17:38] Added resource location '../../Media/Archives/AxiomCore.zip' of type 'ZipFile' to resource group 'General'
-[12:17:38] Added resource location '../../Media/Textures' of type 'Folder' to resource group 'General'
-[12:17:38] Added resource location '../../Media/BrowserImages' of type 'Folder' to resource group 'General'
-[12:17:38] Added resource location '../../Media/Icons' of type 'Folder' to resource group 'General'
-[12:17:38] Added resource location '../../Media/Fonts' of type 'Folder' to resource group 'General'
-[12:17:38] Added resource location '../../Media/Meshes' of type 'Folder' to resource group 'General'
-[12:17:38] Added resource location '../../Media/Skeletons' of type 'Folder' to resource group 'General'
-[12:17:38] Added resource location '../../Media/Materials' of type 'Folder' to resource group 'General'
-[12:17:38] Added resource location '../../Media/Overlays' of type 'Folder' to resource group 'General'
-[12:17:38] Added resource location '../../Media/GpuPrograms' of type 'Folder' to resource group 'General'
-[12:17:39] The given key was not present in the dictionary.
-   at System.ThrowHelper.ThrowKeyNotFoundException()
-   at System.Collections.Generic.Dictionary`2.get_Item(TKey key)
-   at Axiom.Collections.AxiomCollection`1.get_Item(String key)
-   at RolePlayingGame.Program._configure() in C:\Users\gemtr\Documents\Projects\Software\SmartMap\Test\RPG_Demo\Program.cs:line 28
-   at RolePlayingGame.Program.Run() in C:\Users\gemtr\Documents\Projects\Software\SmartMap\Test\RPG_Demo\Program.cs:line 75
+[12:34:52] SceneManagerFactory for type 'BspSceneManager' registered
+[12:34:52] Loaded plugin: Axiom BSP Scene Manager Plugin
+[12:34:52] SceneManagerFactory for type 'OctreeSceneManager' registered
+[12:34:52] SceneManagerFactory for type 'TerrainSceneManager' registered
+[12:34:52] Loaded plugin: Axiom Octree SceneManager Plugin
+[12:34:52] Factory EntityFactory registered for MovableObjectType 'Entity'.
+[12:34:52] Factory LightFactory registered for MovableObjectType 'Light'.
+[12:34:52] Factory BillboardSetFactory registered for MovableObjectType 'BillboardSet'.
+[12:34:52] Factory ManualObjectFactory registered for MovableObjectType 'ManualObject'.
+[12:34:52] Factory BillboardChainFactory registered for MovableObjectType 'BillboardChain'.
+[12:34:52] Factory RibbonTrailFactory registered for MovableObjectType 'RibbonTrail'.
+[12:34:52] Factory MovableTextFactory registered for MovableObjectType 'MovableText'.
