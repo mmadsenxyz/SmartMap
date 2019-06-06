@@ -1,6 +1,4 @@
-# SmartMap
-**SmartMap is an easy desktop random world creator**
-
+## SmartMap - An easy desktop random world creator
 ##### Help our project out with your donations
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=R5F67XT866R72)
 
