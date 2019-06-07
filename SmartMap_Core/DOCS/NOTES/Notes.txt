@@ -66,6 +66,5 @@ QuickGraph is provided within the MbUnit Framework.
 http://www.codeplex.com/quickgraph
 http://www.testdriven.net
 
-Made by:
-Mark V Madsen
-(ioncycle)
+Made by: Mark V Madsen (ioncycle)
+World Editor originally fashioned by Orcun Nisli (sandman)

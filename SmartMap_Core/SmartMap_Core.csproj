@@ -21,6 +21,7 @@
     </UpgradeBackupLocation>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -35,7 +36,6 @@
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -56,6 +56,13 @@
     <PlatformTarget>x86</PlatformTarget>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <Optimize>true</Optimize>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <Win32Resource>
+    </Win32Resource>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="DOCS\TEST\CanonicalSplineManual.resx">
@@ -111,6 +118,7 @@
     <Compile Include="SmartMap_Core.cs">
       <SubType>Code</SubType>
     </Compile>
+    <None Include="app.config" />
     <None Include="ClassDiagram.cd" />
     <None Include="DOCS\PowerCollections.chm" />
     <None Include="DOCS\QuickGraph.Documentation.chm" />
@@ -201,9 +209,9 @@
     <Reference Include="Axiom.Plugins.CgProgramManager">
       <HintPath>Libraries\Axiom.Plugins.CgProgramManager.dll</HintPath>
     </Reference>
-    <Reference Include="Axiom.Plugins.DevILCodecs">
+	<Reference Include="Axiom.Plugins.DevILCodecs">
       <HintPath>Libraries\Axiom.Plugins.DevILCodecs.dll</HintPath>
-    </Reference>
+	</Reference>
     <Reference Include="Axiom.RenderSystems.OpenGL">
       <HintPath>Libraries\Axiom.RenderSystems.OpenGL.dll</HintPath>
     </Reference>
