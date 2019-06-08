@@ -1,6 +1,7 @@
 <?xml version="1.0" standalone="yes"?>
 <EngineConfig xmlns="http://tempuri.org/EngineConfig.xsd">
   <FilePath group="bootstrap" src="../../Media/Archives/AxiomCore.zip" type="ZipFile" />
+  <FilePath group="bootstrap" src="../../Media/Archives/SdkTrays.zip" type="ZipFile" />
   <FilePath group="General" src="../../Media/Configuration" type="Folder" />
   <FilePath group="General" src="../../Media/Textures" type="Folder" />
   <FilePath group="General" src="../../Media/Icons" type="Folder" />
