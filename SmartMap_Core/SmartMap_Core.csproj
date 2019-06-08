@@ -12,8 +12,7 @@
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <OutputType>Exe</OutputType>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <StartupObject>
-    </StartupObject>
+    <StartupObject>SmartMap.SmartMap_Core</StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -159,20 +158,123 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="Libraries\Axiom.dll" />
+    <Content Include="Libraries\Axiom.Framework.dll" />
+    <Content Include="Libraries\Axiom.Framework.pdb" />
+    <Content Include="Libraries\Axiom.pdb" />
+    <Content Include="Libraries\Axiom.Platforms.OpenTK.dll" />
+    <Content Include="Libraries\Axiom.Platforms.OpenTK.pdb" />
+    <Content Include="Libraries\Axiom.Platforms.OpenTK.xml" />
+    <Content Include="Libraries\Axiom.Platforms.Win32.dll" />
+    <Content Include="Libraries\Axiom.Platforms.Win32.pdb" />
+    <Content Include="Libraries\Axiom.Platforms.Win32.xml" />
+    <Content Include="Libraries\Axiom.Plugins.CgProgramManager.dll" />
+    <Content Include="Libraries\Axiom.Plugins.CgProgramManager.pdb" />
+    <Content Include="Libraries\Axiom.Plugins.DevILCodecs.dll" />
+    <Content Include="Libraries\Axiom.Plugins.DevILCodecs.pdb" />
+    <Content Include="Libraries\Axiom.Plugins.DevILCodecs.xml" />
+    <Content Include="Libraries\Axiom.Plugins.OctreeZone.dll" />
+    <Content Include="Libraries\Axiom.Plugins.OctreeZone.pdb" />
+    <Content Include="Libraries\Axiom.Plugins.OctreeZone.xml" />
+    <Content Include="Libraries\Axiom.Plugins.ParticleFX.dll" />
+    <Content Include="Libraries\Axiom.Plugins.ParticleFX.pdb" />
+    <Content Include="Libraries\Axiom.RenderSystems.DirectX9.dll" />
+    <Content Include="Libraries\Axiom.RenderSystems.DirectX9.pdb" />
+    <Content Include="Libraries\Axiom.RenderSystems.OpenGL.dll" />
+    <Content Include="Libraries\Axiom.RenderSystems.OpenGL.pdb" />
+    <Content Include="Libraries\Axiom.SceneManagers.Bsp.dll" />
+    <Content Include="Libraries\Axiom.SceneManagers.Bsp.pdb" />
+    <Content Include="Libraries\Axiom.SceneManagers.Octree.dll" />
+    <Content Include="Libraries\Axiom.SceneManagers.Octree.pdb" />
+    <Content Include="Libraries\Axiom.SceneManagers.PortalConnected.dll" />
+    <Content Include="Libraries\Axiom.SceneManagers.PortalConnected.pdb" />
     <Content Include="Libraries\cg.dll">
       <Link>cg.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Libraries\cg.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Libraries\DevIL.dll">
       <Link>DevIL.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Libraries\DevIL.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\EngineConfig.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Libraries\freetype6.dll">
       <Link>freetype6.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Libraries\freetype6.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\ICSharpCode.SharpZipLib.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\ILU.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\OpenTK.Compatibility.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\OpenTK.Compatibility.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\OpenTK.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\OpenTK.GLControl.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\OpenTK.GLControl.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\OpenTK.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\PowerCollections.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\QuickGraph.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\SynapticEffect.Forms.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\Tao.Cg.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\Tao.Cg.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\Tao.DevIl.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\Tao.DevIl.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\zlib1.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="readme.txt" />
     <None Include="DOCS\TEST\CodeFile2.cs" />
+    <None Include="Libraries\Axiom.dll.config" />
+    <None Include="Libraries\OpenTK.Compatibility.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\OpenTK.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\Tao.Cg.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\Tao.DevIl.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Sound\SoundPanel.cs">
       <SubType>Form</SubType>
     </None>
@@ -209,9 +311,9 @@
     <Reference Include="Axiom.Plugins.CgProgramManager">
       <HintPath>Libraries\Axiom.Plugins.CgProgramManager.dll</HintPath>
     </Reference>
-	<Reference Include="Axiom.Plugins.DevILCodecs">
+    <Reference Include="Axiom.Plugins.DevILCodecs">
       <HintPath>Libraries\Axiom.Plugins.DevILCodecs.dll</HintPath>
-	</Reference>
+    </Reference>
     <Reference Include="Axiom.RenderSystems.OpenGL">
       <HintPath>Libraries\Axiom.RenderSystems.OpenGL.dll</HintPath>
     </Reference>

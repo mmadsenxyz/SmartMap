@@ -253,12 +253,279 @@ namespace SmartMap
             this.sm.GeneratePath("QUADRANT", false, 0, 0); // generate maze with auto or manual path - has error handling   
             Console.WriteLine("--------EXITING PATH GENERATION FOR QUADRANT--------");
             //Console.ReadLine();
-            CreateMap(0, 0, 0, 0);
+            CreateMap(0, 10000, 0, 10000, 3);
         }
 
         #endregion Create Scene
 
         #region Map, Quadrants, Modules and Tiles
+
+        /// <summary>
+        /// Print a Map of Quadrants containing Modules
+        /// </summary>
+        /// <param name="quadrantCount"></param>
+        /// <param name="xPosition"></param>
+        /// <param name="yPosition"></param>
+        /// <param name="zPosition"></param>
+        public void CreateMap(/*int skew,*/ int quadrantCount, float xPosition, float yPosition, float zPosition, int expandQuadrant)
+        {
+            float x = 0, /*y = 0,*/ z = 0;
+            int passes = 0;
+            int moduleCount = 0;
+
+            //this.mapNode[mapCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Map " + mapCount);
+            this.quadrantNode[quadrantCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Quadrant " + quadrantCount);
+
+            // MAKE MODULES - transfer graph to Axiom
+            // do vertices
+            foreach (Point<int> v in sm.md2.Keys) // taken from mazed MultiDictionary
+            {
+                passes = 0; // must complete edge amount to create correct module
+                // get the initial vertex location of world map plus any additional distance.
+                x = ((v.Width * this.moduleSizeEast) * expandQuadrant)  + xPosition;
+                z = ((v.Length * this.moduleSizeNorth) * expandQuadrant) + zPosition;
+
+                // find current edge values. Verteces remain the same
+                Wintellect.PowerCollections.CollectionBase<Edge<Point<int>>> ec =
+                    (Wintellect.PowerCollections.CollectionBase<Edge<Point<int>>>)sm.md2[v];
+                // do edges 
+                foreach (Edge<Point<int>> e in ec) // edges per vertex, 1-4
+                {
+                    // END
+                    if (ec.Count == 1) // one edge for End tile
+                    {
+
+                        //moduleNode[moduleCount].ResetToInitialState(); // set module North as created in modeler
+                        //moduleNode[moduleCount].Position = new Vector3(x, 0, z);
+                        ManufactureModule(moduleCount, x, z);
+                        //moduleNode[moduleCount].ResetOrientation();
+
+                        // yaw
+                        if ((e.Source.Width < v.Width) || (e.Target.Width < v.Width))
+                        {
+                            moduleNode[moduleCount].Yaw(90);
+                        }
+                        else if ((e.Source.Width > v.Width) || (e.Target.Width > v.Width))
+                        {
+                            moduleNode[moduleCount].Yaw(270);
+                        }
+                        else if ((e.Source.Length < v.Length) || (e.Target.Length < v.Length))
+                        {
+                            moduleNode[moduleCount].Yaw(0);
+                        }
+                        else if ((e.Source.Length > v.Length) || (e.Target.Length > v.Length))
+                        {
+                            moduleNode[moduleCount].Yaw(180);
+                        }
+                    }
+                    // HALL 
+                    if (ec.Count == 2)
+                    { // set 2nd edge to compare both edges for: Hall or Corner
+                        if (passes == 0)
+                        { // record 2nd edge for next pass
+                            this.sew2 = e.Source.Width;
+                            this.sel2 = e.Source.Length;
+                            this.tew2 = e.Target.Width;
+                            this.tel2 = e.Target.Length;
+                            passes = 1;
+                        }
+                        else if ((((e.Source.Width != v.Width) | (e.Target.Width != v.Width)) & ((sew2 != v.Width) | (tew2 != v.Width)))
+                          | (((e.Source.Length != v.Length) | (e.Target.Length != v.Length)) & ((sel2 != v.Length) | (tel2 != v.Length))))
+                        {
+                            //moduleNode[moduleCount].Position = new Vector3(x, 0, z);
+                            ManufactureModule(moduleCount, x, z);
+                            //moduleNode[moduleCount].ResetOrientation(); // set module North as created in modeler
+                            /*if (this.sm.NearbyVerticesEmpty(v) == "empty_corner") {
+                                quadrantNode[quadrantCount].AttachObject(exteriorTile[outHallTileCount]);
+                                outHallTileCount++; 
+                            }  
+                            else*/
+                            // yaw 
+                            if ((sew2 != v.Width) | (tew2 != v.Width))
+                                moduleNode[moduleCount].Yaw(90);
+                        }
+                        else
+                        { // CORNER
+                            //moduleNode[moduleCount].Position = new Vector3(x, 0, z);
+                            ManufactureModule(moduleCount, x, z);
+                            //moduleNode[moduleCount].ResetOrientation(); // set module North as created in modeler
+                            /*if (this.sm.NearbyVerticesEmpty(v) == "empty_corner") {
+                                quadrantNode[quadrantCount].AttachObject(exteriorTile[outCornerTileCount]);
+                                outCornerTileCount++; 
+                            }
+                            else*/
+                            // yaw 
+                            if ((((e.Source.Width > v.Width) | (e.Target.Width > v.Width)) & ((sel2 < v.Length) | (tel2 < v.Length)))
+                            || (((e.Source.Length < v.Length) | (e.Target.Length < v.Length)) & ((sew2 > v.Width) | (tew2 > v.Width))))
+                            {
+                                moduleNode[moduleCount].Yaw(0);
+                            }
+                            else if ((((e.Source.Width < v.Width) | (e.Target.Width < v.Width)) & ((sel2 > v.Length) | (tel2 > v.Length)))
+                          || (((e.Source.Length > v.Length) | (e.Target.Length > v.Length)) & ((sew2 < v.Width) | (tew2 < v.Width))))
+                            {
+                                moduleNode[moduleCount].Yaw(180);
+                            }
+                            else if ((((e.Source.Width > v.Width) | (e.Target.Width > v.Width)) & ((sel2 > v.Length) | (tel2 > v.Length)))
+                          || (((e.Source.Length > v.Length) | (e.Target.Length > v.Length)) & ((sew2 > v.Width) | (tew2 > v.Width))))
+                            {
+                                moduleNode[moduleCount].Yaw(270);
+                            }
+                            else if ((((e.Source.Width < v.Width) | (e.Target.Width < v.Width)) & ((sel2 < v.Length) | (tel2 < v.Length)))
+                          || (((e.Source.Length < v.Length) | (e.Target.Length < v.Length)) & ((sew2 < v.Width) | (tew2 < v.Width))))
+                            {
+                                moduleNode[moduleCount].Yaw(90);
+                            }
+                        }
+                    }
+                    // SIDE
+                    if (ec.Count == 3) // 3 edges to calculate side tile
+                    {
+                        if (passes == 0)
+                        { // record 2nd edge
+                            this.sew2 = e.Source.Width;
+                            this.sel2 = e.Source.Length;
+                            this.tew2 = e.Target.Width;
+                            this.tel2 = e.Target.Length;
+                            passes = 1;
+                        }
+                        else if (passes == 1)
+                        { // record 3rd edge  
+                            this.sew3 = e.Source.Width;
+                            this.sel3 = e.Source.Length;
+                            this.tew3 = e.Target.Width;
+                            this.tel3 = e.Target.Length;
+                            passes = 2;
+                        }
+                        else
+                        {
+                            //moduleNode[moduleCount].Position = new Vector3(x, 0, z);
+                            ManufactureModule(moduleCount, x, z);
+                            //moduleNode[moduleCount].ResetOrientation(); // set module North as created in modeler
+
+                            /*if (this.sm.NearbyVerticesEmpty(v) == "empty_corner") {
+                                outSideTileCount++; 
+                            }
+                            else*/
+                            // yaw 
+                            if (!(e.Source.Length < v.Length) & !(e.Target.Length < v.Length) & !(sel2 < v.Length) & !(tel2 < v.Length) & !(sel3 < v.Length) & !(tel3 < v.Length))
+                            {
+                                moduleNode[moduleCount].Yaw(180);
+                            }
+                            else if (!(e.Source.Length > v.Length) & !(e.Target.Length > v.Length) & !(sel2 > v.Length) & !(tel2 > v.Length) & !(sel3 > v.Length) & !(tel3 > v.Length))
+                            {
+                                moduleNode[moduleCount].Yaw(0);
+                            }
+                            else if (!(e.Source.Width < v.Width) & !(e.Target.Width < v.Width) & !(sew2 < v.Width) & !(tew2 < v.Width) & !(sew3 < v.Width) & !(tew3 < v.Width))
+                            {
+                                moduleNode[moduleCount].Yaw(270);
+                            }
+                            else if (!(e.Source.Width > v.Width) & !(e.Target.Width > v.Width) & !(sew2 > v.Width) & !(tew2 > v.Width) & !(sew3 > v.Width) & !(tew3 > v.Width))
+                            {
+                                moduleNode[moduleCount].Yaw(90);
+                            }
+                        }
+                    }
+                    // FLOOR
+                    if ((ec.Count == 4) & (passes == 0)) // 4 on the floor :)
+                    {
+                        ManufactureModule(moduleCount, x, z);
+                        //moduleNode[moduleCount].ResetOrientation(); // set module North as created in modeler
+                        //moduleNode[moduleCount].Position = new Vector3(x, 0, z);
+                        /*if (this.sm.NearbyVerticesEmpty(v) == "empty_corner") {
+                            quadrantNode[quadrantCount].AttachObject(exteriorTile[outFloorTileCount]);
+                            outFloorTileCount++;
+                        } 
+                        else*/
+                        passes = 1;
+                    } /*Debug:*/  //Console.WriteLine("Vertex: {0} -- Edges Source: {1} Target: {2}", v, e.Source, e.Target); Console.WriteLine("{0} {1}", v, ec.Count);        
+                } // add your created quadrant to the map 
+                if (moduleNode[moduleCount] != null)
+                {
+                    this.quadrantNode[quadrantCount].AddChild(moduleNode[moduleCount]);
+                    Console.WriteLine("[][][] New Module {0} has been created for Quadrant [][][]", nodeCount);
+                    //Console.ReadLine();
+                }
+                moduleCount++;
+            }
+        }
+
+        public void ManufactureModule(int moduleCount, float xLocation, float zLocation)
+        {
+            //location tweaks
+            float moveUp = 0;
+            //int clippedTileCount = 0;
+            bool tilesetDestroyed = false;
+
+            //// TRIM MODULES FIRST////
+            this.sm.GenerateGraph("MODULE", false, tileAmountNorth, tileAmountEast);
+            CreateModule(interiorTile, moduleCount, 0, 0, 0); // create generic tileset to adjust it to terrain
+            // PREPARE MODULE FOUNDATION / get terrain height - search in center of module
+            moveUp = SceneManager.GetHeightAt(new Vector3(xLocation + (moduleSizeEast / 2), 0, zLocation + (moduleSizeNorth / 2)), 0);
+            // MOVE THE MODULE ONTO ITS FOUNDATION
+            this.moduleNode[moduleCount].Translate(new Vector3(xLocation, moveUp, zLocation), TransformSpace.World);
+            //this.moduleNode[moduleCount].Position = new Vector3(xLocation, moveUp, zLocation);
+            // TRIM TILESET AROUND TERRAIN
+            // check each tileNode verses module node's height and remove edges and tiles that are burried inside terrain. 
+            /*Console.WriteLine("{0}", moduleNode[moduleCount].Name + "'s nodes are being searched for terrain clipping...");
+            foreach (SceneNode node in moduleNode[moduleCount].Children) // go through tiles
+            { 
+                Console.WriteLine("{0}", node.Name + " is being checked..."); // derivedPosition for real world tileNode position - (derived) very important.
+                float tileHeight = SceneManager.GetHeightAt(new Vector3(node.DerivedPosition.x, 0, node.DerivedPosition.z), 0);
+                if (1000 > (moveUp - MeshSize) + tileClippingAngle) // if tile is in terrain 
+                {
+                    clippedTileCount++;
+                    if (clippedTileCount == (tileAmountNorth * tileAmountEast) * 0.8)
+                    { // if removed tile count equals tileThreshold, remove entire module
+                        SceneManager.DestroySceneNode(moduleNode[moduleCount].Name);
+                        tilesetDestroyed = true;
+                        Console.WriteLine("Too many tiles clipped so module removed. Searching next module.\n\n\n");
+                    }
+                    else if (!tilesetDestroyed)
+                    { // remove tile 
+                        Console.WriteLine("{0}", node.Name + " is too far in terrain.");
+                        // remove trimmed tileNodes' vertex from graph
+                        for (int x = 0; x < this.sm.Width; x++)
+                        {
+                            for (int z = 0; z < this.sm.Length; z++)
+                            {
+                                // check vertex against tileNode vertex
+                                if (x * MeshSize == node.Position.x & z * MeshSize == node.Position.z)
+                                {
+                                    if (this.sm.graph.ContainsVertex(new Point<int>(x, z)))
+                                    {
+                                        Console.WriteLine("Found tilenode's buried Readout vertex: " + x + "," + z + " ...Removing vertex.");
+                                        this.sm.graph.RemoveVertex(new Point<int>(x, z)); // remove vertices to search valid graph. 
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }*/
+            if (tilesetDestroyed == false)
+            {   // RECREATE NEW MODULES BASED ON CURRENT TERRAIN TRIMMED GRAPH
+                Console.WriteLine("...Re-Creating " + moduleNode[moduleCount].Name + "'s tile-set into maze that fits terrain.");
+                // reset node arrays
+                SceneManager.DestroySceneNode(moduleNode[moduleCount].Name);
+                Console.WriteLine("{0} has {1} children left after being destroyed for re-creation", moduleNode[moduleCount].Name, moduleNode[moduleCount].ChildCount);
+                // generate maze with auto or manual path - if it zonks out skip :-)
+                if (!this.sm.GeneratePath("MODULE", false, 0, 0)) { return; }
+                // creates and searches logical path through module (shortest-path)
+                //this.sm.SearchPath("BFS", moduleNode[moduleCount]);
+                CreateModule(interiorTile, moduleCount, 0, 0, 0);
+                Console.WriteLine(moduleNode[moduleCount].Name + " REMODELED");
+                // TRANSLATE NEW MODULE BACK ONTO FOUNDATION
+                this.moduleNode[moduleCount].Translate(new Vector3(xLocation, moveUp, zLocation), TransformSpace.World);
+                //this.moduleNode[moduleCount].Position = new Vector3(xLocation, moveUp + this.tileSetHeight, zLocation);
+                Console.WriteLine("{0}", moduleNode[moduleCount].Children.Count);
+                // AUTO-MOLD TERRAIN to fit around tileset for a customized Foundation under module
+                foreach (SceneNode node in moduleNode[moduleCount].Children)
+                { // bring up or lower terrain (terrain deformation) to match all tileNode heights 
+                    SceneManager.SetHeightAt(node.DerivedPosition, node.DerivedPosition.y - (MeshSize / 2));
+                }
+            }
+            //clippedTileCount = 0; // reset variables
+        }
 
         /// <summary>
         /// Print Modules (Tilesets) with Tiles
@@ -470,268 +737,6 @@ namespace SmartMap
                 nodeCount++;
             }
             Console.WriteLine("Total amount of tiles created {0}", this.moduleNode[moduleCount].ChildCount);
-        }
-
-        /// <summary>
-        /// Print a Map of Quadrants containing Modules
-        /// </summary>
-        /// <param name="quadrantCount"></param>
-        /// <param name="xPosition"></param>
-        /// <param name="yPosition"></param>
-        /// <param name="zPosition"></param>
-        public void CreateMap(/*int skew,*/ int quadrantCount, float xPosition, float yPosition, float zPosition)
-        {
-            float x = 0, /*y = 0,*/ z = 0;
-            int passes = 0;
-            int moduleCount = 0;
-
-            //this.mapNode[mapCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Map " + mapCount);
-            quadrantNode[quadrantCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Quadrant " + quadrantCount);
-
-            // MAKE MODULES - transfer graph to Axiom
-            // do vertices
-            foreach (Point<int> v in sm.md2.Keys) // taken from mazed MultiDictionary
-            {
-                passes = 0; // must complete edge amount to create correct module
-                // get the initial vertex location of world map plus any additional distance.
-                x = (v.Width * moduleSizeEast) + xPosition;
-                z = (v.Length * moduleSizeNorth) + zPosition;
-
-                // find current edge values. Verteces remain the same
-                Wintellect.PowerCollections.CollectionBase<Edge<Point<int>>> ec =
-                    (Wintellect.PowerCollections.CollectionBase<Edge<Point<int>>>)sm.md2[v];
-                // do edges 
-                foreach (Edge<Point<int>> e in ec) // edges per vertex, 1-4
-                {
-                    // END
-                    if (ec.Count == 1) // one edge for End tile
-                    {
-                        ManufactureModule(moduleCount);
-                        //moduleNode[moduleCount].ResetToInitialState(); // set module North as created in modeler
-                        moduleNode[moduleCount].Position = new Vector3(x, 0, z);
-
-                        // yaw
-                        if ((e.Source.Width < v.Width) || (e.Target.Width < v.Width))
-                        {
-                            moduleNode[moduleCount].Yaw(90);
-                        }
-                        else if ((e.Source.Width > v.Width) || (e.Target.Width > v.Width))
-                        {
-                            moduleNode[moduleCount].Yaw(270);
-                        }
-                        else if ((e.Source.Length < v.Length) || (e.Target.Length < v.Length))
-                        {
-                            moduleNode[moduleCount].Yaw(0);
-                        }
-                        else if ((e.Source.Length > v.Length) || (e.Target.Length > v.Length))
-                        {
-                            moduleNode[moduleCount].Yaw(180);
-                        }
-                    }
-                    // HALL 
-                    if (ec.Count == 2)
-                    { // set 2nd edge to compare both edges for: Hall or Corner
-                        if (passes == 0)
-                        { // record 2nd edge for next pass
-                            this.sew2 = e.Source.Width;
-                            this.sel2 = e.Source.Length;
-                            this.tew2 = e.Target.Width;
-                            this.tel2 = e.Target.Length;
-                            passes = 1;
-                        }
-                        else if ((((e.Source.Width != v.Width) | (e.Target.Width != v.Width)) & ((sew2 != v.Width) | (tew2 != v.Width)))
-                          | (((e.Source.Length != v.Length) | (e.Target.Length != v.Length)) & ((sel2 != v.Length) | (tel2 != v.Length))))
-                        {
-                            ManufactureModule(moduleCount);
-                            //moduleNode[moduleCount].ResetToInitialState(); // set module North as created in modeler
-                            moduleNode[moduleCount].Position = new Vector3(x, 0, z);
-                            /*if (this.sm.NearbyVerticesEmpty(v) == "empty_corner") {
-                                quadrantNode[quadrantCount].AttachObject(exteriorTile[outHallTileCount]);
-                                outHallTileCount++; 
-                            }  
-                            else*/
-                            // yaw 
-                            if ((sew2 != v.Width) | (tew2 != v.Width))
-                                moduleNode[moduleCount].Yaw(90);
-                        }
-                        else
-                        { // CORNER
-                            ManufactureModule(moduleCount);
-                            //moduleNode[moduleCount].ResetToInitialState(); // set module North as created in modeler
-                            moduleNode[moduleCount].Position = new Vector3(x, 0, z);
-                            /*if (this.sm.NearbyVerticesEmpty(v) == "empty_corner") {
-                                quadrantNode[quadrantCount].AttachObject(exteriorTile[outCornerTileCount]);
-                                outCornerTileCount++; 
-                            }
-                            else*/
-                            // yaw 
-                            if ((((e.Source.Width > v.Width) | (e.Target.Width > v.Width)) & ((sel2 < v.Length) | (tel2 < v.Length)))
-                            || (((e.Source.Length < v.Length) | (e.Target.Length < v.Length)) & ((sew2 > v.Width) | (tew2 > v.Width))))
-                            {
-                                moduleNode[moduleCount].Yaw(0);
-                            }
-                            else if ((((e.Source.Width < v.Width) | (e.Target.Width < v.Width)) & ((sel2 > v.Length) | (tel2 > v.Length)))
-                          || (((e.Source.Length > v.Length) | (e.Target.Length > v.Length)) & ((sew2 < v.Width) | (tew2 < v.Width))))
-                            {
-                                moduleNode[moduleCount].Yaw(180);
-                            }
-                            else if ((((e.Source.Width > v.Width) | (e.Target.Width > v.Width)) & ((sel2 > v.Length) | (tel2 > v.Length)))
-                          || (((e.Source.Length > v.Length) | (e.Target.Length > v.Length)) & ((sew2 > v.Width) | (tew2 > v.Width))))
-                            {
-                                moduleNode[moduleCount].Yaw(270);
-                            }
-                            else if ((((e.Source.Width < v.Width) | (e.Target.Width < v.Width)) & ((sel2 < v.Length) | (tel2 < v.Length)))
-                          || (((e.Source.Length < v.Length) | (e.Target.Length < v.Length)) & ((sew2 < v.Width) | (tew2 < v.Width))))
-                            {
-                                moduleNode[moduleCount].Yaw(90);
-                            }
-                        }
-                    }
-                    // SIDE
-                    if (ec.Count == 3) // 3 edges to calculate side tile
-                    {
-                        if (passes == 0)
-                        { // record 2nd edge
-                            this.sew2 = e.Source.Width;
-                            this.sel2 = e.Source.Length;
-                            this.tew2 = e.Target.Width;
-                            this.tel2 = e.Target.Length;
-                            passes = 1;
-                        }
-                        else if (passes == 1)
-                        { // record 3rd edge  
-                            this.sew3 = e.Source.Width;
-                            this.sel3 = e.Source.Length;
-                            this.tew3 = e.Target.Width;
-                            this.tel3 = e.Target.Length;
-                            passes = 2;
-                        }
-                        else
-                        {
-                            ManufactureModule(moduleCount);
-                            //moduleNode[moduleCount].ResetToInitialState(); // set module North as created in modeler
-                            moduleNode[moduleCount].Position = new Vector3(x, 0, z);
-                            /*if (this.sm.NearbyVerticesEmpty(v) == "empty_corner") {
-                                outSideTileCount++; 
-                            }
-                            else*/
-                            // yaw 
-                            if (!(e.Source.Length < v.Length) & !(e.Target.Length < v.Length) & !(sel2 < v.Length) & !(tel2 < v.Length) & !(sel3 < v.Length) & !(tel3 < v.Length))
-                            {
-                                moduleNode[moduleCount].Yaw(180);
-                            }
-                            else if (!(e.Source.Length > v.Length) & !(e.Target.Length > v.Length) & !(sel2 > v.Length) & !(tel2 > v.Length) & !(sel3 > v.Length) & !(tel3 > v.Length))
-                            {
-                                moduleNode[moduleCount].Yaw(0);
-                            }
-                            else if (!(e.Source.Width < v.Width) & !(e.Target.Width < v.Width) & !(sew2 < v.Width) & !(tew2 < v.Width) & !(sew3 < v.Width) & !(tew3 < v.Width))
-                            {
-                                moduleNode[moduleCount].Yaw(270);
-                            }
-                            else if (!(e.Source.Width > v.Width) & !(e.Target.Width > v.Width) & !(sew2 > v.Width) & !(tew2 > v.Width) & !(sew3 > v.Width) & !(tew3 > v.Width))
-                            {
-                                moduleNode[moduleCount].Yaw(90);
-                            }
-                        }
-                    }
-                    // FLOOR
-                    if ((ec.Count == 4) & (passes == 0)) // 4 on the floor :)
-                    {
-                        ManufactureModule(moduleCount);
-                        //moduleNode[moduleCount].ResetToInitialState(); // set module North as created in modeler
-                        moduleNode[moduleCount].Position = new Vector3(x, 0, z);
-                        /*if (this.sm.NearbyVerticesEmpty(v) == "empty_corner") {
-                            quadrantNode[quadrantCount].AttachObject(exteriorTile[outFloorTileCount]);
-                            outFloorTileCount++;
-                        } 
-                        else*/
-                        passes = 1;
-                    } /*Debug:*/  //Console.WriteLine("Vertex: {0} -- Edges Source: {1} Target: {2}", v, e.Source, e.Target); Console.WriteLine("{0} {1}", v, ec.Count);        
-                } // add your created quadrant to the map 
-                if (moduleNode[moduleCount] != null)
-                {
-                    this.quadrantNode[quadrantCount].AddChild(moduleNode[moduleCount]);
-                    Console.WriteLine("[][][] New Module {0} has been created for Quadrant [][][]", nodeCount);
-                    //Console.ReadLine();
-                }
-                moduleCount++;
-            }
-        }
-
-        public void ManufactureModule(int moduleCount)
-        {
-            float moveEast = 0, moveNorth = 0, moveUp = 0;
-            //int clippedTileCount = 0;
-            bool tilesetDestroyed = false;
-
-            //// REFINE MODULES ////
-            this.sm.GenerateGraph("MODULE", false, tileAmountNorth, tileAmountEast);
-            CreateModule(interiorTile, moduleCount, 0, 0, 0); // create generic tileset to adjust it to terrain
-            // get terrain height - search in center of module - clipping doesn't work as well if oblong map
-            moveUp = SceneManager.GetHeightAt(new Vector3(moveEast + (moduleSizeEast / 2), 0, moveNorth + (moduleSizeNorth / 2)), 0);
-            Console.WriteLine("Map Location: {0}, {1}", moveEast, moveNorth);
-            // translate module node                 
-            this.moduleNode[moduleCount].Translate(new Vector3(moveEast, moveUp, moveNorth), TransformSpace.World);
-            // check each tileNode verses module node's height and remove edges and tiles that are burried inside terrain. 
-            /*Console.WriteLine("{0}", moduleNode[moduleCount].Name + "'s nodes are being searched for terrain clipping...");
-            foreach (SceneNode node in moduleNode[moduleCount].Children) // go through tiles
-            { //// TRIM TILESET AROUND TERRAIN ////
-                Console.WriteLine("{0}", node.Name + " is being checked..."); // derivedPosition for real world tileNode position - (derived) very important.
-                float tileHeight = SceneManager.GetHeightAt(new Vector3(node.DerivedPosition.x, 0, node.DerivedPosition.z), 0);
-                if (1000 > (moveUp - MeshSize) + tileClippingAngle) // if tile is in terrain 
-                {
-                    clippedTileCount++;
-                    if (clippedTileCount == (tileAmountNorth * tileAmountEast) * 0.8)
-                    { // if removed tile count equals tileThreshold, remove entire module
-                        SceneManager.DestroySceneNode(moduleNode[moduleCount].Name);
-                        tilesetDestroyed = true;
-                        Console.WriteLine("Too many tiles clipped so module removed. Searching next module.\n\n\n");
-                    }
-                    else if (!tilesetDestroyed)
-                    { // remove tile 
-                        Console.WriteLine("{0}", node.Name + " is too far in terrain.");
-                        // remove trimmed tileNodes' vertex from graph
-                        for (int x = 0; x < this.sm.Width; x++)
-                        {
-                            for (int z = 0; z < this.sm.Length; z++)
-                            {
-                                // check vertex against tileNode vertex
-                                if (x * MeshSize == node.Position.x & z * MeshSize == node.Position.z)
-                                {
-                                    if (this.sm.graph.ContainsVertex(new Point<int>(x, z)))
-                                    {
-                                        Console.WriteLine("Found tilenode's buried Readout vertex: " + x + "," + z + " ...Removing vertex.");
-                                        this.sm.graph.RemoveVertex(new Point<int>(x, z)); // remove vertices to search valid graph. 
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }*/
-            if (tilesetDestroyed == false)
-            { // RECREATE EXISTING OPEN FLOOR MODULES AS MAZES FITTING TERRAIN
-                Console.WriteLine("...Re-Creating " + moduleNode[moduleCount].Name + "'s tile-set into maze that fits terrain.");
-                // reset node arrays
-                SceneManager.DestroySceneNode(moduleNode[moduleCount].Name);
-                Console.WriteLine("{0} has {1} children left after being destroyed for re-creation", moduleNode[moduleCount].Name, moduleNode[moduleCount].ChildCount);
-                // generate maze with auto or manual path - if it zonks out skip :-)
-                if (!this.sm.GeneratePath("MODULE", false, 0, 0)) { return; }
-                // creates and searches logical path through module (shortest-path)
-                //this.sm.SearchPath("BFS", moduleNode[moduleCount]);
-                CreateModule(interiorTile, moduleCount, 0, 0, 0);
-                Console.WriteLine(moduleNode[moduleCount].Name + " REMODELED");
-                // translate new module node                 
-                this.moduleNode[moduleCount].Translate(new Vector3(moveEast, moveUp + this.tileSetHeight, moveNorth), TransformSpace.World);
-                // AUTO-MOLD TERRAIN to fit around tileset. Usefull for a "Foundation" under module
-                Console.WriteLine("{0}", moduleNode[moduleCount].Children.Count);
-                //Console.ReadLine();
-                foreach (SceneNode node in moduleNode[moduleCount].Children)
-                { // bring up or lower terrain (terrain deformation) to match all tileNode heights 
-                    //SceneManager.SetHeightAt(node.DerivedPosition, node.DerivedPosition.y - (MeshSize / 2));
-                }
-            }
-            //clippedTileCount = 0; // reset variables
         }
 
         #endregion TileSet
