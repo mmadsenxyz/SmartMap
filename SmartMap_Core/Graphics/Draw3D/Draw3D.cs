@@ -41,15 +41,16 @@ namespace SmartMap
         //private int nextPathnode = 0;
         // user will choose sizeing and quantity of structures.
         public int tileAmountNorth = 5, tileAmountEast = 5;
+        public int moduleAmountSouth = 9, moduleAmountEast = 9;
         private int /*tileThreshhold = 80,*/ tileClippingAngle = 300;
         // quantity of structures
         private int tilesetNorth = 1, tilesetEast = 1, tileSetDispersion = 7;
         private float moduleSizeNorth = 0, moduleSizeEast = 0, tileSetHeight = 150;
         // object resource counts.The amount of tiles created must be less then the tile counts. 
-        //private int sideTileCount = 1000, hallTileCount = 5000, cornerTileCount = 9000, endTileCount = 13000, floorTileCount = 17000;
-        //private int outSideTileCount = 500, outHallTileCount = 2500, outCornerTileCount = 4500, outEndTileCount = 6500, outFloorTileCount = 8500;
-        private int sideTileCount = 50, hallTileCount = 250, cornerTileCount = 450, endTileCount = 750, floorTileCount = 950;
-        private int outSideTileCount = 25, outHallTileCount = 125, outCornerTileCount = 225, outEndTileCount = 325, outFloorTileCount = 425;
+        private int sideTileCount = 1000, hallTileCount = 5000, cornerTileCount = 9000, endTileCount = 13000, floorTileCount = 17000;
+        private int outSideTileCount = 500, outHallTileCount = 2500, outCornerTileCount = 4500, outEndTileCount = 6500, outFloorTileCount = 8500;
+        //private int sideTileCount = 50, hallTileCount = 250, cornerTileCount = 450, endTileCount = 750, floorTileCount = 950;
+        //private int outSideTileCount = 25, outHallTileCount = 125, outCornerTileCount = 225, outEndTileCount = 325, outFloorTileCount = 425;
         private float sew2, sew3, sel2, sel3, tew2, tew3, tel2, tel3; // 2nd and 3rd source edge and target edge
         // Graphics
         public static float MeshSize = 276.75f;
@@ -96,7 +97,7 @@ namespace SmartMap
 
             // =Draw 3D= - SmartMap's 3D window (Axiom3D)            
             // ==== WARNING :: Keep 'count' variables consistant with resource number changes 
-            /*CreateGraphics(interiorTile, "Room_Side", "Room_Side.mesh", "TileSet/Room", 4000, 4000, true);
+            CreateGraphics(interiorTile, "Room_Side", "Room_Side.mesh", "TileSet/Room", 4000, 4000, true);
             CreateGraphics(interiorTile, "Room_Hall", "Room_Hall.mesh", "TileSet/Room", 4000, 4000, false);
             CreateGraphics(interiorTile, "Room_Corner", "Room_Corner.mesh", "TileSet/Room", 4000, 4000, false);
             CreateGraphics(interiorTile, "Room_End", "Room_End.mesh", "TileSet/Room", 4000, 4000, false);
@@ -106,21 +107,21 @@ namespace SmartMap
             CreateGraphics(exteriorTile, "Wall_Hall", "Room_Hall.mesh", "TileSet/Wall", 2000, 2000, false);
             CreateGraphics(exteriorTile, "Wall_Corner", "Room_Corner.mesh", "TileSet/Wall", 2000, 2000, false);
             CreateGraphics(exteriorTile, "Wall_End", "Room_End.mesh", "TileSet/Wall", 2000, 2000, false);
-            CreateGraphics(exteriorTile, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 2000, 2000, false);*/
+            CreateGraphics(exteriorTile, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 2000, 2000, false);
 
             // =Draw 3D= - SmartMap's 3D window (Axiom3D)            
             // ==== WARNING :: Keep 'count' variables consistant with resource amounts 
-            CreateGraphics(interiorTile, "Room_Side", "Room_Side.mesh", "TileSet/Room", 200, 200, true);
+            /*CreateGraphics(interiorTile, "Room_Side", "Room_Side.mesh", "TileSet/Room", 200, 200, true);
             CreateGraphics(interiorTile, "Room_Hall", "Room_Hall.mesh", "TileSet/Room", 200, 200, false);
             CreateGraphics(interiorTile, "Room_Corner", "Room_Corner.mesh", "TileSet/Room", 200, 200, false);
             CreateGraphics(interiorTile, "Room_End", "Room_End.mesh", "TileSet/Room", 200, 200, false);
-            CreateGraphics(interiorTile, "Room_Floor", "Room_Floor.mesh", "TileSet/Room", 200, 200, false);
+            CreateGraphics(interiorTile, "Room_Floor", "Room_Floor.mesh", "TileSet/Wall", 200, 200, false);
             // outer wall resources - (change these to your outer-wall meshes and materials)
             CreateGraphics(exteriorTile, "Wall_Side", "Room_Side.mesh", "TileSet/Wall", 100, 100, true);
             CreateGraphics(exteriorTile, "Wall_Hall", "Room_Hall.mesh", "TileSet/Wall", 100, 100, false);
             CreateGraphics(exteriorTile, "Wall_Corner", "Room_Corner.mesh", "TileSet/Wall", 100, 100, false);
             CreateGraphics(exteriorTile, "Wall_End", "Room_End.mesh", "TileSet/Wall", 100, 100, false);
-            CreateGraphics(exteriorTile, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 100, 100, false);
+            CreateGraphics(exteriorTile, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 100, 100, false);*/
 
             CreateWorld(0, 0, 0, 0, 0);
 
@@ -249,7 +250,7 @@ namespace SmartMap
         /// <param name="quadrantEast"></param>
         public void CreateWorld(int quadrantDispersion, int quadrantAmountNorth, int quadtrantAmountEast, int quadrantNorth, int quadrantEast)
         {
-            this.sm.GenerateGraph("QUADRANT", false, 2, 2);
+            this.sm.GenerateGraph("QUADRANT", false, moduleAmountEast, moduleAmountSouth);
             this.sm.GeneratePath("QUADRANT", false, 0, 0); // generate maze with auto or manual path - has error handling   
             Console.WriteLine("--------EXITING PATH GENERATION FOR QUADRANT--------");
             //Console.ReadLine();
