@@ -101,13 +101,13 @@ namespace SmartMap
             CreateGraphics(interiorTile, "Room_Hall", "Room_Hall.mesh", "TileSet/Room", 4000, 4000, false);
             CreateGraphics(interiorTile, "Room_Corner", "Room_Corner.mesh", "TileSet/Room", 4000, 4000, false);
             CreateGraphics(interiorTile, "Room_End", "Room_End.mesh", "TileSet/Room", 4000, 4000, false);
-            CreateGraphics(interiorTile, "Room_Floor", "Room_Floor.mesh", "TileSet/Room", 4000, 4000, false);
+            CreateGraphics(interiorTile, "Room_Floor", "Room_Floor2.mesh", "Room_Floor2", 4000, 4000, false);
             // outer wall resources - (change these to your outer-wall meshes and materials)
             CreateGraphics(exteriorTile, "Wall_Side", "Room_Side.mesh", "TileSet/Wall", 2000, 2000, true);
             CreateGraphics(exteriorTile, "Wall_Hall", "Room_Hall.mesh", "TileSet/Wall", 2000, 2000, false);
             CreateGraphics(exteriorTile, "Wall_Corner", "Room_Corner.mesh", "TileSet/Wall", 2000, 2000, false);
             CreateGraphics(exteriorTile, "Wall_End", "Room_End.mesh", "TileSet/Wall", 2000, 2000, false);
-            CreateGraphics(exteriorTile, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 2000, 2000, false);
+            CreateGraphics(exteriorTile, "Wall_Floor", "Room_Floor2.mesh", "Room_Floor2", 2000, 2000, false);
 
             // =Draw 3D= - SmartMap's 3D window (Axiom3D)            
             // ==== WARNING :: Keep 'count' variables consistant with resource amounts 

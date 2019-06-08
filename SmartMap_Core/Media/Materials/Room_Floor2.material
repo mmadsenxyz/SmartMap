@@ -1,12 +1,12 @@
 // Room_Floor2 genrated by blender2ogre 0.6.0
 
-material Room_Floor2
+material Room_Floor2 
 {
     receive_shadows on 
 
     technique
     {
-        pass
+        pass Room_Floor2
         {
             ambient 0.800000011920929 0.800000011920929 0.800000011920929 1.0
             diffuse 0.6400000190734865 0.6400000190734865 0.6400000190734865 1.0
