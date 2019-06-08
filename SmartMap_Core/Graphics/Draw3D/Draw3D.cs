@@ -295,27 +295,27 @@ namespace SmartMap
                     if (ec.Count == 1) // one edge for End tile
                     {
 
-                        //moduleNode[moduleCount].ResetToInitialState(); // set module North as created in modeler
-                        //moduleNode[moduleCount].Position = new Vector3(x, 0, z);
+                        //this.moduleNode[moduleCount].ResetToInitialState(); // set module North as created in modeler
+                        //this.moduleNode[moduleCount].Position = new Vector3(x, 0, z);
                         ManufactureModule(moduleCount, x, z);
-                        //moduleNode[moduleCount].ResetOrientation();
+                        //this.moduleNode[moduleCount].ResetOrientation();
 
                         // yaw
                         if ((e.Source.Width < v.Width) || (e.Target.Width < v.Width))
                         {
-                            moduleNode[moduleCount].Yaw(90);
+                            this.moduleNode[moduleCount].Yaw(90);
                         }
                         else if ((e.Source.Width > v.Width) || (e.Target.Width > v.Width))
                         {
-                            moduleNode[moduleCount].Yaw(270);
+                            this.moduleNode[moduleCount].Yaw(270);
                         }
                         else if ((e.Source.Length < v.Length) || (e.Target.Length < v.Length))
                         {
-                            moduleNode[moduleCount].Yaw(0);
+                            this.moduleNode[moduleCount].Yaw(0);
                         }
                         else if ((e.Source.Length > v.Length) || (e.Target.Length > v.Length))
                         {
-                            moduleNode[moduleCount].Yaw(180);
+                            this.moduleNode[moduleCount].Yaw(180);
                         }
                     }
                     // HALL 
@@ -332,9 +332,9 @@ namespace SmartMap
                         else if ((((e.Source.Width != v.Width) | (e.Target.Width != v.Width)) & ((sew2 != v.Width) | (tew2 != v.Width)))
                           | (((e.Source.Length != v.Length) | (e.Target.Length != v.Length)) & ((sel2 != v.Length) | (tel2 != v.Length))))
                         {
-                            //moduleNode[moduleCount].Position = new Vector3(x, 0, z);
+                            //this.moduleNode[moduleCount].Position = new Vector3(x, 0, z);
                             ManufactureModule(moduleCount, x, z);
-                            //moduleNode[moduleCount].ResetOrientation(); // set module North as created in modeler
+                            //this.moduleNode[moduleCount].ResetOrientation(); // set module North as created in modeler
                             /*if (this.sm.NearbyVerticesEmpty(v) == "empty_corner") {
                                 quadrantNode[quadrantCount].AttachObject(exteriorTile[outHallTileCount]);
                                 outHallTileCount++; 
@@ -342,13 +342,13 @@ namespace SmartMap
                             else*/
                             // yaw 
                             if ((sew2 != v.Width) | (tew2 != v.Width))
-                                moduleNode[moduleCount].Yaw(90);
+                                this.moduleNode[moduleCount].Yaw(90);
                         }
                         else
                         { // CORNER
-                            //moduleNode[moduleCount].Position = new Vector3(x, 0, z);
+                            //this.moduleNode[moduleCount].Position = new Vector3(x, 0, z);
                             ManufactureModule(moduleCount, x, z);
-                            //moduleNode[moduleCount].ResetOrientation(); // set module North as created in modeler
+                            //this.moduleNode[moduleCount].ResetOrientation(); // set module North as created in modeler
                             /*if (this.sm.NearbyVerticesEmpty(v) == "empty_corner") {
                                 quadrantNode[quadrantCount].AttachObject(exteriorTile[outCornerTileCount]);
                                 outCornerTileCount++; 
@@ -358,22 +358,22 @@ namespace SmartMap
                             if ((((e.Source.Width > v.Width) | (e.Target.Width > v.Width)) & ((sel2 < v.Length) | (tel2 < v.Length)))
                             || (((e.Source.Length < v.Length) | (e.Target.Length < v.Length)) & ((sew2 > v.Width) | (tew2 > v.Width))))
                             {
-                                moduleNode[moduleCount].Yaw(0);
+                                this.moduleNode[moduleCount].Yaw(0);
                             }
                             else if ((((e.Source.Width < v.Width) | (e.Target.Width < v.Width)) & ((sel2 > v.Length) | (tel2 > v.Length)))
                           || (((e.Source.Length > v.Length) | (e.Target.Length > v.Length)) & ((sew2 < v.Width) | (tew2 < v.Width))))
                             {
-                                moduleNode[moduleCount].Yaw(180);
+                                this.moduleNode[moduleCount].Yaw(180);
                             }
                             else if ((((e.Source.Width > v.Width) | (e.Target.Width > v.Width)) & ((sel2 > v.Length) | (tel2 > v.Length)))
                           || (((e.Source.Length > v.Length) | (e.Target.Length > v.Length)) & ((sew2 > v.Width) | (tew2 > v.Width))))
                             {
-                                moduleNode[moduleCount].Yaw(270);
+                                this.moduleNode[moduleCount].Yaw(270);
                             }
                             else if ((((e.Source.Width < v.Width) | (e.Target.Width < v.Width)) & ((sel2 < v.Length) | (tel2 < v.Length)))
                           || (((e.Source.Length < v.Length) | (e.Target.Length < v.Length)) & ((sew2 < v.Width) | (tew2 < v.Width))))
                             {
-                                moduleNode[moduleCount].Yaw(90);
+                                this.moduleNode[moduleCount].Yaw(90);
                             }
                         }
                     }
@@ -398,9 +398,9 @@ namespace SmartMap
                         }
                         else
                         {
-                            //moduleNode[moduleCount].Position = new Vector3(x, 0, z);
+                            //this.moduleNode[moduleCount].Position = new Vector3(x, 0, z);
                             ManufactureModule(moduleCount, x, z);
-                            //moduleNode[moduleCount].ResetOrientation(); // set module North as created in modeler
+                            //this.moduleNode[moduleCount].ResetOrientation(); // set module North as created in modeler
 
                             /*if (this.sm.NearbyVerticesEmpty(v) == "empty_corner") {
                                 outSideTileCount++; 
@@ -409,19 +409,19 @@ namespace SmartMap
                             // yaw 
                             if (!(e.Source.Length < v.Length) & !(e.Target.Length < v.Length) & !(sel2 < v.Length) & !(tel2 < v.Length) & !(sel3 < v.Length) & !(tel3 < v.Length))
                             {
-                                moduleNode[moduleCount].Yaw(180);
+                                this.moduleNode[moduleCount].Yaw(180);
                             }
                             else if (!(e.Source.Length > v.Length) & !(e.Target.Length > v.Length) & !(sel2 > v.Length) & !(tel2 > v.Length) & !(sel3 > v.Length) & !(tel3 > v.Length))
                             {
-                                moduleNode[moduleCount].Yaw(0);
+                                this.moduleNode[moduleCount].Yaw(0);
                             }
                             else if (!(e.Source.Width < v.Width) & !(e.Target.Width < v.Width) & !(sew2 < v.Width) & !(tew2 < v.Width) & !(sew3 < v.Width) & !(tew3 < v.Width))
                             {
-                                moduleNode[moduleCount].Yaw(270);
+                                this.moduleNode[moduleCount].Yaw(270);
                             }
                             else if (!(e.Source.Width > v.Width) & !(e.Target.Width > v.Width) & !(sew2 > v.Width) & !(tew2 > v.Width) & !(sew3 > v.Width) & !(tew3 > v.Width))
                             {
-                                moduleNode[moduleCount].Yaw(90);
+                                this.moduleNode[moduleCount].Yaw(90);
                             }
                         }
                     }
@@ -430,7 +430,7 @@ namespace SmartMap
                     {
                         ManufactureModule(moduleCount, x, z);
                         //moduleNode[moduleCount].ResetOrientation(); // set module North as created in modeler
-                        //moduleNode[moduleCount].Position = new Vector3(x, 0, z);
+                        //this.moduleNode[moduleCount].Position = new Vector3(x, 0, z);
                         /*if (this.sm.NearbyVerticesEmpty(v) == "empty_corner") {
                             quadrantNode[quadrantCount].AttachObject(exteriorTile[outFloorTileCount]);
                             outFloorTileCount++;
@@ -439,9 +439,10 @@ namespace SmartMap
                         passes = 1;
                     } /*Debug:*/  //Console.WriteLine("Vertex: {0} -- Edges Source: {1} Target: {2}", v, e.Source, e.Target); Console.WriteLine("{0} {1}", v, ec.Count);        
                 } // add your created quadrant to the map 
-                if (moduleNode[moduleCount] != null)
-                {
-                    this.quadrantNode[quadrantCount].AddChild(moduleNode[moduleCount]);
+                if (this.moduleNode[moduleCount] != null)
+                {   //reset Module orientation for now until SmartMap uses Module oriention later for organized cities
+                    this.moduleNode[moduleCount].ResetOrientation();
+                    this.quadrantNode[quadrantCount].AddChild(this.moduleNode[moduleCount]);
                     Console.WriteLine("[][][] New Module {0} has been created for Quadrant [][][]", nodeCount);
                     //Console.ReadLine();
                 }
@@ -451,7 +452,7 @@ namespace SmartMap
 
         public void ManufactureModule(int moduleCount, float xLocation, float zLocation)
         {
-            //location tweaks
+            //move up, or down, the mountain 
             float moveUp = 0;
             //int clippedTileCount = 0;
             bool tilesetDestroyed = false;
@@ -464,10 +465,10 @@ namespace SmartMap
             // MOVE THE MODULE ONTO ITS FOUNDATION
             this.moduleNode[moduleCount].Translate(new Vector3(xLocation, moveUp, zLocation), TransformSpace.World);
             //this.moduleNode[moduleCount].Position = new Vector3(xLocation, moveUp, zLocation);
-            // TRIM TILESET AROUND TERRAIN
+            // TRIM TILESET AROUND TERRAIN FOUNDATION
             // check each tileNode verses module node's height and remove edges and tiles that are burried inside terrain. 
-            /*Console.WriteLine("{0}", moduleNode[moduleCount].Name + "'s nodes are being searched for terrain clipping...");
-            foreach (SceneNode node in moduleNode[moduleCount].Children) // go through tiles
+            /*Console.WriteLine("{0}", this.moduleNode[moduleCount].Name + "'s nodes are being searched for terrain clipping...");
+            foreach (SceneNode node in this.moduleNode[moduleCount].Children) // go through tiles
             { 
                 Console.WriteLine("{0}", node.Name + " is being checked..."); // derivedPosition for real world tileNode position - (derived) very important.
                 float tileHeight = SceneManager.GetHeightAt(new Vector3(node.DerivedPosition.x, 0, node.DerivedPosition.z), 0);
@@ -476,7 +477,7 @@ namespace SmartMap
                     clippedTileCount++;
                     if (clippedTileCount == (tileAmountNorth * tileAmountEast) * 0.8)
                     { // if removed tile count equals tileThreshold, remove entire module
-                        SceneManager.DestroySceneNode(moduleNode[moduleCount].Name);
+                        SceneManager.DestroySceneNode(this.moduleNode[moduleCount].Name);
                         tilesetDestroyed = true;
                         Console.WriteLine("Too many tiles clipped so module removed. Searching next module.\n\n\n");
                     }
@@ -504,22 +505,22 @@ namespace SmartMap
             }*/
             if (tilesetDestroyed == false)
             {   // RECREATE NEW MODULES BASED ON CURRENT TERRAIN TRIMMED GRAPH
-                Console.WriteLine("...Re-Creating " + moduleNode[moduleCount].Name + "'s tile-set into maze that fits terrain.");
+                Console.WriteLine("...Re-Creating " + this.moduleNode[moduleCount].Name + "'s tile-set into maze that fits terrain.");
                 // reset node arrays
-                SceneManager.DestroySceneNode(moduleNode[moduleCount].Name);
-                Console.WriteLine("{0} has {1} children left after being destroyed for re-creation", moduleNode[moduleCount].Name, moduleNode[moduleCount].ChildCount);
+                SceneManager.DestroySceneNode(this.moduleNode[moduleCount].Name);
+                Console.WriteLine("{0} has {1} children left after being destroyed for re-creation", this.moduleNode[moduleCount].Name, this.moduleNode[moduleCount].ChildCount);
                 // generate maze with auto or manual path - if it zonks out skip :-)
                 if (!this.sm.GeneratePath("MODULE", false, 0, 0)) { return; }
                 // creates and searches logical path through module (shortest-path)
-                //this.sm.SearchPath("BFS", moduleNode[moduleCount]);
+                //this.sm.SearchPath("BFS", this.moduleNode[moduleCount]);
                 CreateModule(interiorTile, moduleCount, 0, 0, 0);
-                Console.WriteLine(moduleNode[moduleCount].Name + " REMODELED");
+                Console.WriteLine(this.moduleNode[moduleCount].Name + " REMODELED");
                 // TRANSLATE NEW MODULE BACK ONTO FOUNDATION
                 this.moduleNode[moduleCount].Translate(new Vector3(xLocation, moveUp, zLocation), TransformSpace.World);
                 //this.moduleNode[moduleCount].Position = new Vector3(xLocation, moveUp + this.tileSetHeight, zLocation);
-                Console.WriteLine("{0}", moduleNode[moduleCount].Children.Count);
+                Console.WriteLine("{0}", this.moduleNode[moduleCount].Children.Count);
                 // AUTO-MOLD TERRAIN to fit around tileset for a customized Foundation under module
-                foreach (SceneNode node in moduleNode[moduleCount].Children)
+                foreach (SceneNode node in this.moduleNode[moduleCount].Children)
                 { // bring up or lower terrain (terrain deformation) to match all tileNode heights 
                     SceneManager.SetHeightAt(node.DerivedPosition, node.DerivedPosition.y - (MeshSize / 2));
                 }
@@ -562,34 +563,34 @@ namespace SmartMap
                     if (ec.Count == 1) // one edge for End tile
                     {
                         Console.WriteLine("Manufacturing END Tile");
-                        tileNode[nodeCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Tile " + nodeCount);
-                        tileNode[nodeCount].ResetToInitialState(); // set mesh North as created in modeler
-                        tileNode[nodeCount].Position = new Vector3(x, 0, z);
+                        this.tileNode[nodeCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Tile " + nodeCount);
+                        this.tileNode[nodeCount].ResetToInitialState(); // set mesh North as created in modeler
+                        this.tileNode[nodeCount].Position = new Vector3(x, 0, z);
                         // add exterior tile if adjacent edge is empty. Corner for two. 
                         if (this.sm.NearbyVerticesEmpty(v) == "empty_corner")
                         {
-                            tileNode[nodeCount].AttachObject(exteriorTile[outEndTileCount]);
+                            this.tileNode[nodeCount].AttachObject(exteriorTile[outEndTileCount]);
                             outEndTileCount++;
                         }
                         else
-                            tileNode[nodeCount].AttachObject(tile[endTileCount]);
+                            this.tileNode[nodeCount].AttachObject(tile[endTileCount]);
                         endTileCount++;
                         // yaw
                         if ((e.Source.Width < v.Width) || (e.Target.Width < v.Width))
                         {
-                            tileNode[nodeCount].Yaw(90);
+                            this.tileNode[nodeCount].Yaw(90);
                         }
                         else if ((e.Source.Width > v.Width) || (e.Target.Width > v.Width))
                         {
-                            tileNode[nodeCount].Yaw(270);
+                            this.tileNode[nodeCount].Yaw(270);
                         }
                         else if ((e.Source.Length < v.Length) || (e.Target.Length < v.Length))
                         {
-                            tileNode[nodeCount].Yaw(0);
+                            this.tileNode[nodeCount].Yaw(0);
                         }
                         else if ((e.Source.Length > v.Length) || (e.Target.Length > v.Length))
                         {
-                            tileNode[nodeCount].Yaw(180);
+                            this.tileNode[nodeCount].Yaw(180);
                         }
                     }
                     // HALL 
@@ -607,55 +608,55 @@ namespace SmartMap
                         else if ((((e.Source.Width != v.Width) | (e.Target.Width != v.Width)) & ((sew2 != v.Width) | (tew2 != v.Width)))
                           | (((e.Source.Length != v.Length) | (e.Target.Length != v.Length)) & ((sel2 != v.Length) | (tel2 != v.Length))))
                         {
-                            tileNode[nodeCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Tile " + nodeCount);
-                            tileNode[nodeCount].ResetToInitialState();
-                            tileNode[nodeCount].Position = new Vector3(x, 0, z);
+                            this.tileNode[nodeCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Tile " + nodeCount);
+                            this.tileNode[nodeCount].ResetToInitialState();
+                            this.tileNode[nodeCount].Position = new Vector3(x, 0, z);
                             if (this.sm.NearbyVerticesEmpty(v) == "empty_corner")
                             {
-                                tileNode[nodeCount].AttachObject(exteriorTile[outHallTileCount]);
+                                this.tileNode[nodeCount].AttachObject(exteriorTile[outHallTileCount]);
                                 outHallTileCount++;
                             }
                             else
-                                tileNode[nodeCount].AttachObject(tile[hallTileCount]);
+                                this.tileNode[nodeCount].AttachObject(tile[hallTileCount]);
                             hallTileCount++;
                             // yaw 
                             if ((sew2 != v.Width) | (tew2 != v.Width))
-                                tileNode[nodeCount].Yaw(90);
+                                this.tileNode[nodeCount].Yaw(90);
                         }
                         else
                         { // CORNER
                             Console.WriteLine("Manufacturing CORNER Tile");
-                            tileNode[nodeCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Tile " + nodeCount);
-                            tileNode[nodeCount].ResetToInitialState();
-                            tileNode[nodeCount].Position = new Vector3(x, 0, z);
+                            this.tileNode[nodeCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Tile " + nodeCount);
+                            this.tileNode[nodeCount].ResetToInitialState();
+                            this.tileNode[nodeCount].Position = new Vector3(x, 0, z);
                             if (this.sm.NearbyVerticesEmpty(v) == "empty_corner")
                             {
-                                tileNode[nodeCount].AttachObject(exteriorTile[outCornerTileCount]);
+                                this.tileNode[nodeCount].AttachObject(exteriorTile[outCornerTileCount]);
                                 outCornerTileCount++;
                             }
                             else
-                                tileNode[nodeCount].AttachObject(tile[cornerTileCount]);
+                                this.tileNode[nodeCount].AttachObject(tile[cornerTileCount]);
                             cornerTileCount++;
                             // yaw 
                             if ((((e.Source.Width > v.Width) | (e.Target.Width > v.Width)) & ((sel2 < v.Length) | (tel2 < v.Length)))
                             || (((e.Source.Length < v.Length) | (e.Target.Length < v.Length)) & ((sew2 > v.Width) | (tew2 > v.Width))))
                             {
-                                tileNode[nodeCount].Yaw(0);
+                                this.tileNode[nodeCount].Yaw(0);
                             }
                             else if ((((e.Source.Width < v.Width) | (e.Target.Width < v.Width)) & ((sel2 > v.Length) | (tel2 > v.Length)))
                           || (((e.Source.Length > v.Length) | (e.Target.Length > v.Length)) & ((sew2 < v.Width) | (tew2 < v.Width))))
                             {
-                                tileNode[nodeCount].Yaw(180);
+                                this.tileNode[nodeCount].Yaw(180);
                             }
                             else if ((((e.Source.Width > v.Width) | (e.Target.Width > v.Width)) & ((sel2 > v.Length) | (tel2 > v.Length)))
                           || (((e.Source.Length > v.Length) | (e.Target.Length > v.Length)) & ((sew2 > v.Width) | (tew2 > v.Width))))
                             {
-                                tileNode[nodeCount].Yaw(270);
+                                this.tileNode[nodeCount].Yaw(270);
                             }
                             else if ((((e.Source.Width < v.Width) | (e.Target.Width < v.Width)) & ((sel2 < v.Length) | (tel2 < v.Length)))
                           || (((e.Source.Length < v.Length) | (e.Target.Length < v.Length)) & ((sew2 < v.Width) | (tew2 < v.Width))))
                             {
-                                tileNode[nodeCount].Yaw(90);
+                                this.tileNode[nodeCount].Yaw(90);
                             }
                         }
                     }
@@ -681,33 +682,33 @@ namespace SmartMap
                         }
                         else
                         {
-                            tileNode[nodeCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Tile " + nodeCount);
-                            tileNode[nodeCount].ResetToInitialState();
-                            tileNode[nodeCount].Position = new Vector3(x, 0, z);
+                            this.tileNode[nodeCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Tile " + nodeCount);
+                            this.tileNode[nodeCount].ResetToInitialState();
+                            this.tileNode[nodeCount].Position = new Vector3(x, 0, z);
                             if (this.sm.NearbyVerticesEmpty(v) == "empty_corner")
                             {
-                                tileNode[nodeCount].AttachObject(exteriorTile[outSideTileCount]);
+                                this.tileNode[nodeCount].AttachObject(exteriorTile[outSideTileCount]);
                                 outSideTileCount++;
                             }
                             else
-                                tileNode[nodeCount].AttachObject(tile[sideTileCount]);
+                                this.tileNode[nodeCount].AttachObject(tile[sideTileCount]);
                             sideTileCount++;
                             // yaw 
                             if (!(e.Source.Length < v.Length) & !(e.Target.Length < v.Length) & !(sel2 < v.Length) & !(tel2 < v.Length) & !(sel3 < v.Length) & !(tel3 < v.Length))
                             {
-                                tileNode[nodeCount].Yaw(180);
+                                this.tileNode[nodeCount].Yaw(180);
                             }
                             else if (!(e.Source.Length > v.Length) & !(e.Target.Length > v.Length) & !(sel2 > v.Length) & !(tel2 > v.Length) & !(sel3 > v.Length) & !(tel3 > v.Length))
                             {
-                                tileNode[nodeCount].Yaw(0);
+                                this.tileNode[nodeCount].Yaw(0);
                             }
                             else if (!(e.Source.Width < v.Width) & !(e.Target.Width < v.Width) & !(sew2 < v.Width) & !(tew2 < v.Width) & !(sew3 < v.Width) & !(tew3 < v.Width))
                             {
-                                tileNode[nodeCount].Yaw(270);
+                                this.tileNode[nodeCount].Yaw(270);
                             }
                             else if (!(e.Source.Width > v.Width) & !(e.Target.Width > v.Width) & !(sew2 > v.Width) & !(tew2 > v.Width) & !(sew3 > v.Width) & !(tew3 > v.Width))
                             {
-                                tileNode[nodeCount].Yaw(90);
+                                this.tileNode[nodeCount].Yaw(90);
                             }
                         }
                     }
@@ -715,23 +716,23 @@ namespace SmartMap
                     if ((ec.Count == 4) & (passes == 0)) // 4 on the floor :)
                     {
                         Console.WriteLine("Manufacturing FLOOR Tile");
-                        tileNode[nodeCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Tile " + nodeCount);
-                        tileNode[nodeCount].ResetToInitialState();
-                        tileNode[nodeCount].Position = new Vector3(x, 0, z);
+                        this.tileNode[nodeCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Tile " + nodeCount);
+                        this.tileNode[nodeCount].ResetToInitialState();
+                        this.tileNode[nodeCount].Position = new Vector3(x, 0, z);
                         if (this.sm.NearbyVerticesEmpty(v) == "empty_corner")
                         {
-                            tileNode[nodeCount].AttachObject(exteriorTile[outFloorTileCount]);
+                            this.tileNode[nodeCount].AttachObject(exteriorTile[outFloorTileCount]);
                             outFloorTileCount++;
                         }
                         else
-                            tileNode[nodeCount].AttachObject(tile[floorTileCount]);
+                            this.tileNode[nodeCount].AttachObject(tile[floorTileCount]);
                         passes = 1;
                         floorTileCount++;
                     } /*Debug:*/  //Console.WriteLine("Vertex: {0} -- Edges Source: {1} Target: {2}", v, e.Source, e.Target); Console.WriteLine("{0} {1}", v, ec.Count);        
                 }
-                if (tileNode[nodeCount] != null)
+                if (this.tileNode[nodeCount] != null)
                 {
-                    this.moduleNode[moduleCount].AddChild(tileNode[nodeCount]);
+                    this.moduleNode[moduleCount].AddChild(this.tileNode[nodeCount]);
                     Console.WriteLine("[][][] New tile {0} has been created [][][]", nodeCount);
                 }
                 nodeCount++;
