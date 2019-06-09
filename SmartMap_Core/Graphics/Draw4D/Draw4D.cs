@@ -39,7 +39,7 @@ namespace SmartMap
 
 		public void CreateModel()
 		{
-            idraw.CreateGraphics(model, "Model", "ogrehead.mesh", "Ogre/Skin", 1, 1, true);
+            idraw.CreateGraphics(model, "Model", "ogrehead.mesh", "Ogre/Skin", 1, 1);
 			// for main player
 			modelNode[0] = scene.RootSceneNode.CreateChildSceneNode("Model");
 			modelNode[0].AttachObject(model[0]);
@@ -52,7 +52,7 @@ namespace SmartMap
 			float z = -meshSize/2;
 			// create zones
 			if (!recreate) {
-				idraw.CreateGraphics(zone, "Zone", "Zone.mesh", "TileSet/Room", 36, 36, true);
+				idraw.CreateGraphics(zone, "Zone", "Zone.mesh", "TileSet/Room", 36, 36);
 				// create 36 zoneNodes
 				for (int i = 0; i < zoneNode.Count; ++i) {
 					if (x >= (mapSize * 2) - (mapSize/3)) {
