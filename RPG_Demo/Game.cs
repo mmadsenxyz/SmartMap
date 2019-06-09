@@ -139,8 +139,8 @@ namespace RolePlayingGame
             engine = Root.Instance;
 
             // add event handlers for frame events
-            engine.FrameStarted += new FrameEvent(OnFrameStarted);
-            engine.FrameEnded += new FrameEvent(OnFrameEnded);
+            engine.FrameStarted += new EventHandler<FrameEventArgs>(OnFrameStarted);
+            engine.FrameEnded += new EventHandler<FrameEventArgs>(OnFrameEnded);
 
             window = Root.Instance.Initialize(false, "Game Window");
 
@@ -235,8 +235,8 @@ namespace RolePlayingGame
             if (engine != null)
             {
                 // remove event handlers
-                engine.FrameStarted -= new FrameEvent(OnFrameStarted);
-                engine.FrameEnded -= new FrameEvent(OnFrameEnded);
+                engine.FrameStarted -= new EventHandler<FrameEventArgs>(OnFrameStarted);
+                engine.FrameEnded -= new EventHandler<FrameEventArgs>(OnFrameEnded);
 
                 //engine.Dispose();
             }
@@ -253,12 +253,12 @@ namespace RolePlayingGame
 
         #region Event Handlers
 
-        protected virtual bool OnFrameEnded(Object source, FrameEventArgs e)
+        protected virtual void OnFrameEnded(Object source, FrameEventArgs e)
         {
-            return true;
+            //return true;
         }
 
-        protected virtual bool OnFrameStarted(Object source, FrameEventArgs e)
+        protected virtual void OnFrameStarted(Object source, FrameEventArgs e)
         {
             float scaleMove = 200 * e.TimeSinceLastFrame;
 
@@ -274,7 +274,7 @@ namespace RolePlayingGame
             if (input.IsKeyPressed(KeyCodes.Escape))
             {
                 Root.Instance.QueueEndRendering();
-                return false;
+                //return false;
             }
 
             if (input.IsKeyPressed(KeyCodes.A))
@@ -454,7 +454,7 @@ namespace RolePlayingGame
             OverlayElement element = OverlayManager.Instance.Elements.GetElement("Core/DebugText");
             element.Text = debugText;
 
-            return true;
+            //return true;
         }
 
         protected void UpdateStats()

@@ -1,0 +1,115 @@
+// Ogre overlay scripts
+GUI/DebugOverlay
+{
+	container Panel(Debug/StatPanel)
+	{
+		metrics_mode pixels
+		vert_align top
+		left 8 
+		top 8
+		width 216
+		height 126
+		material GUI/PanelDebug
+		
+		element TextArea(Debug/CurrFps)
+		{
+			metrics_mode pixels
+			left 5
+			top 25
+			width 150
+			height 30
+			font_name VerdanaBold
+			char_height 10
+			caption Current FPS:
+			colour_top 1 1 1
+			colour_bottom 0.8 0.8 0.8
+		}
+		
+		element TextArea(Debug/AverageFps)
+		{
+			metrics_mode pixels
+			left 5
+			top 40
+			width 90
+			height 30
+			font_name VerdanaBold
+			char_height 10
+			caption AVERAGE FPS:
+			colour_top 0.8 0.8 0.8
+			colour_bottom 0.6 0.6 0.6
+		}
+		
+		element TextArea(Debug/WorstFps)
+		{
+			metrics_mode pixels
+			left 5
+			top 55
+			width 90
+			height 30
+			font_name VerdanaBold
+			char_height 10
+			caption WORST FPS:
+			colour_top 0.8 0.8 0.8
+			colour_bottom 0.6 0.6 0.6
+		}
+		
+		element TextArea(Debug/BestFps)
+		{
+			metrics_mode pixels
+			left 5
+			top 70
+			width 90
+			height 30
+			font_name VerdanaBold
+			char_height 10
+			caption BEST FPS:
+			colour_top 0.8 0.8 0.8
+			colour_bottom 0.6 0.6 0.6
+		}
+		
+		element TextArea(Debug/NumTris)
+		{
+			metrics_mode pixels
+			left 5
+			top 85
+			width 90
+			height 30
+			font_name VerdanaBold
+			char_height 10
+			caption Triangle Count:
+			colour_top 0.8 0.8 0.8
+			colour_bottom 0.6 0.6 0.6
+		}
+		
+		element TextArea(Debug/NumBatches)
+		{
+			metrics_mode pixels
+			left 5
+			top 100
+			width 90
+			height 30
+			font_name VerdanaBold
+			char_height 10
+			caption Batch Count:
+			colour_top 0.8 0.8 0.8
+			colour_bottom 0.6 0.6 0.6
+		}
+		
+		element TextArea(Debug/DebugText)
+		{
+			metrics_mode pixels
+			left 400
+			top 5
+			width 200
+			height 30
+			font_name VerdanaBold
+			char_height 10
+			colour_top 1 1 1
+			colour_bottom 0.8 0.8 0.8
+		}
+	}
+}
+
+
+
+

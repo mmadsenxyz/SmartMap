@@ -4,9 +4,82 @@ material TileSet/Room
 	{
 		pass
 		{
+			ambient 0.3 0.3 0.3
 			texture_unit
 			{
 				texture Concrete.jpg
+			}
+		}
+	}
+}
+
+material TileSet/Wall	
+{
+    technique
+	{
+		pass
+		{
+			ambient 0.3 0.3 0.3
+			texture_unit
+			{
+				texture Bricks.jpg
+			}
+		}
+	}
+}
+
+material Material01
+{
+    technique
+	{
+		pass
+		{
+			ambient 0.3 0.3 0.3
+			texture_unit
+			{
+				texture Bricks.jpg
+			}
+		}
+	}
+}
+material Material02
+{
+    technique
+	{
+		pass
+		{
+			ambient 0.3 0.3 0.3
+			texture_unit
+			{
+				texture Bricks.jpg
+			}
+		}
+	}
+}
+material Material03	
+{
+    technique
+	{
+		pass
+		{
+			ambient 0.3 0.3 0.3
+			texture_unit
+			{
+				texture Bricks.jpg
+			}
+		}
+	}
+}
+material Material04	
+{
+    technique
+	{
+		pass
+		{
+			ambient 0.3 0.3 0.3
+			texture_unit
+			{
+				texture Bricks.jpg
 			}
 		}
 	}

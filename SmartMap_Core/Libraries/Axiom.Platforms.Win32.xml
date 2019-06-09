@@ -1,0 +1,259 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Axiom.Platforms.Win32</name>
+    </assembly>
+    <members>
+        <member name="T:Axiom.Platforms.Win32.Win32InputReader">
+            <summary>
+            	Win32 input implementation using Managed DirectInput (tm).
+            </summary>
+        </member>
+        <member name="F:Axiom.Platforms.Win32.Win32InputReader.dinput">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="F:Axiom.Platforms.Win32.Win32InputReader.keyboardState">
+            <summary>
+            	Holds a snapshot of DirectInput keyboard state.
+            </summary>
+        </member>
+        <member name="F:Axiom.Platforms.Win32.Win32InputReader.mouseState">
+            <summary>
+            	Holds a snapshot of DirectInput mouse state.
+            </summary>
+        </member>
+        <member name="F:Axiom.Platforms.Win32.Win32InputReader.keyboardDevice">
+            <summary>
+            	DirectInput keyboard device.
+            </summary>
+        </member>
+        <member name="F:Axiom.Platforms.Win32.Win32InputReader.mouseDevice">
+            <summary>
+            	DirectInput mouse device.
+            </summary>
+        </member>
+        <member name="F:Axiom.Platforms.Win32.Win32InputReader.winHandle">
+            <summary>
+            	Active host control that reserves control over the input.
+            </summary>
+        </member>
+        <member name="F:Axiom.Platforms.Win32.Win32InputReader.control">
+            <summary>
+            System.Windows.Forms.Form control to retrieve input from
+            </summary>
+        </member>
+        <member name="F:Axiom.Platforms.Win32.Win32InputReader.ownMouse">
+            <summary>
+            	Do we want exclusive use of the mouse?
+            </summary>
+        </member>
+        <member name="F:Axiom.Platforms.Win32.Win32InputReader.window">
+            <summary>
+            	Reference to the render window that is the target of the input.
+            </summary>
+        </member>
+        <member name="F:Axiom.Platforms.Win32.Win32InputReader.lastWindowActive">
+            <summary>
+            	Flag used to remember the state of the render window the last time input was captured.
+            </summary>
+        </member>
+        <member name="F:Axiom.Platforms.Win32.Win32InputReader.BufferSize">
+            <summary>
+            	Size to use for DirectInput's input buffer.
+            </summary>
+        </member>
+        <member name="P:Axiom.Platforms.Win32.Win32InputReader.RelativeMouseX">
+            <summary>
+            	Retrieves the relative (compared to the last input poll) mouse movement
+            	on the X (horizontal) axis.
+            </summary>
+        </member>
+        <member name="P:Axiom.Platforms.Win32.Win32InputReader.RelativeMouseY">
+            <summary>
+            	Retrieves the relative (compared to the last input poll) mouse movement
+            	on the Y (vertical) axis.
+            </summary>
+        </member>
+        <member name="P:Axiom.Platforms.Win32.Win32InputReader.RelativeMouseZ">
+            <summary>
+            	Retrieves the relative (compared to the last input poll) mouse movement
+            	on the Z (mouse wheel) axis.
+            </summary>
+        </member>
+        <member name="P:Axiom.Platforms.Win32.Win32InputReader.AbsoluteMouseX">
+            <summary>
+            	Retrieves the absolute mouse position on the X (horizontal) axis.
+            </summary>
+        </member>
+        <member name="P:Axiom.Platforms.Win32.Win32InputReader.AbsoluteMouseY">
+            <summary>
+            	Retrieves the absolute mouse position on the Y (vertical) axis.
+            </summary>
+        </member>
+        <member name="P:Axiom.Platforms.Win32.Win32InputReader.AbsoluteMouseZ">
+            <summary>
+            	Retrieves the absolute mouse position on the Z (mouse wheel) axis.
+            </summary>
+        </member>
+        <member name="P:Axiom.Platforms.Win32.Win32InputReader.UseKeyboardEvents">
+            <summary>
+            	Get/Set whether or not to use event based keyboard input notification.
+            </summary>
+            <value>
+            	When true, events will be fired when keyboard input occurs on a call to <see cref="M:Axiom.Platforms.Win32.Win32InputReader.Capture"/>.
+            	When false, the current keyboard state will be available via <see cref="M:Axiom.Platforms.Win32.Win32InputReader.IsKeyPressed(Axiom.Input.KeyCodes)"/> .
+            </value>
+        </member>
+        <member name="P:Axiom.Platforms.Win32.Win32InputReader.UseMouseEvents">
+            <summary>
+            	Get/Set whether or not to use event based mouse input notification.
+            </summary>
+            <value>
+            	When true, events will be fired when mouse input occurs on a call to <see cref="M:Axiom.Platforms.Win32.Win32InputReader.Capture"/>.
+            	When false, the current mouse state will be available via <see cref="M:Axiom.Platforms.Win32.Win32InputReader.IsMousePressed(Axiom.Input.MouseButtons)"/> .
+            </value>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32InputReader.Capture">
+            <summary>
+            	Captures the state of all active input controllers.
+            </summary>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32InputReader.Initialize(Axiom.Graphics.RenderWindow,System.Boolean,System.Boolean,System.Boolean,System.Boolean)">
+            <summary>
+            	Intializes DirectInput for use on Win32 platforms.
+            </summary>
+            <param name="window"></param>
+            <param name="useKeyboard"></param>
+            <param name="useMouse"></param>
+            <param name="useGamepad"></param>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32InputReader.IsKeyPressed(Axiom.Input.KeyCodes)">
+             <summary>
+            
+             </summary>
+             <param name="key"></param>
+             <returns></returns>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32InputReader.IsMousePressed(Axiom.Input.MouseButtons)">
+            <summary>
+               Returns true if the specified mouse button is currently down.
+            </summary>
+            <param name="button">Mouse button to query.</param>
+            <returns>True if the mouse button is down, false otherwise.</returns>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32InputReader.Dispose">
+            <summary>
+                Called when the platform manager is shutting down.
+            </summary>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32InputReader.ClearInput">
+            <summary>
+                Clear this class input buffers (those accesible to client through one of the public methods)
+            </summary>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32InputReader.CaptureInput">
+            <summary>
+                Capture buffered or unbuffered mouse and/or keyboard input.
+            </summary>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32InputReader.InitializeKeyboard">
+            <summary>
+            	Initializes the keyboard using either immediate mode or event based input.
+            </summary>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32InputReader.InitializeMouse">
+            <summary>
+            	Initializes the mouse using either immediate mode or event based input.
+            </summary>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32InputReader.InitializeImmediateKeyboard">
+            <summary>
+            	Initializes DirectInput for immediate input.
+            </summary>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32InputReader.InitializeBufferedKeyboard">
+            <summary>
+            	Prepares DirectInput for non-immediate input capturing.
+            </summary>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32InputReader.InitializeImmediateMouse">
+            <summary>
+            	Prepares DirectInput for immediate mouse input.
+            </summary>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32InputReader.InitializeBufferedMouse">
+             <summary>
+            
+             </summary>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32InputReader.ReadBufferedKeyboardData">
+            <summary>
+            	Reads buffered input data when in buffered mode.
+            </summary>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32InputReader.CaptureKeyboard">
+            <summary>
+            	Captures an immediate keyboard state snapshot (for non-buffered data).
+            </summary>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32InputReader.CaptureMouse">
+            <summary>
+            	Captures the mouse input based on the preffered input mode.
+            </summary>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32InputReader.CaptureBufferedMouse">
+            <summary>
+            	Checks the buffered mouse events.
+            </summary>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32InputReader.CaptureImmediateMouse">
+            <summary>
+            	Takes a snapshot of the mouse state for immediate input checking.
+            </summary>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32InputReader.VerifyInputAcquired">
+            <summary>
+            	Verifies the state of the host window and reacquires input if the window was
+            	previously minimized and has been brought back into focus.
+            </summary>
+            <returns>True if the input devices are acquired and input capturing can proceed, false otherwise.</returns>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32InputReader.ConvertKeyEnum(Axiom.Input.KeyCodes)">
+            <summary>
+            	Used to convert an Axiom.Input.KeyCodes enum val to a DirectInput.Key enum val.
+            </summary>
+            <param name="key">Axiom keyboard code to query.</param>
+            <returns>The equivalent enum value in the DI.Key enum.</returns>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32InputReader.ConvertKeyEnum(SlimDX.DirectInput.Key)">
+            <summary>
+            	Used to convert a DirectInput.Key enum val to a Axiom.Input.KeyCodes enum val.
+            </summary>
+            <param name="key">DirectInput.Key code to query.</param>
+            <returns>The equivalent enum value in the Axiom.KeyCodes enum.</returns>
+        </member>
+        <member name="T:Axiom.Platforms.Win32.Win32PlatformManager">
+            <summary>
+            	Platform management specialization for Microsoft Windows (r) platform.
+            </summary>
+        </member>
+        <member name="F:Axiom.Platforms.Win32.Win32PlatformManager.inputReader">
+            <summary>
+            	Reference to the current input reader.
+            </summary>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32PlatformManager.CreateInputReader">
+            <summary>
+            	Creates an InputReader implemented using Microsoft DirectInput (tm).
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Axiom.Platforms.Win32.Win32PlatformManager.Dispose">
+            <summary>
+                Called when the engine is being shutdown.
+            </summary>
+        </member>
+    </members>
+</doc>

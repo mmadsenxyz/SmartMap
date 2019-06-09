@@ -273,9 +273,9 @@ namespace RolePlayingGame.TheSaga
             //camera.LookAt(Vector3.Zero);
             //camera.AutoAspectRatio = true;
         }
-        protected override bool OnFrameStarted(object source, FrameEventArgs e)
+        protected override void OnFrameStarted(object source, FrameEventArgs e)
         {
-            bool result = base.OnFrameStarted(source, e);
+            base.OnFrameStarted(source, e);
             GuiBase.OnFrameStarted();
             debugText = "Role Playing Game Demo";
             ShowOverlay(gameState);
@@ -296,7 +296,7 @@ namespace RolePlayingGame.TheSaga
                         break;
                     }
             }
-            return result;
+            //return result;
         }
 
         protected void ShowOverlay(GameStates state)

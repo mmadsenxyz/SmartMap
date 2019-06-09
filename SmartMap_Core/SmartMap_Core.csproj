@@ -1,4 +1,4 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="15.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.21022</ProductVersion>
@@ -10,18 +10,17 @@
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
-    <DelaySign>false</DelaySign>
     <OutputType>Exe</OutputType>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <StartupObject>
-    </StartupObject>
+    <StartupObject>SmartMap.SmartMap_Core</StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
-    <OldToolsVersion>2.0</OldToolsVersion>
+    <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -37,35 +36,32 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <OutputPath>bin\Debug\</OutputPath>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <BaseAddress>285212672</BaseAddress>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
-    <FileAlignment>4096</FileAlignment>
-    <NoStdLib>false</NoStdLib>
-    <Optimize>false</Optimize>
-    <RegisterForComInterop>false</RegisterForComInterop>
-    <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <OutputPath>bin\Release\</OutputPath>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
     <BaseAddress>285212672</BaseAddress>
-    <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
-    <DefineConstants>TRACE</DefineConstants>
-    <DebugSymbols>false</DebugSymbols>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <FileAlignment>4096</FileAlignment>
-    <NoStdLib>false</NoStdLib>
-    <Optimize>false</Optimize>
-    <RegisterForComInterop>false</RegisterForComInterop>
-    <RemoveIntegerChecks>false</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningLevel>4</WarningLevel>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <BaseAddress>285212672</BaseAddress>
+    <FileAlignment>4096</FileAlignment>
+    <PlatformTarget>x86</PlatformTarget>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
+    <Optimize>true</Optimize>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup />
+  <PropertyGroup>
+    <Win32Resource>
+    </Win32Resource>
   </PropertyGroup>
   <ItemGroup>
     <EmbeddedResource Include="DOCS\TEST\CanonicalSplineManual.resx">
@@ -91,10 +87,14 @@
     </EmbeddedResource>
     <Compile Include="Configuration\EngineConfig.cs">
       <DependentUpon>EngineConfig.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Configuration\EngineConfig.Designer.cs">
       <DependentUpon>EngineConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Configuration\EngineConfig1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EngineConfig.xsd</DependentUpon>
     </Compile>
     <Compile Include="EngineSetup.cs">
     </Compile>
@@ -117,6 +117,7 @@
     <Compile Include="SmartMap_Core.cs">
       <SubType>Code</SubType>
     </Compile>
+    <None Include="app.config" />
     <None Include="ClassDiagram.cd" />
     <None Include="DOCS\PowerCollections.chm" />
     <None Include="DOCS\QuickGraph.Documentation.chm" />
@@ -155,260 +156,125 @@
     <Content Include="DOCS\TEST\UI_Filter.wav" />
     <Content Include="EngineConfig.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
-    <Content Include="Media\BrowserImages\BezierPatch.jpg" />
-    <Content Include="Media\BrowserImages\bsp.jpg" />
-    <Content Include="Media\BrowserImages\CameraTrack.jpg" />
-    <Content Include="Media\BrowserImages\CelShading.jpg" />
-    <Content Include="Media\BrowserImages\Compositor.jpg" />
-    <Content Include="Media\BrowserImages\CubeMapping.jpg" />
-    <Content Include="Media\BrowserImages\Dot3Bump.jpg" />
-    <Content Include="Media\BrowserImages\EnvMapping.jpg" />
-    <Content Include="Media\BrowserImages\FacialAnimation.jpg" />
-    <Content Include="Media\BrowserImages\Fresnel.jpg" />
-    <Content Include="Media\BrowserImages\Frustum.jpg" />
-    <Content Include="Media\BrowserImages\FrustumCulling.jpg" />
-    <Content Include="Media\BrowserImages\HardwareOcclusion.jpg" />
-    <Content Include="Media\BrowserImages\ImageNotAvailable.jpg" />
-    <Content Include="Media\BrowserImages\Lights.jpg" />
-    <Content Include="Media\BrowserImages\OffsetMapping.jpg" />
-    <Content Include="Media\BrowserImages\ParticleFX.jpg" />
-    <Content Include="Media\BrowserImages\Physics.jpg" />
-    <Content Include="Media\BrowserImages\RenderToTexture.jpg" />
-    <Content Include="Media\BrowserImages\Shadows.jpg" />
-    <Content Include="Media\BrowserImages\SkeletalAnimation.jpg" />
-    <Content Include="Media\BrowserImages\SkyBox.jpg" />
-    <Content Include="Media\BrowserImages\SkyDome.jpg" />
-    <Content Include="Media\BrowserImages\SkyPlane.jpg" />
-    <Content Include="Media\BrowserImages\Smoke.jpg" />
-    <Content Include="Media\BrowserImages\Terrain.jpg" />
-    <Content Include="Media\BrowserImages\TextureFX.jpg" />
-    <Content Include="Media\BrowserImages\Transparency.jpg" />
-    <Content Include="Media\BrowserImages\Tutorial1.jpg" />
-    <Content Include="Media\BrowserImages\Water.jpg" />
-    <Content Include="Media\Fonts\Arial.png" />
-    <Content Include="Media\Fonts\Garamond.png" />
-    <Content Include="Media\Fonts\PalatinoLinotype.png" />
-    <Content Include="Media\Fonts\read_me.html" />
-    <Content Include="Media\GpuPrograms\keepgpuprograms.txt" />
-    <Content Include="Media\GpuPrograms\OffsetMapping_specular.asm" />
-    <Content Include="Media\Icons\AxiomIcon.ico" />
-    <Content Include="Media\PCZAppMedia\Carpet_Diamond_Olive.jpg" />
-    <Content Include="Media\PCZAppMedia\Metal_Brass_Ceiling.jpg" />
-    <Content Include="Media\PCZAppMedia\Metal_Embossed.jpg" />
-    <Content Include="Media\PCZAppMedia\Metal_Rusted.jpg" />
-    <Content Include="Media\PCZAppMedia\Metal_Rusted1.jpg" />
-    <Content Include="Media\PCZAppMedia\Metal_Steel_Textured.jpg" />
-    <Content Include="Media\PCZAppMedia\Metal_Steel_Textured_White.jpg" />
-    <Content Include="Media\PCZAppMedia\Roofing_Tile_Spanish.jpg" />
-    <Content Include="Media\PCZAppMedia\terrain.png" />
-    <Content Include="Media\PCZAppMedia\terrain2.png" />
-    <Content Include="Media\PCZAppMedia\Translucent_Glass_Tinted.jpg" />
-    <Content Include="Media\PCZAppMedia\Translucent_Glass_Tinted1.jpg" />
-    <Content Include="Media\PCZAppMedia\Wood_Floor.jpg" />
-    <Content Include="Media\Textures\10points.png" />
-    <Content Include="Media\Textures\2049x2049_map.png" />
-    <Content Include="Media\Textures\atheneNormalMap.png" />
-    <Content Include="Media\Textures\aureola.png" />
-    <Content Include="Media\Textures\basic_droplet.png" />
-    <Content Include="Media\Textures\blue_flare.jpg" />
-    <Content Include="Media\Textures\body.jpg" />
-    <Content Include="Media\Textures\bricks.jpg" />
-    <Content Include="Media\Textures\BumpyMetal.jpg" />
-    <Content Include="Media\Textures\cel_shading_diffuse.png" />
-    <Content Include="Media\Textures\cel_shading_edge.png" />
-    <Content Include="Media\Textures\cel_shading_specular.png" />
-    <Content Include="Media\Textures\clouds.jpg" />
-    <Content Include="Media\Textures\Concrete.jpg" />
-    <Content Include="Media\Textures\decal.png" />
-    <Content Include="Media\Textures\dirt01.jpg" />
-    <Content Include="Media\Textures\Dr_Bunsen_Head.jpg" />
-    <Content Include="Media\Textures\egyptrockyfull.jpg" />
-    <Content Include="Media\Textures\Flare.png" />
-    <Content Include="Media\Textures\flaretrail.png" />
-    <Content Include="Media\Textures\fw12b.jpg" />
-    <Content Include="Media\Textures\Grass.jpg" />
-    <Content Include="Media\Textures\grass_1024.jpg" />
-    <Content Include="Media\Textures\gras_02.png" />
-    <Content Include="Media\Textures\GreenSkin.jpg" />
-    <Content Include="Media\Textures\head4.jpg" />
-    <Content Include="Media\Textures\legs.jpg" />
-    <Content Include="Media\Textures\MtlPlat2.jpg" />
-    <Content Include="Media\Textures\NMBalls.png" />
-    <Content Include="Media\Textures\NMBumpsOut.png" />
-    <Content Include="Media\Textures\NMHollyBumps.png" />
-    <Content Include="Media\Textures\NMStripes.png" />
-    <Content Include="Media\Textures\nm_bk.png" />
-    <Content Include="Media\Textures\nm_dn.png" />
-    <Content Include="Media\Textures\nm_fr.png" />
-    <Content Include="Media\Textures\nm_lf.png" />
-    <Content Include="Media\Textures\nm_rt.png" />
-    <Content Include="Media\Textures\nm_up.png" />
-    <Content Include="Media\Textures\nskingr.jpg" />
-    <Content Include="Media\Textures\r2skin.jpg" />
-    <Content Include="Media\Textures\Razor.png" />
-    <Content Include="Media\Textures\ribbonband.png" />
-    <Content Include="Media\Textures\Rock.jpg" />
-    <Content Include="Media\Textures\RustedMetal.jpg" />
-    <Content Include="Media\Textures\RustySteel.jpg" />
-    <Content Include="Media\Textures\smoke.png" />
-    <Content Include="Media\Textures\smokecolors.png" />
-    <Content Include="Media\Textures\spacesky.jpg" />
-    <Content Include="Media\Textures\spheremap.png" />
-    <Content Include="Media\Textures\terrain.png" />
-    <Content Include="Media\Textures\terrain_detail.jpg" />
-    <Content Include="Media\Textures\terrain_texture.jpg" />
-    <Content Include="Media\Textures\terr_dirt-grass.jpg" />
-    <Content Include="Media\Textures\texmap2.jpg" />
-    <Content Include="Media\Textures\Water01.jpg" />
-    <Content Include="Media\Textures\Water02.jpg" />
-    <Content Include="Media\Textures\WeirdEye.png" />
-    <Content Include="readme.txt" />
-    <Content Include="Terrain.xml">
+    <Content Include="Libraries\Axiom.dll" />
+    <Content Include="Libraries\Axiom.Framework.dll" />
+    <Content Include="Libraries\Axiom.Framework.pdb" />
+    <Content Include="Libraries\Axiom.pdb" />
+    <Content Include="Libraries\Axiom.Platforms.OpenTK.dll" />
+    <Content Include="Libraries\Axiom.Platforms.OpenTK.pdb" />
+    <Content Include="Libraries\Axiom.Platforms.OpenTK.xml" />
+    <Content Include="Libraries\Axiom.Platforms.Win32.dll" />
+    <Content Include="Libraries\Axiom.Platforms.Win32.pdb" />
+    <Content Include="Libraries\Axiom.Platforms.Win32.xml" />
+    <Content Include="Libraries\Axiom.Plugins.CgProgramManager.dll" />
+    <Content Include="Libraries\Axiom.Plugins.CgProgramManager.pdb" />
+    <Content Include="Libraries\Axiom.Plugins.DevILCodecs.dll" />
+    <Content Include="Libraries\Axiom.Plugins.DevILCodecs.pdb" />
+    <Content Include="Libraries\Axiom.Plugins.DevILCodecs.xml" />
+    <Content Include="Libraries\Axiom.Plugins.OctreeZone.dll" />
+    <Content Include="Libraries\Axiom.Plugins.OctreeZone.pdb" />
+    <Content Include="Libraries\Axiom.Plugins.OctreeZone.xml" />
+    <Content Include="Libraries\Axiom.Plugins.ParticleFX.dll" />
+    <Content Include="Libraries\Axiom.Plugins.ParticleFX.pdb" />
+    <Content Include="Libraries\Axiom.RenderSystems.DirectX9.dll" />
+    <Content Include="Libraries\Axiom.RenderSystems.DirectX9.pdb" />
+    <Content Include="Libraries\Axiom.RenderSystems.OpenGL.dll" />
+    <Content Include="Libraries\Axiom.RenderSystems.OpenGL.pdb" />
+    <Content Include="Libraries\Axiom.SceneManagers.Bsp.dll" />
+    <Content Include="Libraries\Axiom.SceneManagers.Bsp.pdb" />
+    <Content Include="Libraries\Axiom.SceneManagers.Octree.dll" />
+    <Content Include="Libraries\Axiom.SceneManagers.Octree.pdb" />
+    <Content Include="Libraries\Axiom.SceneManagers.PortalConnected.dll" />
+    <Content Include="Libraries\Axiom.SceneManagers.PortalConnected.pdb" />
+    <Content Include="Libraries\cg.dll">
+      <Link>cg.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="Libraries\cg.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Content Include="Libraries\DevIL.dll">
+      <Link>DevIL.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Libraries\DevIL.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\EngineConfig.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Content Include="Libraries\freetype6.dll">
+      <Link>freetype6.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="Libraries\freetype6.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\ICSharpCode.SharpZipLib.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\ILU.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\OpenTK.Compatibility.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\OpenTK.Compatibility.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\OpenTK.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\OpenTK.GLControl.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\OpenTK.GLControl.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\OpenTK.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\PowerCollections.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\QuickGraph.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\SynapticEffect.Forms.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\Tao.Cg.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\Tao.Cg.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\Tao.DevIl.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\Tao.DevIl.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\zlib1.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Content Include="readme.txt" />
     <None Include="DOCS\TEST\CodeFile2.cs" />
-    <None Include="Media\Archives\AxiomCore.zip" />
-    <None Include="Media\Archives\chiropteraDM.zip" />
-    <None Include="Media\Archives\cubemapsJS.zip" />
-    <None Include="Media\Archives\Fresnel.zip" />
-    <None Include="Media\Archives\RZR-002.zip" />
-    <None Include="Media\Archives\Water.zip" />
-    <None Include="Media\Fonts\Arial.fontdef" />
-    <None Include="Media\Fonts\Garamond.fontdef" />
-    <None Include="Media\Fonts\maiden.TTF" />
-    <None Include="Media\Fonts\PalatinoLinotype.fontdef" />
-    <None Include="Media\Fonts\sample.fontdef" />
-    <None Include="Media\Fonts\solo5.ttf" />
-    <None Include="Media\GpuPrograms\Bloom_ps20.hlsl" />
-    <None Include="Media\GpuPrograms\Bloom_vs11.hlsl" />
-    <None Include="Media\GpuPrograms\Blur0_ps20.hlsl" />
-    <None Include="Media\GpuPrograms\Blur0_vs.glsl" />
-    <None Include="Media\GpuPrograms\Blur0_vs11.hlsl" />
-    <None Include="Media\GpuPrograms\Blur1_ps20.hlsl" />
-    <None Include="Media\GpuPrograms\Blur1_vs.glsl" />
-    <None Include="Media\GpuPrograms\Blur1_vs11.hlsl" />
-    <None Include="Media\GpuPrograms\Blur_ps.glsl" />
-    <None Include="Media\GpuPrograms\Combine_fp.cg" />
-    <None Include="Media\GpuPrograms\Dot3Bump.program" />
-    <None Include="Media\GpuPrograms\Examples.program" />
-    <None Include="Media\GpuPrograms\Example_Basic.cg" />
-    <None Include="Media\GpuPrograms\Example_BumpMapping.cg" />
-    <None Include="Media\GpuPrograms\Example_CelShading.cg" />
-    <None Include="Media\GpuPrograms\Fresnel.program" />
-    <None Include="Media\GpuPrograms\GlassFP.cg" />
-    <None Include="Media\GpuPrograms\Grass.cg" />
-    <None Include="Media\GpuPrograms\GrayScale.cg" />
-    <None Include="Media\GpuPrograms\HardwareSkinning.cg" />
-    <None Include="Media\GpuPrograms\hdr_bloom.glsl" />
-    <None Include="Media\GpuPrograms\hdr_downscale2x2luminence.glsl" />
-    <None Include="Media\GpuPrograms\hdr_downscale3x3.glsl" />
-    <None Include="Media\GpuPrograms\hdr_downscale3x3brightpass.glsl" />
-    <None Include="Media\GpuPrograms\hdr_finalToneMapping.glsl" />
-    <None Include="Media\GpuPrograms\hdr_tonemap_util.glsl" />
-    <None Include="Media\GpuPrograms\HeatVision.cg" />
-    <None Include="Media\GpuPrograms\LaplaceFP.cg" />
-    <None Include="Media\GpuPrograms\OffsetMapping.cg" />
-    <None Include="Media\GpuPrograms\OffsetMapping.program" />
-    <None Include="Media\GpuPrograms\OldMovieFP.cg" />
-    <None Include="Media\GpuPrograms\OldTV.cg" />
-    <None Include="Media\GpuPrograms\PosterizeFP.cg" />
-    <None Include="Media\GpuPrograms\SharpenEdgesFP.cg" />
-    <None Include="Media\GpuPrograms\StdQuad_vp.cg" />
-    <None Include="Media\GpuPrograms\StdQuad_vp.glsl" />
-    <None Include="Media\GpuPrograms\StdQuad_vp.program" />
-    <None Include="Media\GpuPrograms\TilingFP.cg" />
-    <None Include="Media\Materials\Athene.material" />
-    <None Include="Media\Materials\BlackAndWhite.material" />
-    <None Include="Media\Materials\Bloom.material" />
-    <None Include="Media\Materials\CelShading.material" />
-    <None Include="Media\Materials\Dot3Bump.material" />
-    <None Include="Media\Materials\DP3.material" />
-    <None Include="Media\Materials\Example-DynTex.material" />
-    <None Include="Media\Materials\Example.particle" />
-    <None Include="Media\Materials\Examples.compositor" />
-    <None Include="Media\Materials\Examples.material" />
-    <None Include="Media\Materials\facial.material" />
-    <None Include="Media\Materials\Glass.material" />
-    <None Include="Media\Materials\hdr.material" />
-    <None Include="Media\Materials\HeatVision.material" />
-    <None Include="Media\Materials\Laplace.material" />
-    <None Include="Media\Materials\MotionBlur.material" />
-    <None Include="Media\Materials\Ninja.material" />
-    <None Include="Media\Materials\OffsetMapping.material" />
-    <None Include="Media\Materials\OldMovie.material" />
-    <None Include="Media\Materials\OldTV.material" />
-    <None Include="Media\Materials\Particles.material" />
-    <None Include="Media\Materials\Posterize.material" />
-    <None Include="Media\Materials\Robot.material" />
-    <None Include="Media\Materials\Room.material" />
-    <None Include="Media\Materials\SharpenEdges.material" />
-    <None Include="Media\Materials\Skys.material" />
-    <None Include="Media\Materials\smoke.material" />
-    <None Include="Media\Materials\Terrain.material" />
-    <None Include="Media\Materials\Tiling.material" />
-    <None Include="Media\Meshes\athene.mesh" />
-    <None Include="Media\Meshes\axes.mesh" />
-    <None Include="Media\Meshes\ball.mesh" />
-    <None Include="Media\Meshes\box.mesh" />
-    <None Include="Media\Meshes\column.mesh" />
-    <None Include="Media\Meshes\cube.mesh" />
-    <None Include="Media\Meshes\dragon.mesh" />
-    <None Include="Media\Meshes\facial.mesh" />
-    <None Include="Media\Meshes\geosphere1000.mesh" />
-    <None Include="Media\Meshes\geosphere12500.mesh" />
-    <None Include="Media\Meshes\geosphere19220.mesh" />
-    <None Include="Media\Meshes\geosphere2000.mesh" />
-    <None Include="Media\Meshes\geosphere4500.mesh" />
-    <None Include="Media\Meshes\geosphere8000.mesh" />
-    <None Include="Media\Meshes\knot.mesh" />
-    <None Include="Media\Meshes\ninja.mesh" />
-    <None Include="Media\Meshes\ogrehead.mesh" />
-    <None Include="Media\Meshes\razor.mesh" />
-    <None Include="Media\Meshes\robot.mesh" />
-    <None Include="Media\Meshes\Room_Corner.mesh" />
-    <None Include="Media\Meshes\Room_End.mesh" />
-    <None Include="Media\Meshes\Room_Floor.mesh" />
-    <None Include="Media\Meshes\Room_Hall.mesh" />
-    <None Include="Media\Meshes\Room_Side.mesh" />
-    <None Include="Media\Meshes\sphere.mesh" />
-    <None Include="Media\Meshes\teapot.mesh" />
-    <None Include="Media\Meshes\tudorhouse.mesh" />
-    <None Include="Media\Meshes\Zone.mesh" />
-    <None Include="Media\Overlays\Example-CubeMapping.overlay" />
-    <None Include="Media\Overlays\Example-DynTex.overlay" />
-    <None Include="Media\PCZAppMedia\building_exterior.mesh" />
-    <None Include="Media\PCZAppMedia\ROOM.material" />
-    <None Include="Media\PCZAppMedia\ROOM_NX.mesh" />
-    <None Include="Media\PCZAppMedia\room_nxnynz.mesh" />
-    <None Include="Media\PCZAppMedia\room_nxpx.mesh" />
-    <None Include="Media\PCZAppMedia\room_nxpxnypynzpz.mesh" />
-    <None Include="Media\PCZAppMedia\room_nxpxnz.mesh" />
-    <None Include="Media\PCZAppMedia\room_nxpxnzpz.mesh" />
-    <None Include="Media\PCZAppMedia\room_nxpxpz.mesh" />
-    <None Include="Media\PCZAppMedia\room_nxpynz.mesh" />
-    <None Include="Media\PCZAppMedia\room_nxpz.mesh" />
-    <None Include="Media\PCZAppMedia\ROOM_NY.mesh" />
-    <None Include="Media\PCZAppMedia\room_nypy.mesh" />
-    <None Include="Media\PCZAppMedia\room_nypy_4y.mesh" />
-    <None Include="Media\PCZAppMedia\ROOM_NZ.mesh" />
-    <None Include="Media\PCZAppMedia\room_nzpz.mesh" />
-    <None Include="Media\PCZAppMedia\ROOM_PX.mesh" />
-    <None Include="Media\PCZAppMedia\room_pxnynz.mesh" />
-    <None Include="Media\PCZAppMedia\room_pxpynz.mesh" />
-    <None Include="Media\PCZAppMedia\room_pxpz.mesh" />
-    <None Include="Media\PCZAppMedia\ROOM_PY.mesh" />
-    <None Include="Media\PCZAppMedia\ROOM_PZ.mesh" />
-    <None Include="Media\PCZAppMedia\terrain2.cfg" />
-    <None Include="Media\Skeletons\ninja.skeleton" />
-    <None Include="Media\Skeletons\robot.skeleton" />
-    <None Include="Media\Textures\grassWalpha.tga" />
-    <None Include="Media\Textures\HeatLookup.tga" />
-    <None Include="Media\Textures\HeatNoise.tga" />
-    <None Include="Media\Textures\perlinvolume.dds" />
-    <None Include="Media\Textures\rockwall.tga" />
-    <None Include="Media\Textures\rockwall_NH.tga" />
-    <None Include="Media\Textures\SkyBoxes.zip" />
+    <None Include="Libraries\Axiom.dll.config" />
+    <None Include="Libraries\OpenTK.Compatibility.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\OpenTK.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\Tao.Cg.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\Tao.DevIl.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Sound\SoundPanel.cs">
       <SubType>Form</SubType>
     </None>
@@ -429,73 +295,50 @@
       <ProductName>.NET Framework 3.5</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Axiom, Version=0.8.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Axiom">
+      <HintPath>Libraries\Axiom.dll</HintPath>
     </Reference>
-    <Reference Include="Axiom.Platforms.Win32, Version=0.8.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Axiom.Platforms.OpenTK">
+      <HintPath>Libraries\Axiom.Platforms.OpenTK.dll</HintPath>
     </Reference>
-    <Reference Include="Axiom.Plugins.CgProgramManager, Version=0.8.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Axiom.Plugins.CgProgramManager">
+      <HintPath>Libraries\Axiom.Plugins.CgProgramManager.dll</HintPath>
     </Reference>
-    <Reference Include="Axiom.Plugins.DevILCodecs, Version=0.8.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Axiom.Plugins.DevILCodecs">
+      <HintPath>Libraries\Axiom.Plugins.DevILCodecs.dll</HintPath>
     </Reference>
-    <Reference Include="Axiom.Plugins.ParticleFX, Version=0.8.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Axiom.RenderSystems.OpenGL">
+      <HintPath>Libraries\Axiom.RenderSystems.OpenGL.dll</HintPath>
     </Reference>
-    <Reference Include="Axiom.RenderSystems.DirectX9, Version=0.8.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Axiom.SceneManagers.Octree">
+      <HintPath>Libraries\Axiom.SceneManagers.Octree.dll</HintPath>
     </Reference>
-    <Reference Include="Axiom.RenderSystems.OpenGL.Win32, Version=0.8.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Axiom.SceneManagers.Bsp, Version=0.8.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Axiom.SceneManagers.Octree, Version=0.8.0.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib, Version=0.84.0.0, Culture=neutral, PublicKeyToken=1b03e6acf1164f73">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.DirectX, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.DirectX.Direct3D, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.DirectX.DirectDraw, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.DirectX.DirectInput, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="Microsoft.DirectX.DirectSound, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
-      <SpecificVersion>False</SpecificVersion>
-    </Reference>
-    <Reference Include="PowerCollections, Version=1.0.2141.24679, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="PowerCollections">
       <HintPath>Libraries\PowerCollections.dll</HintPath>
     </Reference>
-    <Reference Include="QuickGraph, Version=3.2.40122.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
+    <Reference Include="QuickGraph, Version=3.2.40122.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\QuickGraph.dll</HintPath>
     </Reference>
-    <Reference Include="SynapticEffect.Forms, Version=0.9.9.27064, Culture=neutral">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="SynapticEffect.Forms">
       <HintPath>Libraries\SynapticEffect.Forms.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Libraries\" />
+    <Folder Include="Media\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections;
+using System.Configuration;
 using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics;
-
 using Axiom.SceneManagers.Octree;
 using Axiom.Configuration;
 using Axiom.Core;
@@ -11,43 +11,44 @@ using Axiom.Input;
 using Axiom.Overlays;
 using Axiom.Math;
 using Axiom.Graphics;
+using Axiom.Platforms.OpenTK;
 using MouseButtons = Axiom.Input.MouseButtons;
 
 namespace SmartMap
 {
     #region ConfigDialog
-    
+
     class ConfigDialog
     {
         #region Types
-        
+
         public enum DialogResult { Ok, Cancel }
-        
+
         #endregion
-    
+
         #region Fields
         private ConfigOption _renderSystems;
-        private RenderSystem _currentSystem;
+        private Axiom.Graphics.RenderSystem _currentSystem;
         private DialogResult _result;
         private ConfigOption _currentOption;
         private ArrayList _menuItems = new ArrayList();
         private ArrayList _options = new ArrayList();
         #endregion
-        
+
         #region Constructor
-        
+
         public ConfigDialog()
         {
             _currentSystem = Root.Instance.RenderSystems[0];
             _renderSystems = new ConfigOption("Render System", _currentSystem.Name, false);
-            foreach (RenderSystem rs in Root.Instance.RenderSystems)
+            foreach (Axiom.Graphics.RenderSystem rs in Root.Instance.RenderSystems)
             {
                 _renderSystems.PossibleValues.Add(_renderSystems.PossibleValues.Count, rs.ToString());
             }
             BuildOptions();
         }
         #endregion
-        
+
         #region Methods 
         private void BuildOptions()
         {
@@ -195,10 +196,10 @@ namespace SmartMap
             Console.Clear();
             return _result;
         }
-        
-        #endregion      
+
+        #endregion
     }
-    
+
     #endregion
 
     /// <summary>
@@ -246,7 +247,7 @@ namespace SmartMap
 
             // set the near clipping plane to be very close
             Camera.Near = 5;
-            
+
             m_frustum = new Frustum();
             m_frustum.Near = 10;
             m_frustum.Far = 40000;
@@ -255,12 +256,12 @@ namespace SmartMap
 
             // create a node for the frustum and attach it
             frustumNode = m_sceneManager.RootSceneNode.CreateChildSceneNode(new Vector3(0, 2000, 2000), Quaternion.Identity);
-            
+
             frustumNode.Yaw(0);
             frustumNode.Position = new Vector3(8000, -7000, 8000);
-            
+
             frustumNode.AttachObject(m_frustum);
-            frustumNode.AttachObject(Camera);   
+            frustumNode.AttachObject(Camera);
         }
 
         /// <summary>
@@ -313,7 +314,7 @@ namespace SmartMap
         protected virtual void ChooseSceneManager()
         {
             // Create a generic TerrainSceneManager
-            m_sceneManager = (TerrainSceneManager)Root.CreateSceneManager( "TerrainSceneManager", "TerrainInstance");
+            m_sceneManager = (TerrainSceneManager)Root.CreateSceneManager("TerrainSceneManager", "TerrainInstance");
         }
 
         /// <summary>
@@ -335,9 +336,8 @@ namespace SmartMap
         {
 
             // add event handlers for frame events
-            Root.FrameStarted += new FrameEvent(OnFrameStarted);
-            Root.FrameEnded += new FrameEvent(OnFrameEnded);
-
+            Root.FrameStarted += new EventHandler<FrameEventArgs>(OnFrameStarted);
+            Root.FrameEnded += new EventHandler<FrameEventArgs>(OnFrameEnded);
         }
 
         /// <summary>
@@ -349,7 +349,7 @@ namespace SmartMap
         {
             // instantiate the Root singleton
             Root = new Root("AxiomEngine.log");
-
+           
             // this actually loads the resource information
             // stored in EngineConfig.xml
             SetupResources();
@@ -402,7 +402,6 @@ namespace SmartMap
         /// </summary>
         protected virtual void SetupInput()
         {
-
             // retreive and initialize the input system
             Input = PlatformManager.Instance.CreateInputReader();
             Input.Initialize(Window, true, true, false, false);
@@ -410,7 +409,7 @@ namespace SmartMap
         }
 
         /// <summary>
-        ///		Loads default resource configuration if one exists.
+        ///     Loads default resource configuration if one exists.
         /// </summary>
         protected virtual void SetupResources()
         {
@@ -439,7 +438,7 @@ namespace SmartMap
         protected virtual bool Configure()
         {
             ConfigDialog dlg = new ConfigDialog();
-            ConfigDialog.DialogResult result= dlg.ShowDialog();
+            ConfigDialog.DialogResult result = dlg.ShowDialog();
             if (result == ConfigDialog.DialogResult.Cancel)
             {
                 Root.Instance.Dispose();
@@ -491,8 +490,8 @@ namespace SmartMap
             if (Root != null)
             {
                 // remove event handlers
-                Root.FrameStarted -= new FrameEvent(OnFrameStarted);
-                Root.FrameEnded -= new FrameEvent(OnFrameEnded);
+                Root.FrameStarted -= new EventHandler<FrameEventArgs>(OnFrameStarted);
+                Root.FrameEnded -= new EventHandler<FrameEventArgs>(OnFrameEnded);
 
                 //engine.Dispose();
             }
@@ -515,31 +514,21 @@ namespace SmartMap
         /// </summary>
         /// <param name="source"></param>
         /// <param name="e"></param>
-        protected virtual bool OnFrameEnded(Object source, FrameEventArgs e)
+        protected void OnFrameEnded(Object source, FrameEventArgs e)
         {
-             if ( OnFrameEnded( source, e ) == false )
-                return false;
-                
-                return true;
+
         }
 
-        protected virtual bool OnFrameStarted(Object source, FrameEventArgs e)
+        protected virtual void OnFrameStarted(Object source, FrameEventArgs e)
         {
-             if ( OnFrameStarted( source, e ) == false )
-                return false;
-
             UpdateDebugOverlay(source, e);
 
             UpdateInput(source, e);
-            
-            return true;
         }
 
-        protected virtual bool UpdateInput(Object source, FrameEventArgs e)
+        protected void UpdateInput(Object source, FrameEventArgs e)
         {
-             if ( UpdateInput( source, e ) == false )
-                return false;
-     
+
             Input.Capture();
 
             float scaleMove = 200 * e.TimeSinceLastFrame;
@@ -554,7 +543,7 @@ namespace SmartMap
             if (Input.IsKeyPressed(KeyCodes.Escape))
             {
                 Root.Instance.QueueEndRendering();
-                return false;
+                //return false;
             }
 
             if (Input.IsKeyPressed(KeyCodes.A))
@@ -715,8 +704,7 @@ namespace SmartMap
             if (camAccel == Vector3.Zero)
             {
                 camVelocity *= (1 - (6 * e.TimeSinceLastFrame));
-            }                          
-            return true;
+            }
         }
 
         protected void UpdateDebugOverlay(object source, FrameEventArgs e)

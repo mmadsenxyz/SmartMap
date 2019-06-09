@@ -17,8 +17,8 @@ namespace SmartMap
 		// IDraw interface
 		public IDraw idraw;
 		private SceneManager scene;
-		// Zones
-		public Dictionary<int, Entity> zone;
+        // Zones
+        public Dictionary<int, Entity> zone;
 		public Dictionary<int, SceneNode> zoneNode;
 		public Dictionary<int, SceneNode> zoneGroup;
 		private int zoneCount;
@@ -30,15 +30,16 @@ namespace SmartMap
 		{
 			this.scene = man;
 
-			this.zone = new Dictionary<int, Entity>(36);
+            this.zone = new Dictionary<int, Entity>(36);
 			this.zoneNode = new Dictionary<int, SceneNode>(36);
 			this.zoneGroup = new Dictionary<int, SceneNode> (4);
 			this.model = new Dictionary<int, Entity>(10);
 			this.modelNode = new Dictionary<int, SceneNode>(10);
-		}
+        }
+
 		public void CreateModel()
 		{
-            idraw.CreateGraphics(model, "Model", "ogrehead.mesh", "Ogre/Skin", 1, 1, true);
+            idraw.CreateGraphics(model, "Model", "ogrehead.mesh", "Ogre/Skin", 1, 1);
 			// for main player
 			modelNode[0] = scene.RootSceneNode.CreateChildSceneNode("Model");
 			modelNode[0].AttachObject(model[0]);
@@ -51,7 +52,7 @@ namespace SmartMap
 			float z = -meshSize/2;
 			// create zones
 			if (!recreate) {
-				idraw.CreateGraphics(zone, "Zone", "Zone.mesh", "TileSet/Room", 36, 36, true);
+				idraw.CreateGraphics(zone, "Zone", "Zone.mesh", "TileSet/Room", 36, 36);
 				// create 36 zoneNodes
 				for (int i = 0; i < zoneNode.Count; ++i) {
 					if (x >= (mapSize * 2) - (mapSize/3)) {

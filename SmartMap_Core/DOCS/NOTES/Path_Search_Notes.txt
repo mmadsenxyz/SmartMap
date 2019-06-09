@@ -1,0 +1,13 @@
+Breadth First VS Depth First
+
+They have similar running time, but either may greatly outperform the other on any given problem simply due to the order in which the cells are visited.
+
+In terms of space usage, BFS will on average use more memory for trees, but for more general graphs, in certain cases, it could use significantly less memory.
+
+For mazes specifically (if we define a maze as there being only one way to reach a cell from the starting point without backtracking, meaning it's essentially a tree), BFS will generally use more memory, as we'll need to keep multiple paths in memory at the same time, where DFS only needs to keep track of a single path at any given time.
+
+For more general grids, it's much less obvious which one will be better in terms of memory, especially when considering how we keep track of cells we've visited thus far to prevent repeatedly visiting cells.
+
+If you're not concerned about memory, you can pick either. If you're fairly comfortable with recursion, DFS should be easier to implement.
+
+However, if you're looking for the shortest path to some given cell in a general grid, use BFS (or A*), as that guarantees to find the shortest path, where DFS does not (you can still use either in a maze where there's only a single path to any given cell).
