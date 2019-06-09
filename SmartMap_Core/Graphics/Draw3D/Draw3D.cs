@@ -89,20 +89,20 @@ namespace SmartMap
         {
             this.sm = new SmartMap_Core();
 
-            this.interiorTileSide = new Dictionary<int, Entity>(1200000); // an Interior style tile will have indoor textures
-            this.exteriorTileHall = new Dictionary<int, Entity>(1200000); // an Exterior style tile will have outdoor textures
-            this.interiorTileCorner = new Dictionary<int, Entity>(1200000); // an Interior style tile will have indoor textures
-            this.exteriorTileEnd = new Dictionary<int, Entity>(1200000); // an Exterior style tile will have outdoor textures
-            this.interiorTileFloor = new Dictionary<int, Entity>(1200000); // an Interior style tile will have indoor textures
-            this.exteriorTileSide = new Dictionary<int, Entity>(1200000); // an Exterior style tile will have outdoor textures
-            this.interiorTileHall = new Dictionary<int, Entity>(1200000); // an Interior style tile will have indoor textures
-            this.exteriorTileCorner = new Dictionary<int, Entity>(1200000); // an Exterior style tile will have outdoor textures
-            this.interiorTileEnd = new Dictionary<int, Entity>(1200000); // an Interior style tile will have indoor textures
-            this.exteriorTileFloor = new Dictionary<int, Entity>(1200000); // an Exterior style tile will have outdoor textures
+            this.interiorTileSide = new Dictionary<int, Entity>(300000); // an Interior style tile will have indoor textures
+            this.exteriorTileHall = new Dictionary<int, Entity>(300000); // an Exterior style tile will have outdoor textures
+            this.interiorTileCorner = new Dictionary<int, Entity>(300000); // an Interior style tile will have indoor textures
+            this.exteriorTileEnd = new Dictionary<int, Entity>(300000); // an Exterior style tile will have outdoor textures
+            this.interiorTileFloor = new Dictionary<int, Entity>(300000); // an Interior style tile will have indoor textures
+            this.exteriorTileSide = new Dictionary<int, Entity>(300000); // an Exterior style tile will have outdoor textures
+            this.interiorTileHall = new Dictionary<int, Entity>(300000); // an Interior style tile will have indoor textures
+            this.exteriorTileCorner = new Dictionary<int, Entity>(300000); // an Exterior style tile will have outdoor textures
+            this.interiorTileEnd = new Dictionary<int, Entity>(300000); // an Interior style tile will have indoor textures
+            this.exteriorTileFloor = new Dictionary<int, Entity>(300000); // an Exterior style tile will have outdoor textures
             this.mapNode = new SceneNode[100]; // a map is an overall region of the world encapsulating Quadrants, Modules and Tiles
-            this.quadrantNode = new SceneNode[1000000]; // a Quadrant is a large section of modules in a Map
-            this.moduleNode = new SceneNode[1000000]; // a Module is a Tileset represeting a myriad of interchangeable tiles
-            this.tileNode = new SceneNode[1000000]; // a tile is a singular interchangeable puzzle-piece within a Tileset Module 
+            this.quadrantNode = new SceneNode[1000]; // a Quadrant is a large section of modules in a Map
+            this.moduleNode = new SceneNode[300000]; // a Module is a Tileset represeting a myriad of interchangeable tiles
+            this.tileNode = new SceneNode[300000]; // a tile is a singular interchangeable puzzle-piece within a Tileset Module 
 
             this.moduleSizeEast = MeshSize * tileAmountEast; // size map east
             this.moduleSizeNorth = MeshSize * tileAmountNorth; // size of map north
@@ -118,18 +118,27 @@ namespace SmartMap
         {
             CreateEnvironment();
 
-            // =Draw 3D= - SmartMap's 3D window (Axiom3D)            
-            // ==== WARNING :: Keep 'count' variables consistant with resource number changes 
+            // LOAD UP YER MESHES           
+            Console.WriteLine("LOADING...interiorTileSide");
             CreateGraphics(interiorTileSide, "Room_Side", "Room_Side.mesh", "TileSet/Room", 2000, 2000);
+            Console.WriteLine("LOADING...interiorTileHall");
             CreateGraphics(interiorTileHall, "Room_Hall", "Room_Hall.mesh", "TileSet/Room", 2000, 2000);
+            Console.WriteLine("LOADING...interiorTileCorner");
             CreateGraphics(interiorTileCorner, "Room_Corner", "Room_Corner.mesh", "TileSet/Room", 2000, 2000);
+            Console.WriteLine("LOADING...interiorTileEnd");
             CreateGraphics(interiorTileEnd, "Room_End", "Room_End.mesh", "TileSet/Room", 2000, 2000);
+            Console.WriteLine("LOADING...interiorTileFloor");
             CreateGraphics(interiorTileFloor, "Room_Floor", "Room_Floor2.mesh", "Room_Floor2", 2000, 2000);
-            // outer wall resources - (change these to your outer-wall meshes and materials)
+            // outer wall resources
+            Console.WriteLine("LOADING...exteriorTileSide");
             CreateGraphics(exteriorTileSide, "Wall_Side", "Room_Side.mesh", "TileSet/Wall", 2000, 2000);
+            Console.WriteLine("LOADING...exteriorTileHall");
             CreateGraphics(exteriorTileHall, "Wall_Hall", "Room_Hall.mesh", "TileSet/Wall", 2000, 2000);
+            Console.WriteLine("LOADING...exteriorTileCorner");
             CreateGraphics(exteriorTileCorner, "Wall_Corner", "Room_Corner.mesh", "TileSet/Wall", 2000, 2000);
+            Console.WriteLine("LOADING...exteriorTileEnd");
             CreateGraphics(exteriorTileEnd, "Wall_End", "Room_End.mesh", "TileSet/Wall", 2000, 2000);
+            Console.WriteLine("LOADING...exteriorTileFloor");
             CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor2.mesh", "Room_Floor2", 2000, 2000);
 
             CreateWorld(0, 0, 0, 0, 0);
