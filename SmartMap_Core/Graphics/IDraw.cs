@@ -36,7 +36,6 @@ namespace SmartMap
     /// </summary>
 	public interface IDraw
 	{
-		void CreateGraphics(Dictionary<int, Entity> entity, string tileName, string tileFileName, string materialName, int meshAmount,
-		    int textureAmount, bool newEntity);
+		void CreateGraphics(Dictionary<int, Entity> entity, string tileName, string tileFileName, string materialName, int meshAmount, int textureAmount);
 	}
 }

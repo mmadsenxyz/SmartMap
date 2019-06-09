@@ -45,6 +45,9 @@ namespace SmartMap
         private DepthFirstSearchAlgorithm<Point<int>, Edge<Point<int>>> dfs;
         //private ConnectedComponentsAlgorithm<Point<int>, Edge<Point<int>>> cca;
         private CyclePoppingRandomTreeAlgorithm<Point<int>, Edge<Point<int>>> pop;
+        // Debug
+        public bool DebugStatements = false;
+        private string assertMessage;
          // Save
 
         #region Properties
@@ -123,7 +126,7 @@ namespace SmartMap
                 {      
                     this.md.Add(e.Source, e); // out-edge
                     this.md.Add(e.Target, e); // in-edge
-                    //Console.WriteLine("The vertices are: {0} {1}", e.Source, e);
+                    //Debug.Assert(DebugStatements == true,"The vertices are: {0} {1}", e.Source, e);
                 }
             }
             
@@ -135,7 +138,7 @@ namespace SmartMap
                 {      
                     this.md2.Add(e.Source, e); // out-edge
                     this.md2.Add(e.Target, e); // in-edge
-                    //Console.WriteLine("The vertices are: {0} {1}", e.Source, e);
+                    //Debug.Assert(DebugStatements == true,"The vertices are: {0} {1}", e.Source, e);
                 }
             }
         }
@@ -189,7 +192,8 @@ namespace SmartMap
         /// <param name="rootZ">Root z: Must be less than tileAmount</param>
         public bool GeneratePath(string type, bool automated, int rootX, int rootZ)
         {
-            Console.WriteLine("Point: {0} : {1} is the entrance for this module", rootX, rootZ);
+            assertMessage = string.Format("Point: {0} : {1} is the entrance for this module", rootX, rootZ);
+            Debug.Assert(DebugStatements == true, assertMessage);
             //Console.ReadLine();
 
             // fill in the entrance vertex for searcher
@@ -216,7 +220,7 @@ namespace SmartMap
                         }
                         rootX = v.Width;
                         rootZ = v.Length;
-                            // Console.WriteLine("{0}", v.ToString());
+                            // Debug.Assert(DebugStatements == true,"{0}", v.ToString());
                     } else {
                         return false;
                     }
@@ -238,7 +242,7 @@ namespace SmartMap
                 pop.RandomTreeWithRoot(new Point<int>(rootX, rootZ));
             }
             catch (Exception ex) {
-                    Console.WriteLine("{0} Module could not be pathed... SKIPPING", ex.ToString());
+                    Debug.Assert(DebugStatements == true,"{0} Module could not be pathed... SKIPPING", ex.ToString());
                 //Console.ReadLine();
                 return false;    
             }
@@ -248,33 +252,39 @@ namespace SmartMap
             // delete all edges before edge re-population -- helps remove edgeless vertices
             foreach (Point<int> v in this.graph.Vertices) {
                    this.graph.ClearEdges(v);
-            }       
+            }
 
             if (type == "MODULE")
             {
                 this.md.Clear();
-                Console.WriteLine("--------Adding mazed RandomTreeWithRootBranch graph to dictionary--------");
-                Console.WriteLine("VEDSuccesors Count is: {0}", this.vedSuccessors.Count);
+                Debug.Assert(DebugStatements == true,"--------Adding mazed RandomTreeWithRootBranch graph to dictionary--------");
+                assertMessage = string.Format("VEDSuccesors Count is: {0}", this.vedSuccessors.Count);
+                Debug.Assert(DebugStatements == true, assertMessage);
                 // put vedSuccessors in MultiDictionary for mazed map creation (populate edges) 
                 foreach (Edge<Point<int>> e in this.vedSuccessors.Values)
                 {
                     if (e == null)   // if empty, skip and continue the edge search
                     {
-                        Console.WriteLine("--------EDGE IS EMPTY--------");
+                        Debug.Assert(DebugStatements == true,"--------EDGE IS EMPTY--------");
                         continue;
                     }
                     
                     // grab these mazed vertex/edges for vertex/edge print-out in CreateTileset()
                     this.md.Add(e.Source, e); // out-edge
                     this.md.Add(e.Target, e); // in-edge
-                    Console.WriteLine("Edge {0}", e.Target, e.Source);
+                    assertMessage = string.Format("Edge {0}", e.Target, e.Source);
+                    Debug.Assert(DebugStatements == true, assertMessage);
                     // redo the cleared graph with new random edges
                     this.graph.AddEdge(e);
                 }
-                Console.WriteLine("FINAL Graph Edge Count is: {0}", graph.EdgeCount);
-                Console.WriteLine("FINAL MD VERTEX Count is: {0}", this.md.Keys.Count);
-                Console.WriteLine("FINAL MD TOTAL Edge COUNT is: {0}", this.md.Values.Count);
-                Console.WriteLine("FINAL MD Edges details are: {0}", this.md.KeyValuePairs);
+                assertMessage = string.Format("FINAL Graph Edge Count is: {0}", graph.EdgeCount);
+                Debug.Assert(DebugStatements == true, assertMessage);
+                assertMessage = string.Format("FINAL MD VERTEX Count is: {0}", this.md.Keys.Count);
+                Debug.Assert(DebugStatements == true, assertMessage);
+                assertMessage = string.Format("FINAL MD TOTAL Edge COUNT is: {0}", this.md.Values.Count);
+                Debug.Assert(DebugStatements == true, assertMessage);
+                assertMessage = string.Format("FINAL MD Edges details are: {0}", this.md.KeyValuePairs);
+                Debug.Assert(DebugStatements == true, assertMessage);
             }
             
             if (type == "QUADRANT")
@@ -285,11 +295,11 @@ namespace SmartMap
                 {
                     if (e == null)   // if empty, skip and continue the edge search
                         continue;
-                        //Console.WriteLine("{0} was successfull.", e.ID); 
+                        //Debug.Assert(DebugStatements == true,"{0} was successfull.", e.ID); 
                     // grab these mazed vertex/edges for vertex/edge print-out in CreateTileset()
                     this.md2.Add(e.Source, e); // out-edge
                     this.md2.Add(e.Target, e); // in-edge
-                        //Console.WriteLine("Edge {0}", e.Target, e.Source);
+                        //Debug.Assert(DebugStatements == true,"Edge {0}", e.Target, e.Source);
                     // redo the cleared graph with new random edges
                     this.graph.AddEdge(e);
                 }
@@ -301,9 +311,8 @@ namespace SmartMap
                     if (this.graph.ContainsVertex(new Point<int>(x, z)))
                         if (this.graph.Degree(new Point<int>(x, z)) == 0)
                             this.graph.RemoveVertex(new Point<int>(x, z));
-            Console.WriteLine("--------Cleaned up edgeless vertices--------");
+            Debug.Assert(DebugStatements == true,"--------Cleaned up edgeless vertices--------");
             //Console.ReadLine();
-
             // GC.Collect(); // could probably be used. Not too slow.
 
             return true;
@@ -316,7 +325,7 @@ namespace SmartMap
         /// <param name="module">Module to search</param>
         public void SearchPath(string searchType, SceneNode mod)
         {
-            Console.WriteLine("--------SEARCHING MODULE PATH-------");
+            Debug.Assert(DebugStatements == true,"--------SEARCHING MODULE PATH-------");
             this.module = mod;
             
             // BreadthFirstSearch Search - Shortest path 
@@ -327,12 +336,13 @@ namespace SmartMap
                 //this.bfs.StartVertex += new VertexAction<Point<int>>(this.RecordStartVertex);
                 this.bfs.ExamineVertex += new VertexAction<Point<int>>(this.RecordVertex);
 
-                Console.WriteLine("Vertex: {0} is the entrance for this module", this.pointFirst);
+                assertMessage = string.Format("Vertex: {0} is the entrance for this module", this.pointFirst);
+                Debug.Assert(DebugStatements == true, assertMessage);
                 try { // compute SEARCH
                     this.bfs.Compute(this.pointFirst);
                 }
                 catch (Exception ex) {
-                        Console.WriteLine("{0} Can't find entrance...Module can't be pathed", ex.ToString());
+                        Debug.Assert(DebugStatements == true,"{0} Can't find entrance...Module can't be pathed", ex.ToString());
                 }
 
                 // add to multi-dictiionary to store all module paths for console readout
@@ -341,8 +351,8 @@ namespace SmartMap
                                   
                 foreach (List<Vertex<float>> m in this.path_modules) {
                     foreach (Vertex<float> v in m) {
-                        Console.WriteLine("Printing out module vertices");
-                        Console.WriteLine("{0} vertex", v.ToString());
+                        Debug.Assert(DebugStatements == true,"Printing out module vertices");
+                        Debug.Assert(DebugStatements == true,"{0} vertex", v.ToString());
                     }
                 }  
             }
@@ -359,8 +369,9 @@ namespace SmartMap
                 //this.dfs.Finished += new VertexAction<Point<int>>(this.RecordLastVertex);
                 
                 // start the search
-                this.dfs.Compute(this.pointFirst);  
-                Console.WriteLine("Vertex: {0} is the entrance for this module", this.pointFirst);
+                this.dfs.Compute(this.pointFirst);
+                assertMessage = string.Format("Vertex: {0} is the entrance for this module", this.pointFirst);
+                Debug.Assert(DebugStatements == true, assertMessage);
 
                 // add to multi-dictiionary to store all module paths for console readout
                 this.path_module = new List<Vertex<float>>(); // create a new List and add it to path_modules
@@ -377,18 +388,18 @@ namespace SmartMap
                 // output Component listing to Console
                 foreach (int a in this.vidSuccessors.Values)
                 {
-                    Console.WriteLine("{0}", a);
+                    Debug.Assert(DebugStatements == true,"{0}", a);
                 }
                 Console.ReadLine();
 
-                Console.WriteLine("{0}", this.cca.ComponentCount);
+                Debug.Assert(DebugStatements == true,"{0}", this.cca.ComponentCount);
                 Console.ReadLine();*/
             }
         }
         
         private void StateStatus(object obj, EventArgs ea)
         {
-            Console.WriteLine("Maze creator status: {0}", pop.State.ToString());
+            Debug.Assert(DebugStatements == true,"Maze creator status: {0}", pop.State.ToString());
             //Console.ReadLine();
         }
 
@@ -421,7 +432,7 @@ namespace SmartMap
         private void FinishVertex(Point<int> point)
         {
             this.pointSearch = point;
-                //Console.WriteLine("{0} is the first vertex with an out-edge", this.vertex);
+                //Debug.Assert(DebugStatements == true,"{0} is the first vertex with an out-edge", this.vertex);
         }
 
         ///<summary>
@@ -429,7 +440,8 @@ namespace SmartMap
         ///</summary>
         private void RecordOutEdge(Edge<Point<int>> args)
         {
-                Console.WriteLine("{0} is the first vertex with an out-edge", args.Source);
+            assertMessage = string.Format("{0} is the first vertex with an out-edge", args.Source);
+            Debug.Assert(DebugStatements == true, assertMessage);
             this.pointSearch = args.Source;
             //this.dfs.ExamineEdge -= new EdgeAction<Point<int>, Edge<Point<int>>>(this.RecordOutEdge);
 
@@ -486,7 +498,7 @@ namespace SmartMap
             }
             catch (Exception e)
             {
-                Console.WriteLine("Exception: {0}", e.ToString());
+                Debug.Assert(DebugStatements == true,"Exception: {0}", e.ToString());
             }
             finally
             {
