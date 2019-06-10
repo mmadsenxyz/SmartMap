@@ -17,6 +17,8 @@ using Axiom.Math;
 using Axiom.Graphics;
 using Axiom.Input;
 using Axiom;
+using Axiom.Configuration;
+using Axiom.ParticleSystems;
 
 namespace SmartMap
 {
@@ -26,6 +28,7 @@ namespace SmartMap
     [System.ComponentModel.DesignerCategory("")]
     public class Draw3D : EngineSetup, IDraw, IDisposable
     {
+        #region objects
         // Map
         SmartMap_Core sm;
         private Draw4D d4d;
@@ -72,18 +75,26 @@ namespace SmartMap
         protected bool isModelWalking = false;    // Whether or not the object is moving
         protected float timeSinceLastFrame = 0.0f;
         // Occlusion
-        //private EntityList entityList = new EntityList();
+        private HardwareOcclusionQuery query;
         public int camClipped = 0;
-        //private int objectsVisible = 0;
+        private int objectsVisible = 0;
         // Mesh Optimization
-        //private List<InstancedGeometry> renderInstance;
-        //private List<StaticGeometry> renderStatic;
-        //private List<Entity> renderEntity;
-        //private List<SceneNode> nodes;
-        //private List<List<Vector3>> posMatrices;
+        /*private static readonly int maxObjectsPerBatch = 80;
+        private double mAvgFrameTime;
+        private int mSelectedMesh;
+        private int mNumMeshes;
+        private int objectCount;
+        private string mDebugText;
+        private int mNumRendered;
+        private List<InstancedGeometry> renderInstance;
+        private List<StaticGeometry> renderStatic;
+        private List<Entity> renderEntity;
+        private List<SceneNode> nodes;
+        private List<List<Vector3>> posMatrices;*/
         // Debug
-        public bool DebugStatements = false;
+        public bool DebugStatements = true;
         private string assertMessage;
+        #endregion
 
         public Draw3D()
         {
@@ -120,26 +131,28 @@ namespace SmartMap
 
             // LOAD UP YER MESHES           
             Console.WriteLine("LOADING...interiorTileSide");
-            CreateGraphics(interiorTileSide, "Room_Side", "Room_Side.mesh", "TileSet/Room", 2000, 2000);
+            CreateGraphics(interiorTileSide, "Room_Side", "Room_Side.mesh", "TileSet/Room", 1000, 1000);
             Console.WriteLine("LOADING...interiorTileHall");
-            CreateGraphics(interiorTileHall, "Room_Hall", "Room_Hall.mesh", "TileSet/Room", 2000, 2000);
+            CreateGraphics(interiorTileHall, "Room_Hall", "Room_Hall.mesh", "TileSet/Room", 1000, 1000);
             Console.WriteLine("LOADING...interiorTileCorner");
-            CreateGraphics(interiorTileCorner, "Room_Corner", "Room_Corner.mesh", "TileSet/Room", 2000, 2000);
+            CreateGraphics(interiorTileCorner, "Room_Corner", "Room_Corner.mesh", "TileSet/Room", 1000, 1000);
             Console.WriteLine("LOADING...interiorTileEnd");
-            CreateGraphics(interiorTileEnd, "Room_End", "Room_End.mesh", "TileSet/Room", 2000, 2000);
+            CreateGraphics(interiorTileEnd, "Room_End", "Room_End.mesh", "TileSet/Room", 1000, 1000);
             Console.WriteLine("LOADING...interiorTileFloor");
-            CreateGraphics(interiorTileFloor, "Room_Floor", "Room_Floor2.mesh", "Room_Floor2", 2000, 2000);
+            CreateGraphics(interiorTileFloor, "Room_Floor", "Room_Floor2.mesh", "Room_Floor2", 1000, 1000);
             // outer wall resources
             Console.WriteLine("LOADING...exteriorTileSide");
-            CreateGraphics(exteriorTileSide, "Wall_Side", "Room_Side.mesh", "TileSet/Wall", 2000, 2000);
+            CreateGraphics(exteriorTileSide, "Wall_Side", "Room_Side.mesh", "TileSet/Wall", 1000, 1000);
             Console.WriteLine("LOADING...exteriorTileHall");
-            CreateGraphics(exteriorTileHall, "Wall_Hall", "Room_Hall.mesh", "TileSet/Wall", 2000, 2000);
+            CreateGraphics(exteriorTileHall, "Wall_Hall", "Room_Hall.mesh", "TileSet/Wall", 1000, 1000);
             Console.WriteLine("LOADING...exteriorTileCorner");
-            CreateGraphics(exteriorTileCorner, "Wall_Corner", "Room_Corner.mesh", "TileSet/Wall", 2000, 2000);
+            CreateGraphics(exteriorTileCorner, "Wall_Corner", "Room_Corner.mesh", "TileSet/Wall", 1000, 1000);
             Console.WriteLine("LOADING...exteriorTileEnd");
-            CreateGraphics(exteriorTileEnd, "Wall_End", "Room_End.mesh", "TileSet/Wall", 2000, 2000);
+            CreateGraphics(exteriorTileEnd, "Wall_End", "Room_End.mesh", "TileSet/Wall", 1000, 1000);
             Console.WriteLine("LOADING...exteriorTileFloor");
-            CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor2.mesh", "Room_Floor2", 2000, 2000);
+            CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor2.mesh", "Room_Floor2", 1000, 1000);
+
+            //CreateInstanceGeom();
 
             CreateWorld(0, 0, 0, 0, 0);
 
@@ -189,10 +202,14 @@ namespace SmartMap
 
         protected virtual void CreateEnvironment()
         {
+            // set up queue event handlers to run the query
+            SceneManager.QueueStarted += scene_QueueStarted;
+            SceneManager.QueueEnded += scene_QueueEnded;
+
             // set some ambient light
             SceneManager.AmbientLight = new ColorEx(1.0f, 0.4f, 0.4f, 0.4f);
 
-            SceneManager.SetFog(FogMode.Exp, ColorEx.White, 0.00001f);
+            SceneManager.SetFog(FogMode.Linear, new ColorEx(1.0f, 1.0f, 1.0f), 0, 100000, 200000);
 
             // create a skydome
             SceneManager.SetSkyDome(true, "Examples/CloudySky", 5, 8);
@@ -209,18 +226,17 @@ namespace SmartMap
             // water plane setup
             Plane waterPlane = new Plane(Vector3.UnitY, 1.5f);
 
-            MeshManager.Instance.CreatePlane(
-                                             "WaterPlane",
+            MeshManager.Instance.CreatePlane("WaterPlane",
                                              ResourceGroupManager.DefaultResourceGroupName,
                                              waterPlane,
-                                             256000, 256000,
-                                             20, 20,
-                                             true, 1,
-                                             10, 10,
-                                             Vector3.UnitZ);
+                                             256000, 256000, 20, 20, true, 1, 10, 10, Vector3.UnitZ);
 
             Entity waterEntity = SceneManager.CreateEntity("Water", "WaterPlane");
             waterEntity.MaterialName = "Terrain/WaterPlane";
+            // do not frustum cull Water
+            waterEntity.BoundingBox.IsInfinite = true;
+            // do not frustum cull Water
+            waterEntity.BoundingBox.IsNull = true;
 
             var waterNode = SceneManager.RootSceneNode.CreateChildSceneNode("WaterNode");
             waterNode.AttachObject(waterEntity);
@@ -228,6 +244,15 @@ namespace SmartMap
 
             this.frustumNode.Position = new Vector3(128, 500, 128);
             Camera.LookAt(new Vector3(0, 0, -300));
+
+            // instance optimization
+            //this.mNumMeshes = 160;
+            //this.mNumRendered = 0;
+
+            // occlusion query
+            query = Root.Instance.RenderSystem.CreateHardwareOcclusionQuery();
+
+            // particles smoke
         }
 
         /// <summary>
@@ -239,19 +264,114 @@ namespace SmartMap
         /// <param name="meshAmount">The amount of meshes you want - Must match tile creation</param>
         /// <param name="textureAmount">The amount of textures you want - Must match tile creation</param>
         /// <param name="newEntity">Reset Entity count to zero for a new Entity or not stack entity numbers</param>
-        public void CreateGraphics(Dictionary<int, Entity> entity, string tileName, string tileFileName, string materialName, int meshAmount, int textureAmount)
+        public void CreateGraphics(Dictionary<int, Entity> entityList, string tileName, string tileFileName, string materialName, int meshAmount, int textureAmount)
         {
             for (int i = meshCount; i < meshAmount; ++i)
             {
-                entity[i] = SceneManager.CreateEntity(tileName + i, tileFileName);
+                entityList[i] = SceneManager.CreateEntity(tileName + i, tileFileName);
+                //CreateInstanceGeom(entity[i]);
             }
             for (int i = textureCount; i < textureAmount; ++i)
             {
-                entity[i].MaterialName = materialName;
+                entityList[i].MaterialName = materialName;
             }
             meshCount = 0;
             textureCount = 0;
         }
+
+        #region INSTANCING
+
+        /// <summary>
+        /// Create Instanced mesh
+        /// </summary>
+        /// <param name="mesh">New mesh on the block</param>
+        /*private void CreateInstanceGeom(Entity mesh)
+        {
+            this.renderInstance = new List<InstancedGeometry>(this.mNumRendered);
+
+            //Load a mesh to read data from.	
+            var batch = new InstancedGeometry(SceneManager, mesh.Name + "s")
+            {
+                CastShadows = true,
+                Origin = Vector3.Zero,
+                BatchInstanceDimensions = new Vector3(1000000f, 1000000f, 1000000f)
+            };
+
+            int batchSize = (this.mNumMeshes > maxObjectsPerBatch) ? maxObjectsPerBatch : this.mNumMeshes;
+            SetupInstancedMaterialToEntity(mesh);
+            for (int i = 0; i < batchSize; i++)
+            {
+                batch.AddEntity(mesh, Vector3.Zero);
+            }
+
+            batch.Build();
+
+
+            int k;
+            for (k = 0; k < this.mNumRendered - 1; k++)
+            {
+                batch.AddBatchInstance();
+            }
+
+            k = 0;
+            foreach (var batchInstance in batch.BatchInstances)
+            {
+                int j = 0;
+                foreach (var instancedObject in batchInstance.(???))
+                {
+                    instancedObject.Position = this.posMatrices[k][j];
+                    ++j;
+                }
+                k++;
+            }
+            batch.IsVisible = true;
+            this.renderInstance[0] = batch;
+
+            SceneManager.RemoveEntity(mesh);
+        }
+
+        private void SetupInstancedMaterialToEntity(Entity ent)
+        {
+            for (int i = 0; i < ent.SubEntityCount; ++i)
+            {
+                SubEntity se = ent.GetSubEntity(i);
+                string materialName = se.MaterialName;
+                se.MaterialName = BuildInstancedMaterial(materialName);
+            }
+        }
+
+        private string BuildInstancedMaterial(string originalMaterialName)
+        {
+            // already instanced ?
+            if (originalMaterialName.EndsWith("/instanced"))
+            {
+                return originalMaterialName;
+            }
+
+            var originalMaterial = (Material)MaterialManager.Instance.GetByName(originalMaterialName);
+
+            // if originalMat doesn't exists use "Instancing" material name
+            string instancedMaterialName = (null == originalMaterial ? "Instancing" : originalMaterialName + "/Instanced");
+            var instancedMaterial = (Material)MaterialManager.Instance.GetByName(instancedMaterialName);
+
+            // already exists ?
+            if (null == instancedMaterial)
+            {
+                instancedMaterial = originalMaterial.Clone(instancedMaterialName);
+                instancedMaterial.Load();
+                Technique t = instancedMaterial.GetBestTechnique();
+                for (int pItr = 0; pItr < t.PassCount; pItr++)
+                {
+                    Pass p = t.GetPass(pItr);
+                    p.SetVertexProgram("Instancing", false);
+                    p.SetShadowCasterVertexProgram("InstancingShadowCaster");
+                }
+            }
+            instancedMaterial.Load();
+            return instancedMaterialName;
+        }*/
+
+        #endregion
 
         /// <summary>
         /// Create Quadrants for Maps
@@ -530,7 +650,8 @@ namespace SmartMap
                 // creates and searches logical path through module (shortest-path)
                 //this.sm.SearchPath("BFS", this.moduleNode[moduleCount]);
                 CreateModule(moduleCount, 0, 0, 0);
-                 Debug.Assert(DebugStatements == true,this.moduleNode[moduleCount].Name + " REMODELED");
+                //this.moduleNode[0].AttachObject(ParticleSystemManager.Instance.CreateSystem("Smoke", "Examples/Smoke"));
+                Debug.Assert(DebugStatements == true,this.moduleNode[moduleCount].Name + " REMODELED");
                 // TRANSLATE NEW MODULE BACK ONTO FOUNDATION
                 this.moduleNode[moduleCount].Translate(new Vector3(xLocation, moveUp, zLocation), TransformSpace.World);
                 //this.moduleNode[moduleCount].Position = new Vector3(xLocation, moveUp + this.tileSetHeight, zLocation);
@@ -809,12 +930,319 @@ namespace SmartMap
                 return true;
         }
 
-        #region Frame Animation
+        public override void Dispose()
+        {
+            if (query != null)
+            {
+                query.Dispose();
+            }
+            base.Dispose();
+        }
+
+        #region RENDERING QUEUE
+        
+        /// <summary>
+		///	When RenderQueue 6 is starting, we will begin the occlusion query.
+		/// </summary>
+		/// <param name="priority"></param>
+		/// <returns></returns>
+		private void scene_QueueStarted(object sender, SceneManager.BeginRenderQueueEventArgs e)
+        {
+            // begin the occlusion query
+            if (e.RenderQueueId == RenderQueueGroupID.Six)
+            {
+                query.Begin();
+            }
+
+            return;
+        }
+
+        /// <summary>
+        ///	When RenderQueue 6 is ending, we will end the query and poll for the results.
+        /// </summary>
+        /// <param name="priority"></param>
+        /// <returns></returns>
+        private void scene_QueueEnded(object sender, SceneManager.EndRenderQueueEventArgs e)
+        {
+            // end our occlusion query
+            if (e.RenderQueueId == RenderQueueGroupID.Six)
+            {
+                query.End();
+            }
+
+            // get the fragment count from the query
+
+            int count = query.PullResults();
+
+            // report the results
+            if (count <= 0)
+            {
+                debugText = "Object is occluded. ";
+            }
+            else
+            {
+                debugText = string.Format("Visible fragments = {0}", count);
+            }
+
+            return;
+        }
+        
+        #endregion
+
+        #region Frame Animation   
 
         protected override void OnFrameStarted(object source, FrameEventArgs e)
         {
             //timeSinceLastFrame = e.TimeSinceLastFrame;
             base.OnFrameStarted(source, e);
+
+            #region OBJECT PATHFINDING
+
+            ////// MODEL PATHFINDING //////
+            //modelAnimationState.AddTime(timeSinceLastFrame);
+            /*float move = 0.0f;
+ 
+            if (!isModelWalking)
+            //either we've not started walking or reached a way point
+            {
+                //check if there are places to go
+               if (nextLocation())
+               {
+                    // start the walk animation
+                    //modelAnimationState = d4d.model[0].GetAnimationState("Walk");
+                    //modelAnimationState.Loop = true;
+                    //modelAnimationState.IsEnabled = true;
+                    isModelWalking = true;
+
+                    //nextWaypoint.x = sm.path_module[0].Width; 
+                    //nextWaypoint.z = sm.path_module[0].Length;
+
+                    if (nextPathnode < sm.path_module.Count)
+                    { 
+                        // add Vector3 later to simplify
+                        nextWaypoint.x = sm.path_module[nextPathnode].Width;
+                        nextWaypoint.z = sm.path_module[nextPathnode].Length; 
+                        nextWaypoint.y = sm.path_module[nextPathnode].Height + 75;                                                  
+                    } else if (nextPathnode == sm.path_module.Count)
+                    {
+                        nextPathnode = 0;
+                    }
+
+                    nextPathnode++;
+                     Debug.Assert(DebugStatements == true,"Pathnode: {0}", nextPathnode);             
+
+                    // update the direction and the distance
+                    directionOfTravel = nextWaypoint - d4d.modelNode[0].DerivedPosition;
+                     Debug.Assert(DebugStatements == true,"Next Waypoint: {0} - {1}", nextWaypoint, d4d.modelNode[0].DerivedPosition);
+                    distanceToNextWaypoint = directionOfTravel.Normalize();
+                }
+                //else // nowhere to go. set to idle animation
+                //{   //if nodeCount more loactions just keep going
+                    // modelAnimationState = d4d.model[0].GetAnimationState("Idle");
+                    // robotAnimationState = _robotEnt.GetAnimationState("Die");
+                    // robotAnimationState.Loop = false;
+                //}
+            } else // if isModelWalking, determine how far to move this frame
+            {
+                move = modelWalkSpeed * timeSinceLastFrame;
+                distanceToNextWaypoint -= move;                                 
+            }
+            // you have reached a pathnode
+            if (distanceToNextWaypoint <= 0) // stop model and set isModelWalking to false 
+            {      //  Debug.Assert(DebugStatements == true,"Stopped");
+                // set our node to the destination we've just reached & reset direction to 0
+                d4d.modelNode[0].Position = nextWaypoint;
+                directionOfTravel = Vector3.Zero;
+                isModelWalking = false;
+            } else // move the model
+            {
+                //  Debug.Assert(DebugStatements == true,"Moving");
+                // movement code goes here
+                //directionOfTravel = nextWaypoint - d4d.modelNode[0].DerivedPosition;
+                d4d.modelNode[0].Translate(directionOfTravel * move);
+
+                // rotation code goes here
+                Vector3 src = d4d.modelNode[0].Orientation * Vector3.UnitX;
+                Quaternion quat = src.GetRotationTo(directionOfTravel);
+                d4d.modelNode[0].Rotate(quat);
+
+            }*/
+
+            #endregion ANIMATION
+
+            #region FRUSTUM CULL
+            objectsVisible = 0;
+            // make < number the amount of meshes in scene using variables. 
+            //for (int i = 0; i < moduleAmountSouth * moduleAmountEast; i++) 
+            //{
+            /*interiorTileSide;
+            exteriorTileHall;
+            interiorTileCorner;
+            exteriorTileEnd;
+            interiorTileFloor;
+            exteriorTileSide;
+            interiorTileHall;
+            exteriorTileCorner;
+            interiorTileEnd;
+            exteriorTileFloor;*/
+
+            // go through each entity in the scene.  if the entity is within
+            // the frustum, show its bounding box
+            /*foreach (var ent in this.interiorTileSide)
+            {
+                if (ent.Value.IsAttached)
+                {
+                    if (m_frustum.IsObjectVisible(ent.Value.GetWorldBoundingBox()))
+                    {
+                        ent.Value.IsVisible = true;
+                        objectsVisible++;
+                    }
+                    else
+                    {
+                        ent.Value.IsVisible = false;
+                    }
+                }
+            }
+            foreach (var ent in this.interiorTileHall)
+            {
+                if (ent.Value.IsAttached)
+                {
+                    if (m_frustum.IsObjectVisible(ent.Value.GetWorldBoundingBox()))
+                    {
+                        ent.Value.IsVisible = true;
+                        objectsVisible++;
+                    }
+                    else
+                    {
+                        ent.Value.IsVisible = false;
+                    }
+                }
+            }
+            foreach (var ent in this.interiorTileSide)
+            {
+                if (ent.Value.IsAttached)
+                {
+                    if (m_frustum.IsObjectVisible(ent.Value.GetWorldBoundingBox()))
+                    {
+                        ent.Value.IsVisible = true;
+                        objectsVisible++;
+                    }
+                    else
+                    {
+                        ent.Value.IsVisible = false;
+                    }
+                }
+            }
+            foreach (var ent in this.interiorTileEnd)
+            {
+                if (ent.Value.IsAttached)
+                {
+                    if (m_frustum.IsObjectVisible(ent.Value.GetWorldBoundingBox()))
+                    {
+                        ent.Value.IsVisible = true;
+                        objectsVisible++;
+                    }
+                    else
+                    {
+                        ent.Value.IsVisible = false;
+                    }
+                }
+            }
+            foreach (var ent in this.interiorTileFloor)
+            {
+                if (ent.Value.IsAttached)
+                {
+                    if (m_frustum.IsObjectVisible(ent.Value.GetWorldBoundingBox()))
+                    {
+                        ent.Value.IsVisible = true;
+                        objectsVisible++;
+                    }
+                    else
+                    {
+                        ent.Value.IsVisible = false;
+                    }
+                }
+            }
+            foreach (var ent in this.exteriorTileHall)
+            {
+                if (ent.Value.IsAttached)
+                {
+                    if (m_frustum.IsObjectVisible(ent.Value.GetWorldBoundingBox()))
+                    {
+                        ent.Value.IsVisible = true;
+                        objectsVisible++;
+                    }
+                    else
+                    {
+                        ent.Value.IsVisible = false;
+                    }
+                }
+            }
+            foreach (var ent in this.exteriorTileEnd)
+            {
+                if (ent.Value.IsAttached)
+                {
+                    if (m_frustum.IsObjectVisible(ent.Value.GetWorldBoundingBox()))
+                    {
+                        ent.Value.IsVisible = true;
+                        objectsVisible++;
+                    }
+                    else
+                    {
+                        ent.Value.IsVisible = false;
+                    }
+                }
+            }
+            foreach (var ent in this.exteriorTileSide)
+            {
+                if (ent.Value.IsAttached)
+                {
+                    if (m_frustum.IsObjectVisible(ent.Value.GetWorldBoundingBox()))
+                    {
+                        ent.Value.IsVisible = true;
+                        objectsVisible++;
+                    }
+                    else
+                    {
+                        ent.Value.IsVisible = false;
+                    }
+                }
+            }
+            foreach (var ent in this.exteriorTileCorner)
+            {
+                if (ent.Value.IsAttached)
+                {
+                    if (m_frustum.IsObjectVisible(ent.Value.GetWorldBoundingBox()))
+                    {
+                        ent.Value.IsVisible = true;
+                        objectsVisible++;
+                    }
+                    else
+                    {
+                        ent.Value.IsVisible = false;
+                    }
+                }
+            }
+            foreach (var ent in this.exteriorTileFloor)
+            {
+                if (ent.Value.IsAttached)
+                {
+                    if (m_frustum.IsObjectVisible(ent.Value.GetWorldBoundingBox()))
+                    {
+                        ent.Value.IsVisible = true;
+                        objectsVisible++;
+                    }
+                    else
+                    {
+                        ent.Value.IsVisible = false;
+                    }
+                }
+            }*/
+
+            // report the number of objects within the frustum 
+            debugText = string.Format("Objects visible: {0}", objectsVisible);
+            #endregion
+
             #region Camera Clipping Events and CREATING PATHS
             /*
                 // PAGING ZONE SYSTEM (dependant on pure engine coordinates, meant for massive worlds)
@@ -1258,104 +1686,8 @@ namespace SmartMap
                 }
                 */
 
-            //objectsVisible = 0;
-            // make < number the amount of meshes in scene using variables. 
-            /*for (int i = 0; i < 10000; i++) 
-            {
-               
-               // tileNode[i].DetachAllObjects();
-                if (Frustum.IsObjectVisible(interiorTile[i].GetWorldBoundingBox()))
-                {
-                    //SceneNode nd = (SceneNode)interiorTile[i].ParentNode;
-                    //nd.DetachAllObjects();                  
-                    interiorTile[i].IsVisible = true;       
-                    //objectsVisible++;
-                }
-                else if (interiorTile[i].IsAttached) // make sure entity is attached before attempting to use it
-                {
-                    //Node nd = interiorTile[i].ParentNode;
-                    //nd.RemoveAllChildren();
-                    interiorTile[i].IsVisible = false;
-                }
-            } */
-            // report the number of objects within the frustum 
-            //Window.DebugText = string.Format("Objects visible: {0}", objectsVisible);
-
             #endregion Camera Clipping Events
 
-            #region OBJECT PATHFINDING
-
-            ////// MODEL PATHFINDING //////
-            //modelAnimationState.AddTime(timeSinceLastFrame);
-            /*float move = 0.0f;
- 
-            if (!isModelWalking)
-            //either we've not started walking or reached a way point
-            {
-                //check if there are places to go
-               if (nextLocation())
-               {
-                    // start the walk animation
-                    //modelAnimationState = d4d.model[0].GetAnimationState("Walk");
-                    //modelAnimationState.Loop = true;
-                    //modelAnimationState.IsEnabled = true;
-                    isModelWalking = true;
-
-                    //nextWaypoint.x = sm.path_module[0].Width; 
-                    //nextWaypoint.z = sm.path_module[0].Length;
-
-                    if (nextPathnode < sm.path_module.Count)
-                    { 
-                        // add Vector3 later to simplify
-                        nextWaypoint.x = sm.path_module[nextPathnode].Width;
-                        nextWaypoint.z = sm.path_module[nextPathnode].Length; 
-                        nextWaypoint.y = sm.path_module[nextPathnode].Height + 75;                                                  
-                    } else if (nextPathnode == sm.path_module.Count)
-                    {
-                        nextPathnode = 0;
-                    }
-
-                    nextPathnode++;
-                     Debug.Assert(DebugStatements == true,"Pathnode: {0}", nextPathnode);             
-
-                    // update the direction and the distance
-                    directionOfTravel = nextWaypoint - d4d.modelNode[0].DerivedPosition;
-                     Debug.Assert(DebugStatements == true,"Next Waypoint: {0} - {1}", nextWaypoint, d4d.modelNode[0].DerivedPosition);
-                    distanceToNextWaypoint = directionOfTravel.Normalize();
-                }
-                //else // nowhere to go. set to idle animation
-                //{   //if nodeCount more loactions just keep going
-                    // modelAnimationState = d4d.model[0].GetAnimationState("Idle");
-                    // robotAnimationState = _robotEnt.GetAnimationState("Die");
-                    // robotAnimationState.Loop = false;
-                //}
-            } else // if isModelWalking, determine how far to move this frame
-            {
-                move = modelWalkSpeed * timeSinceLastFrame;
-                distanceToNextWaypoint -= move;                                 
-            }
-            // you have reached a pathnode
-            if (distanceToNextWaypoint <= 0) // stop model and set isModelWalking to false 
-            {      //  Debug.Assert(DebugStatements == true,"Stopped");
-                // set our node to the destination we've just reached & reset direction to 0
-                d4d.modelNode[0].Position = nextWaypoint;
-                directionOfTravel = Vector3.Zero;
-                isModelWalking = false;
-            } else // move the model
-            {
-                //  Debug.Assert(DebugStatements == true,"Moving");
-                // movement code goes here
-                //directionOfTravel = nextWaypoint - d4d.modelNode[0].DerivedPosition;
-                d4d.modelNode[0].Translate(directionOfTravel * move);
-
-                // rotation code goes here
-                Vector3 src = d4d.modelNode[0].Orientation * Vector3.UnitX;
-                Quaternion quat = src.GetRotationTo(directionOfTravel);
-                d4d.modelNode[0].Rotate(quat);
-
-            }*/
-
-            #endregion ANIMATION
         }
 
         #endregion

@@ -46,7 +46,7 @@ namespace SmartMap
         //private ConnectedComponentsAlgorithm<Point<int>, Edge<Point<int>>> cca;
         private CyclePoppingRandomTreeAlgorithm<Point<int>, Edge<Point<int>>> pop;
         // Debug
-        public bool DebugStatements = false;
+        public bool DebugStatements = true;
         private string assertMessage;
          // Save
 

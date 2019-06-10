@@ -7,6 +7,7 @@ using System.Diagnostics;
 using Axiom.SceneManagers.Octree;
 using Axiom.Configuration;
 using Axiom.Core;
+using Axiom.Core.InstanceGeometry;
 using Axiom.Input;
 using Axiom.Overlays;
 using Axiom.Math;
@@ -250,7 +251,7 @@ namespace SmartMap
 
             m_frustum = new Frustum();
             m_frustum.Near = 10;
-            m_frustum.Far = 40000;
+            m_frustum.Far = 400;
             m_frustum.IsVisible = true;
             m_frustum.Name = "Frustum";
 
@@ -462,6 +463,8 @@ namespace SmartMap
 
         #region Public Methods
 
+    
+
         /// <summary>
         /// Begins the execution the application.
         /// </summary>
@@ -485,7 +488,7 @@ namespace SmartMap
             }
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             if (Root != null)
             {
