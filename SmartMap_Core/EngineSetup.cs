@@ -251,8 +251,8 @@ namespace SmartMap
 
             m_frustum = new Frustum();
             m_frustum.Near = 10;
-            m_frustum.Far = 4000;
-            m_frustum.FieldOfView = 360;
+            m_frustum.Far = 10000;
+            m_frustum.FieldOfView = 90;
             m_frustum.IsVisible = true;
             m_frustum.Name = "Frustum";
 

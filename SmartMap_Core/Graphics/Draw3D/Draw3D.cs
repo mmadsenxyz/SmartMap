@@ -1030,7 +1030,7 @@ namespace SmartMap
                 {
                     if (this.m_frustum.IsObjectVisible(exteriorTileEnd[i].GetWorldBoundingBox()))
                     {
-                        exteriorTileEnd[i].ShowBoundingBox = true;
+                        exteriorTileEnd[i].ShowBoundingBox = false;
                         exteriorTileEnd[i].IsVisible = true;
                     }
                     else // make sure entity is attached before attempting to use it
@@ -1047,7 +1047,7 @@ namespace SmartMap
                 {
                     if (this.m_frustum.IsObjectVisible(exteriorTileCorner[i].GetWorldBoundingBox()))
                     {
-                        exteriorTileCorner[i].ShowBoundingBox = true;
+                        exteriorTileCorner[i].ShowBoundingBox = false;
                         exteriorTileCorner[i].IsVisible = true;
                     }
                     else // make sure entity is attached before attempting to use it
@@ -1064,7 +1064,7 @@ namespace SmartMap
                 {
                     if (this.m_frustum.IsObjectVisible(exteriorTileFloor[i].GetWorldBoundingBox()))
                     {
-                        exteriorTileFloor[i].ShowBoundingBox = true;
+                        exteriorTileFloor[i].ShowBoundingBox = false;
                         exteriorTileFloor[i].IsVisible = true;
                     }
                     else // make sure entity is attached before attempting to use it
@@ -1081,7 +1081,7 @@ namespace SmartMap
                 {
                     if (this.m_frustum.IsObjectVisible(exteriorTileHall[i].GetWorldBoundingBox()))
                     {
-                        exteriorTileHall[i].ShowBoundingBox = true;
+                        exteriorTileHall[i].ShowBoundingBox = false;
                         exteriorTileHall[i].IsVisible = true;
                     }
                     else // make sure entity is attached before attempting to use it
@@ -1098,7 +1098,7 @@ namespace SmartMap
                 {
                     if (this.m_frustum.IsObjectVisible(exteriorTileSide[i].GetWorldBoundingBox()))
                     {
-                        exteriorTileSide[i].ShowBoundingBox = true;
+                        exteriorTileSide[i].ShowBoundingBox = false;
                         exteriorTileSide[i].IsVisible = true;
                     }
                     else // make sure entity is attached before attempting to use it
@@ -1115,7 +1115,7 @@ namespace SmartMap
                 {
                     if (this.m_frustum.IsObjectVisible(interiorTileCorner[i].GetWorldBoundingBox()))
                     {
-                        interiorTileCorner[i].ShowBoundingBox = true;
+                        interiorTileCorner[i].ShowBoundingBox = false;
                         interiorTileCorner[i].IsVisible = true;
                     }
                     else // make sure entity is attached before attempting to use it
@@ -1132,7 +1132,7 @@ namespace SmartMap
                 {
                     if (this.m_frustum.IsObjectVisible(interiorTileEnd[i].GetWorldBoundingBox()))
                     {
-                        interiorTileEnd[i].ShowBoundingBox = true;
+                        interiorTileEnd[i].ShowBoundingBox = false;
                         interiorTileEnd[i].IsVisible = true;
                     }
                     else // make sure entity is attached before attempting to use it
@@ -1149,7 +1149,7 @@ namespace SmartMap
                 {
                     if (this.m_frustum.IsObjectVisible(interiorTileFloor[i].GetWorldBoundingBox()))
                     {
-                        interiorTileFloor[i].ShowBoundingBox = true;
+                        interiorTileFloor[i].ShowBoundingBox = false;
                         interiorTileFloor[i].IsVisible = true;
                     }
                     else // make sure entity is attached before attempting to use it
@@ -1166,7 +1166,7 @@ namespace SmartMap
                 {
                     if (this.m_frustum.IsObjectVisible(interiorTileHall[i].GetWorldBoundingBox()))
                     {
-                        interiorTileHall[i].ShowBoundingBox = true;
+                        interiorTileHall[i].ShowBoundingBox = false;
                         interiorTileHall[i].IsVisible = true;
                     }
                     else // make sure entity is attached before attempting to use it
@@ -1183,7 +1183,7 @@ namespace SmartMap
                 {
                     if (this.m_frustum.IsObjectVisible(interiorTileSide[i].GetWorldBoundingBox()))
                     {
-                        interiorTileSide[i].ShowBoundingBox = true;
+                        interiorTileSide[i].ShowBoundingBox = false;
                         interiorTileSide[i].IsVisible = true;
                     }
                     else // make sure entity is attached before attempting to use it
