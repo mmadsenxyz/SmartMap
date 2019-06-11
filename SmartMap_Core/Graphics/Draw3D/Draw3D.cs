@@ -53,7 +53,7 @@ namespace SmartMap
         //private int nextPathnode = 0;
         // Sizeing and quantity of structures.
         public int tileAmountNorth = 5, tileAmountEast = 5;
-        public int moduleAmountSouth = 2, moduleAmountEast = 2;
+        public int moduleAmountSouth = 9, moduleAmountEast = 9;
         //////////
         private int /*tileThreshhold = 80,*/ tileClippingAngle = 300;
         private float moduleSizeNorth = 0, moduleSizeEast = 0, tileSetHeight = 150;
@@ -131,15 +131,15 @@ namespace SmartMap
 
             // LOAD UP YER MESHES           
             Console.WriteLine("LOADING...interiorTileSide");
-            CreateGraphics(interiorTileSide, "Room_Side", "Room_Side.mesh", "TileSet/Room", 1000, 1000);
+            CreateGraphics(interiorTileSide, "Room_Side", "Room_Side.mesh", "TileSet/Room", 1500, 1500);
             Console.WriteLine("LOADING...interiorTileHall");
-            CreateGraphics(interiorTileHall, "Room_Hall", "Room_Hall.mesh", "TileSet/Room", 1000, 1000);
+            CreateGraphics(interiorTileHall, "Room_Hall", "Room_Hall.mesh", "TileSet/Room", 1500, 1500);
             Console.WriteLine("LOADING...interiorTileCorner");
-            CreateGraphics(interiorTileCorner, "Room_Corner", "Room_Corner.mesh", "TileSet/Room", 1000, 1000);
+            CreateGraphics(interiorTileCorner, "Room_Corner", "Room_Corner.mesh", "TileSet/Room", 1500, 1500);
             Console.WriteLine("LOADING...interiorTileEnd");
-            CreateGraphics(interiorTileEnd, "Room_End", "Room_End.mesh", "TileSet/Room", 1000, 1000);
+            CreateGraphics(interiorTileEnd, "Room_End", "Room_End.mesh", "TileSet/Room", 1500, 1500);
             Console.WriteLine("LOADING...interiorTileFloor");
-            CreateGraphics(interiorTileFloor, "Room_Floor", "Room_Floor2.mesh", "Room_Floor2", 1000, 1000);
+            CreateGraphics(interiorTileFloor, "Room_Floor", "Room_Floor.mesh", "TileSet/Room", 1500, 1500);
             // outer wall resources
             Console.WriteLine("LOADING...exteriorTileSide");
             CreateGraphics(exteriorTileSide, "Wall_Side", "Room_Side.mesh", "TileSet/Wall", 1000, 1000);
@@ -150,12 +150,35 @@ namespace SmartMap
             Console.WriteLine("LOADING...exteriorTileEnd");
             CreateGraphics(exteriorTileEnd, "Wall_End", "Room_End.mesh", "TileSet/Wall", 1000, 1000);
             Console.WriteLine("LOADING...exteriorTileFloor");
-            CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor2.mesh", "Room_Floor2", 1000, 1000);
+            CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 1000, 1000);
+
+            // LOAD UP YER MESHES           
+            /*Console.WriteLine("LOADING...interiorTileSide");
+            CreateGraphics(interiorTileSide, "Room_Side", "Room_Side.mesh", "TileSet/Room", 200, 200);
+            Console.WriteLine("LOADING...interiorTileHall");
+            CreateGraphics(interiorTileHall, "Room_Hall", "Room_Hall.mesh", "TileSet/Room", 200, 200);
+            Console.WriteLine("LOADING...interiorTileCorner");
+            CreateGraphics(interiorTileCorner, "Room_Corner", "Room_Corner.mesh", "TileSet/Room", 200, 200);
+            Console.WriteLine("LOADING...interiorTileEnd");
+            CreateGraphics(interiorTileEnd, "Room_End", "Room_End.mesh", "TileSet/Room", 200, 200);
+            Console.WriteLine("LOADING...interiorTileFloor");
+            CreateGraphics(interiorTileFloor, "Room_Floor", "Room_Floor2.mesh", "Room_Floor2", 200, 200);
+            // outer wall resources
+            Console.WriteLine("LOADING...exteriorTileSide");
+            CreateGraphics(exteriorTileSide, "Wall_Side", "Room_Side.mesh", "TileSet/Wall", 200, 200);
+            Console.WriteLine("LOADING...exteriorTileHall");
+            CreateGraphics(exteriorTileHall, "Wall_Hall", "Room_Hall.mesh", "TileSet/Wall", 200, 200);
+            Console.WriteLine("LOADING...exteriorTileCorner");
+            CreateGraphics(exteriorTileCorner, "Wall_Corner", "Room_Corner.mesh", "TileSet/Wall", 200, 200);
+            Console.WriteLine("LOADING...exteriorTileEnd");
+            CreateGraphics(exteriorTileEnd, "Wall_End", "Room_End.mesh", "TileSet/Wall", 200, 200);
+            Console.WriteLine("LOADING...exteriorTileFloor");
+            CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor2.mesh", "Room_Floor2", 200, 200);*/
 
             //CreateInstanceGeom();
 
             CreateWorld(0, 0, 0, 0, 0);
-
+            this.moduleNode[0].ShowBoundingBox = true;
             // =Draw 4D= - For dynamic objects in scene
             // TODO: set up clipping regions for 4 tileSets
             //this.d4d = new Draw4D(base.SceneManager);
@@ -242,7 +265,7 @@ namespace SmartMap
             waterNode.AttachObject(waterEntity);
             waterNode.Translate(new Vector3(-999, 10, -999));
 
-            this.frustumNode.Position = new Vector3(128, 500, 128);
+            frustumNode.Position = new Vector3(128, 500, 128);
             Camera.LookAt(new Vector3(0, 0, -300));
 
             // instance optimization
@@ -251,7 +274,7 @@ namespace SmartMap
 
             // occlusion query
             query = Root.Instance.RenderSystem.CreateHardwareOcclusionQuery();
-
+    
             // particles smoke
         }
 
@@ -388,6 +411,7 @@ namespace SmartMap
             Debug.Assert(DebugStatements == true,"--------EXITING PATH GENERATION FOR QUADRANT--------");
             //Console.ReadLine();
             CreateMap(0, 10000, 0, 10000, 3);
+            frustumNode.Translate(moduleNode[0].Position);
         }
 
         #endregion Create Scene
@@ -707,6 +731,7 @@ namespace SmartMap
                         if (this.sm.NearbyVerticesEmpty(v) == "empty_corner")
                         {          
                             this.tileNode[nodeCount].AttachObject(exteriorTileEnd[outEndTileCount]);
+                            Console.WriteLine("Exterior EndTile Entity {0} attached", outEndTileCount);
                             outEndTileCount++;
                         }
                         else
@@ -871,6 +896,7 @@ namespace SmartMap
                 {
                     this.moduleNode[moduleCount].AddChild(this.tileNode[nodeCount]);
                     assertMessage = string.Format("[][][] New tile {0} has been created [][][]", nodeCount);
+                    //Console.WriteLine("TileNode {0} has been created", this.tileNode[nodeCount].Name);
                     Debug.Assert(DebugStatements == true, assertMessage);
                 }
                 nodeCount++;
@@ -996,6 +1022,181 @@ namespace SmartMap
             //timeSinceLastFrame = e.TimeSinceLastFrame;
             base.OnFrameStarted(source, e);
 
+            #region FRUSTUM CULL
+            //objectsVisible = 0;
+            for (int i = 0; i < exteriorTileEnd.Count; i++) 
+            {
+                if (exteriorTileEnd[i].IsAttached)
+                {
+                    if (this.m_frustum.IsObjectVisible(exteriorTileEnd[i].GetWorldBoundingBox()))
+                    {
+                        exteriorTileEnd[i].ShowBoundingBox = true;
+                        exteriorTileEnd[i].IsVisible = true;
+                    }
+                    else // make sure entity is attached before attempting to use it
+                    {
+                        exteriorTileEnd[i].ShowBoundingBox = false;
+                        exteriorTileEnd[i].IsVisible = false;
+                    }
+                }
+            }
+
+            for (int i = 0; i < exteriorTileCorner.Count; i++)
+            {
+                if (exteriorTileCorner[i].IsAttached)
+                {
+                    if (this.m_frustum.IsObjectVisible(exteriorTileCorner[i].GetWorldBoundingBox()))
+                    {
+                        exteriorTileCorner[i].ShowBoundingBox = true;
+                        exteriorTileCorner[i].IsVisible = true;
+                    }
+                    else // make sure entity is attached before attempting to use it
+                    {
+                        exteriorTileCorner[i].ShowBoundingBox = false;
+                        exteriorTileCorner[i].IsVisible = false;
+                    }
+                }
+            }
+
+            for (int i = 0; i < exteriorTileFloor.Count; i++)
+            {
+                if (exteriorTileFloor[i].IsAttached)
+                {
+                    if (this.m_frustum.IsObjectVisible(exteriorTileFloor[i].GetWorldBoundingBox()))
+                    {
+                        exteriorTileFloor[i].ShowBoundingBox = true;
+                        exteriorTileFloor[i].IsVisible = true;
+                    }
+                    else // make sure entity is attached before attempting to use it
+                    {
+                        exteriorTileFloor[i].ShowBoundingBox = false;
+                        exteriorTileFloor[i].IsVisible = false;
+                    }
+                }
+            }
+
+            for (int i = 0; i < exteriorTileHall.Count; i++)
+            {
+                if (exteriorTileHall[i].IsAttached)
+                {
+                    if (this.m_frustum.IsObjectVisible(exteriorTileHall[i].GetWorldBoundingBox()))
+                    {
+                        exteriorTileHall[i].ShowBoundingBox = true;
+                        exteriorTileHall[i].IsVisible = true;
+                    }
+                    else // make sure entity is attached before attempting to use it
+                    {
+                        exteriorTileHall[i].ShowBoundingBox = false;
+                        exteriorTileHall[i].IsVisible = false;
+                    }
+                }
+            }
+
+            for (int i = 0; i < exteriorTileSide.Count; i++)
+            {
+                if (exteriorTileSide[i].IsAttached)
+                {
+                    if (this.m_frustum.IsObjectVisible(exteriorTileSide[i].GetWorldBoundingBox()))
+                    {
+                        exteriorTileSide[i].ShowBoundingBox = true;
+                        exteriorTileSide[i].IsVisible = true;
+                    }
+                    else // make sure entity is attached before attempting to use it
+                    {
+                        exteriorTileSide[i].ShowBoundingBox = false;
+                        exteriorTileSide[i].IsVisible = false;
+                    }
+                }
+            }
+
+            for (int i = 0; i < interiorTileCorner.Count; i++)
+            {
+                if (interiorTileCorner[i].IsAttached)
+                {
+                    if (this.m_frustum.IsObjectVisible(interiorTileCorner[i].GetWorldBoundingBox()))
+                    {
+                        interiorTileCorner[i].ShowBoundingBox = true;
+                        interiorTileCorner[i].IsVisible = true;
+                    }
+                    else // make sure entity is attached before attempting to use it
+                    {
+                        interiorTileCorner[i].ShowBoundingBox = false;
+                        interiorTileCorner[i].IsVisible = false;
+                    }
+                }
+            }
+
+            for (int i = 0; i < interiorTileEnd.Count; i++)
+            {
+                if (interiorTileEnd[i].IsAttached)
+                {
+                    if (this.m_frustum.IsObjectVisible(interiorTileEnd[i].GetWorldBoundingBox()))
+                    {
+                        interiorTileEnd[i].ShowBoundingBox = true;
+                        interiorTileEnd[i].IsVisible = true;
+                    }
+                    else // make sure entity is attached before attempting to use it
+                    {
+                        interiorTileEnd[i].ShowBoundingBox = false;
+                        interiorTileEnd[i].IsVisible = false;
+                    }
+                }
+            }
+
+            for (int i = 0; i < interiorTileFloor.Count; i++)
+            {
+                if (interiorTileFloor[i].IsAttached)
+                {
+                    if (this.m_frustum.IsObjectVisible(interiorTileFloor[i].GetWorldBoundingBox()))
+                    {
+                        interiorTileFloor[i].ShowBoundingBox = true;
+                        interiorTileFloor[i].IsVisible = true;
+                    }
+                    else // make sure entity is attached before attempting to use it
+                    {
+                        interiorTileFloor[i].ShowBoundingBox = false;
+                        interiorTileFloor[i].IsVisible = false;
+                    }
+                }
+            }
+
+            for (int i = 0; i < interiorTileHall.Count; i++)
+            {
+                if (interiorTileHall[i].IsAttached)
+                {
+                    if (this.m_frustum.IsObjectVisible(interiorTileHall[i].GetWorldBoundingBox()))
+                    {
+                        interiorTileHall[i].ShowBoundingBox = true;
+                        interiorTileHall[i].IsVisible = true;
+                    }
+                    else // make sure entity is attached before attempting to use it
+                    {
+                        interiorTileHall[i].ShowBoundingBox = false;
+                        interiorTileHall[i].IsVisible = false;
+                    }
+                }
+            }
+
+            for (int i = 0; i < interiorTileSide.Count; i++)
+            {
+                if (interiorTileSide[i].IsAttached)
+                {
+                    if (this.m_frustum.IsObjectVisible(interiorTileSide[i].GetWorldBoundingBox()))
+                    {
+                        interiorTileSide[i].ShowBoundingBox = true;
+                        interiorTileSide[i].IsVisible = true;
+                    }
+                    else // make sure entity is attached before attempting to use it
+                    {
+                        interiorTileSide[i].ShowBoundingBox = false;
+                        interiorTileSide[i].IsVisible = false;
+                    }
+                }
+            }
+            // report the number of objects within the frustum 
+            //debugText = string.Format("Objects visible: {0}", objectsVisible);
+            #endregion
+
             #region OBJECT PATHFINDING
 
             ////// MODEL PATHFINDING //////
@@ -1070,195 +1271,19 @@ namespace SmartMap
 
             #endregion ANIMATION
 
-            #region FRUSTUM CULL
-            objectsVisible = 0;
-            // make < number the amount of meshes in scene using variables. 
-            //for (int i = 0; i < moduleAmountSouth * moduleAmountEast; i++) 
-            //{
-            /*interiorTileSide;
-            exteriorTileHall;
-            interiorTileCorner;
-            exteriorTileEnd;
-            interiorTileFloor;
-            exteriorTileSide;
-            interiorTileHall;
-            exteriorTileCorner;
-            interiorTileEnd;
-            exteriorTileFloor;*/
-
-            // go through each entity in the scene.  if the entity is within
-            // the frustum, show its bounding box
-            /*foreach (var ent in this.interiorTileSide)
-            {
-                if (ent.Value.IsAttached)
-                {
-                    if (m_frustum.IsObjectVisible(ent.Value.GetWorldBoundingBox()))
-                    {
-                        ent.Value.IsVisible = true;
-                        objectsVisible++;
-                    }
-                    else
-                    {
-                        ent.Value.IsVisible = false;
-                    }
-                }
-            }
-            foreach (var ent in this.interiorTileHall)
-            {
-                if (ent.Value.IsAttached)
-                {
-                    if (m_frustum.IsObjectVisible(ent.Value.GetWorldBoundingBox()))
-                    {
-                        ent.Value.IsVisible = true;
-                        objectsVisible++;
-                    }
-                    else
-                    {
-                        ent.Value.IsVisible = false;
-                    }
-                }
-            }
-            foreach (var ent in this.interiorTileSide)
-            {
-                if (ent.Value.IsAttached)
-                {
-                    if (m_frustum.IsObjectVisible(ent.Value.GetWorldBoundingBox()))
-                    {
-                        ent.Value.IsVisible = true;
-                        objectsVisible++;
-                    }
-                    else
-                    {
-                        ent.Value.IsVisible = false;
-                    }
-                }
-            }
-            foreach (var ent in this.interiorTileEnd)
-            {
-                if (ent.Value.IsAttached)
-                {
-                    if (m_frustum.IsObjectVisible(ent.Value.GetWorldBoundingBox()))
-                    {
-                        ent.Value.IsVisible = true;
-                        objectsVisible++;
-                    }
-                    else
-                    {
-                        ent.Value.IsVisible = false;
-                    }
-                }
-            }
-            foreach (var ent in this.interiorTileFloor)
-            {
-                if (ent.Value.IsAttached)
-                {
-                    if (m_frustum.IsObjectVisible(ent.Value.GetWorldBoundingBox()))
-                    {
-                        ent.Value.IsVisible = true;
-                        objectsVisible++;
-                    }
-                    else
-                    {
-                        ent.Value.IsVisible = false;
-                    }
-                }
-            }
-            foreach (var ent in this.exteriorTileHall)
-            {
-                if (ent.Value.IsAttached)
-                {
-                    if (m_frustum.IsObjectVisible(ent.Value.GetWorldBoundingBox()))
-                    {
-                        ent.Value.IsVisible = true;
-                        objectsVisible++;
-                    }
-                    else
-                    {
-                        ent.Value.IsVisible = false;
-                    }
-                }
-            }
-            foreach (var ent in this.exteriorTileEnd)
-            {
-                if (ent.Value.IsAttached)
-                {
-                    if (m_frustum.IsObjectVisible(ent.Value.GetWorldBoundingBox()))
-                    {
-                        ent.Value.IsVisible = true;
-                        objectsVisible++;
-                    }
-                    else
-                    {
-                        ent.Value.IsVisible = false;
-                    }
-                }
-            }
-            foreach (var ent in this.exteriorTileSide)
-            {
-                if (ent.Value.IsAttached)
-                {
-                    if (m_frustum.IsObjectVisible(ent.Value.GetWorldBoundingBox()))
-                    {
-                        ent.Value.IsVisible = true;
-                        objectsVisible++;
-                    }
-                    else
-                    {
-                        ent.Value.IsVisible = false;
-                    }
-                }
-            }
-            foreach (var ent in this.exteriorTileCorner)
-            {
-                if (ent.Value.IsAttached)
-                {
-                    if (m_frustum.IsObjectVisible(ent.Value.GetWorldBoundingBox()))
-                    {
-                        ent.Value.IsVisible = true;
-                        objectsVisible++;
-                    }
-                    else
-                    {
-                        ent.Value.IsVisible = false;
-                    }
-                }
-            }
-            foreach (var ent in this.exteriorTileFloor)
-            {
-                if (ent.Value.IsAttached)
-                {
-                    if (m_frustum.IsObjectVisible(ent.Value.GetWorldBoundingBox()))
-                    {
-                        ent.Value.IsVisible = true;
-                        objectsVisible++;
-                    }
-                    else
-                    {
-                        ent.Value.IsVisible = false;
-                    }
-                }
-            }*/
-
-            // report the number of objects within the frustum 
-            debugText = string.Format("Objects visible: {0}", objectsVisible);
-            #endregion
-
             #region Camera Clipping Events and CREATING PATHS
             /*
                 // PAGING ZONE SYSTEM (dependant on pure engine coordinates, meant for massive worlds)
                 // Essentially a Random Zone creator as you explore
                 //////////////////////////////////////
 
-             * if ((d4d.modelNode[0].WorldAABB.Intersects(d4d.zoneNode[0].WorldAABB)) & (camClipped != 1))
+                if ((d4d.modelNode[0].WorldAABB.Intersects(d4d.zoneNode[0].WorldAABB)) & (camClipped != 1))
                 { 
                     // turn off camClip until another is triggered because of timer
                     camClipped = 1;
                     Window.DebugText = string.Format("Zone: 1");
                     if ((tileNode[2700].Position.x != tileNode[0].Position.x - mapSize) | (tileNode[2700].Position.z != tileNode[0].Position.z - mapSize))
                     {
-                        this.sm.GeneratePath(10, 10); // wont need to do this every time
-                        this.sm.SearchPath();
-                        RemoveTileset(4);
                         CreateModule(4, true, tileNode[0].Position.x - mapSize, 0, tileNode[0].Position.z - mapSize);
                         d4d.zoneGroup[3].Position = new Vector3(d4d.zoneGroup[0].Position.x - mapSize*2, 0, d4d.zoneGroup[0].Position.z - mapSize*2);
                     }
@@ -1269,9 +1294,6 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 2");
                     if ((tileNode[1800].Position.x != tileNode[0].Position.x) | (tileNode[1800].Position.z > tileNode[0].Position.z))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(3);
                         CreateModule(3, true, tileNode[0].Position.x, 0, tileNode[0].Position.z - mapSize);
                         d4d.zoneGroup[2].Position = new Vector3(d4d.zoneGroup[0].Position.x, 0, d4d.zoneGroup[0].Position.z - mapSize*2);
                     }
@@ -1282,9 +1304,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 3");
                     if ((tileNode[2700].Position.x != tileNode[0].Position.x + mapSize) | (tileNode[2700].Position.z != tileNode[0].Position.z - mapSize))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(4);
+
                         CreateModule(4, true, tileNode[0].Position.x + mapSize, 0, tileNode[0].Position.z - mapSize);
                         d4d.zoneGroup[3].Position = new Vector3(d4d.zoneGroup[0].Position.x, 0, d4d.zoneGroup[0].Position.z - mapSize*2);
                     }
@@ -1295,9 +1315,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 4");
                     if ((tileNode[1800].Position.x != tileNode[0].Position.x) | (tileNode[1800].Position.z != tileNode[0].Position.z - mapSize))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(3);
+
                         CreateModule(3, true, tileNode[0].Position.x, 0, tileNode[0].Position.z - mapSize);
                         d4d.zoneGroup[2].Position = new Vector3(d4d.zoneGroup[1].Position.x, 0, d4d.zoneGroup[1].Position.z - mapSize*2);
                     }
@@ -1308,9 +1326,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 5");
                     if ((tileNode[2700].Position.x != tileNode[900].Position.x) | (tileNode[2700].Position.z > tileNode[900].Position.z))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(4);
+
                         CreateModule(4, true, tileNode[900].Position.x, 0, tileNode[900].Position.z - mapSize);
                         d4d.zoneGroup[3].Position = new Vector3(d4d.zoneGroup[1].Position.x, 0, d4d.zoneGroup[1].Position.z - mapSize*2);
                     }
@@ -1321,9 +1337,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 6");
                     if ((tileNode[1800].Position.x != tileNode[900].Position.x + mapSize) | (tileNode[1800].Position.z != tileNode[900].Position.z - mapSize))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(3);
+
                         CreateModule(3, true, tileNode[900].Position.x + mapSize, 0, tileNode[900].Position.z - mapSize);
                         d4d.zoneGroup[2].Position = new Vector3(d4d.zoneGroup[1].Position.x + mapSize*2, 0, d4d.zoneGroup[1].Position.z - mapSize*2);
                     }
@@ -1334,9 +1348,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 7");
                     if ((tileNode[900].Position.z != tileNode[0].Position.z) | (tileNode[900].Position.x > tileNode[0].Position.x))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(2);
+
                         CreateModule(2, true, tileNode[0].Position.x - mapSize, 0, tileNode[0].Position.z);
                         d4d.zoneGroup[1].Position = new Vector3(d4d.zoneGroup[0].Position.x - mapSize*2, 0, d4d.zoneGroup[0].Position.z);
                     }
@@ -1351,9 +1363,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 9");
                     if ((tileNode[900].Position.z != tileNode[0].Position.z) | (tileNode[900].Position.x < tileNode[0].Position.x))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(2);
+
                         CreateModule(2, true, tileNode[0].Position.x + mapSize, 0, tileNode[0].Position.z);
                         d4d.zoneGroup[1].Position = new Vector3(d4d.zoneGroup[0].Position.x, 0, d4d.zoneGroup[0].Position.z);
                     }
@@ -1364,9 +1374,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 10");
                     if ((tileNode[0].Position.z != tileNode[900].Position.z) | (tileNode[0].Position.x > tileNode[900].Position.x))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(1);
+
                         CreateModule(1, true, tileNode[900].Position.x - mapSize, 0, tileNode[900].Position.z);
                         d4d.zoneGroup[0].Position = new Vector3(d4d.zoneGroup[1].Position.x, 0, d4d.zoneGroup[1].Position.z);
                     }
@@ -1382,9 +1390,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 12");
                     if ((tileNode[0].Position.z != tileNode[0].Position.z) | (tileNode[0].Position.x < tileNode[900].Position.x))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(1);
+
                         CreateModule(1, true, tileNode[900].Position.x + mapSize, 0, tileNode[0].Position.z);
                         d4d.zoneGroup[0].Position = new Vector3(d4d.zoneGroup[1].Position.x + mapSize*2, 0, d4d.zoneGroup[1].Position.z);
                     }
@@ -1395,9 +1401,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 13");
                     if ((tileNode[2700].Position.x != tileNode[0].Position.x - mapSize) | (tileNode[2700].Position.z != tileNode[0].Position.z + mapSize))
                         {
-                            this.sm.GeneratePath(10, 10);
-                            this.sm.SearchPath();
-                            RemoveTileset(4);
+
                             CreateModule(4, true, tileNode[0].Position.x - mapSize, 0, tileNode[0].Position.z + mapSize);
                             d4d.zoneGroup[3].Position =  new Vector3(d4d.zoneGroup[0].Position.x - mapSize*2, 0, d4d.zoneGroup[0].Position.z);
                         }
@@ -1408,9 +1412,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 14");
                     if ((tileNode[0].Position.x != tileNode[1800].Position.x) | (tileNode[0].Position.z > tileNode[1800].Position.z))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(3);
+
                         CreateModule(3, true, tileNode[0].Position.x, 0, tileNode[0].Position.z + mapSize);
                         d4d.zoneGroup[2].Position = new Vector3(d4d.zoneGroup[0].Position.x, 0, d4d.zoneGroup[0].Position.z);
                     }
@@ -1421,9 +1423,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 15");
                     if ((tileNode[2700].Position.x != tileNode[0].Position.x + mapSize) | (tileNode[2700].Position.z != tileNode[0].Position.z + mapSize))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(4);
+
                         CreateModule(4, true, tileNode[0].Position.x + mapSize, 0, tileNode[0].Position.z + mapSize);
                         d4d.zoneGroup[3].Position = new Vector3(d4d.zoneGroup[0].Position.x, 0, d4d.zoneGroup[0].Position.z);
                     }
@@ -1434,9 +1434,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 16");
                     if ((tileNode[1800].Position.x != tileNode[900].Position.x - mapSize) | (tileNode[1800].Position.z != tileNode[900].Position.z + mapSize))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(3);
+
                         CreateModule(3, true, tileNode[900].Position.x - mapSize, 0, tileNode[900].Position.z + mapSize);
                         d4d.zoneGroup[2].Position = new Vector3(d4d.zoneGroup[1].Position.x, 0, d4d.zoneGroup[1].Position.z);
                     }
@@ -1447,9 +1445,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 17");
                     if ((tileNode[2700].Position.x != tileNode[900].Position.x) | (tileNode[2700].Position.z < tileNode[900].Position.z))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(4);
+
                         CreateModule(4, true, tileNode[900].Position.x, 0, tileNode[900].Position.z + mapSize);
                         d4d.zoneGroup[3].Position = new Vector3(d4d.zoneGroup[1].Position.x, 0, d4d.zoneGroup[1].Position.z);
                     }
@@ -1460,9 +1456,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 18");
                     if ((tileNode[1800].Position.x != tileNode[900].Position.x + mapSize) | (tileNode[1800].Position.z != tileNode[900].Position.z + mapSize))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(3);
+
                         CreateModule(3, true, tileNode[900].Position.x + mapSize, 0, tileNode[900].Position.z + mapSize);
                         d4d.zoneGroup[2].Position = new Vector3(d4d.zoneGroup[1].Position.x + mapSize*2, 0, d4d.zoneGroup[1].Position.z);
                     }
@@ -1473,9 +1467,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 19");
                     if ((tileNode[900].Position.x != tileNode[1800].Position.x - mapSize) | (tileNode[900].Position.z != tileNode[1800].Position.z - mapSize))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(2);
+
                         CreateModule(2, true, tileNode[1800].Position.x - mapSize, 0, tileNode[1800].Position.z - mapSize);
                         d4d.zoneGroup[1].Position = new Vector3(d4d.zoneGroup[2].Position.x - mapSize*2, 0, d4d.zoneGroup[2].Position.z);
                     }
@@ -1486,9 +1478,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 20");
                     if ((tileNode[0].Position.x != tileNode[1800].Position.x) | (tileNode[0].Position.z > tileNode[1800].Position.z))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(1);
+
                         CreateModule(1, true, tileNode[1800].Position.x, 0, tileNode[1800].Position.z - mapSize);
                         d4d.zoneGroup[0].Position = new Vector3(d4d.zoneGroup[2].Position.x, 0, d4d.zoneGroup[2].Position.z);
                     }
@@ -1499,9 +1489,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 21");   
                     if ((tileNode[900].Position.x != tileNode[1800].Position.x + mapSize) | (tileNode[900].Position.z != tileNode[1800].Position.z - mapSize))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(2);
+
                         CreateModule(2, true, tileNode[1800].Position.x + mapSize, 0, tileNode[1800].Position.z - mapSize);
                         d4d.zoneGroup[1].Position = new Vector3(d4d.zoneGroup[2].Position.x, 0, d4d.zoneGroup[2].Position.z);
                     }
@@ -1511,9 +1499,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 22");
                     if ((tileNode[0].Position.x != tileNode[2700].Position.x - mapSize) | (tileNode[0].Position.z != tileNode[2700].Position.z - mapSize))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(1);
+
                         CreateModule(1, true, tileNode[2700].Position.x - mapSize, 0, tileNode[2700].Position.z - mapSize);
                         d4d.zoneGroup[0].Position = new Vector3(d4d.zoneGroup[3].Position.x, 0, d4d.zoneGroup[3].Position.z);
                     }
@@ -1524,9 +1510,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 23");
                     if ((tileNode[900].Position.x != tileNode[2700].Position.x) | (tileNode[900].Position.z > tileNode[2700].Position.z))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(2);
+
                         CreateModule(2, true, tileNode[2700].Position.x, 0, tileNode[2700].Position.z - mapSize);
                         d4d.zoneGroup[1].Position = new Vector3(d4d.zoneGroup[3].Position.x, 0, d4d.zoneGroup[3].Position.z);
                     }
@@ -1537,9 +1521,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 24");
                     if ((tileNode[0].Position.x != tileNode[2700].Position.x + mapSize) | (tileNode[0].Position.z != tileNode[2700].Position.z - mapSize))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(1);
+
                         CreateModule(1, true, tileNode[2700].Position.x + mapSize, 0, tileNode[2700].Position.z - mapSize);
                         d4d.zoneGroup[0].Position = new Vector3(d4d.zoneGroup[3].Position.x + mapSize*2, 0, d4d.zoneGroup[3].Position.z);
                     }
@@ -1550,9 +1532,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 25");
                     if ((tileNode[2700].Position.z != tileNode[1800].Position.z) | (tileNode[2700].Position.x > tileNode[1800].Position.x))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(4);
+
                         CreateModule(4, true, tileNode[1800].Position.x - mapSize, 0, tileNode[0].Position.z);
                         d4d.zoneGroup[3].Position = new Vector3(d4d.zoneGroup[2].Position.x - mapSize*2, 0, d4d.zoneGroup[2].Position.z);
                     }
@@ -1568,9 +1548,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 27");
                     if ((tileNode[2700].Position.z != tileNode[1800].Position.z) | (tileNode[2700].Position.x < tileNode[1800].Position.x))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(4);
+
                         CreateModule(4, true, tileNode[1800].Position.x + mapSize, 0, tileNode[1800].Position.z);
                         d4d.zoneGroup[3].Position = new Vector3(d4d.zoneGroup[2].Position.x, 0, d4d.zoneGroup[2].Position.z);
                     }
@@ -1581,9 +1559,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 28");
                     if ((tileNode[1800].Position.z != tileNode[2700].Position.z) | (tileNode[1800].Position.x > tileNode[2700].Position.x))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(3);
+
                         CreateModule(3, true, tileNode[2700].Position.x - mapSize, 0, tileNode[2700].Position.z);
                         d4d.zoneGroup[2].Position = new Vector3(d4d.zoneGroup[3].Position.x, 0, d4d.zoneGroup[3].Position.z);
                     }
@@ -1599,9 +1575,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 30");
                     if ((tileNode[1800].Position.z != tileNode[2700].Position.z) | (tileNode[1800].Position.x < tileNode[2700].Position.x))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(3);
+
                         CreateModule(3, true, tileNode[2700].Position.x + mapSize, 0, tileNode[2700].Position.z);
                         d4d.zoneGroup[2].Position = new Vector3(d4d.zoneGroup[3].Position.x + mapSize*2, 0, d4d.zoneGroup[3].Position.z);
                     }
@@ -1612,9 +1586,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 31");
                     if ((tileNode[900].Position.x != tileNode[1800].Position.x - mapSize) | (tileNode[900].Position.z != tileNode[1800].Position.z + mapSize))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(2);
+
                         CreateModule(2, true, tileNode[1800].Position.x - mapSize, 0, tileNode[1800].Position.z + mapSize);
                         d4d.zoneGroup[1].Position = new Vector3(d4d.zoneGroup[2].Position.x - mapSize*2, 0, d4d.zoneGroup[2].Position.z + mapSize*2);
                     }
@@ -1625,9 +1597,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 32");
                     if ((tileNode[1800].Position.x != tileNode[0].Position.x) | (tileNode[1800].Position.z > tileNode[0].Position.z))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(1);
+
                         CreateModule(1, true, tileNode[1800].Position.x, 0, tileNode[1800].Position.z + mapSize);
                         d4d.zoneGroup[0].Position = new Vector3(d4d.zoneGroup[2].Position.x, 0, d4d.zoneGroup[2].Position.z);
                     }
@@ -1638,9 +1608,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 33");
                     if ((tileNode[900].Position.x != tileNode[1800].Position.x + mapSize) | (tileNode[900].Position.z != tileNode[1800].Position.z + mapSize))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(2);
+
                         CreateModule(2, true, tileNode[1800].Position.x + mapSize, 0, tileNode[1800].Position.z + mapSize);
                         d4d.zoneGroup[1].Position = new Vector3(d4d.zoneGroup[2].Position.x, 0, d4d.zoneGroup[2].Position.z + mapSize*2);
                     }
@@ -1651,9 +1619,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 34");
                     if ((tileNode[0].Position.x != tileNode[2700].Position.x - mapSize) | (tileNode[0].Position.z != tileNode[2700].Position.z - mapSize))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(1);
+
                         CreateModule(1, true, tileNode[2700].Position.x - mapSize, 0, tileNode[2700].Position.z + mapSize);
                         d4d.zoneGroup[0].Position = new Vector3(d4d.zoneGroup[3].Position.x, 0, d4d.zoneGroup[3].Position.z + mapSize*2);
                     }
@@ -1664,9 +1630,7 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 35");
                     if ((tileNode[2700].Position.x != tileNode[900].Position.x) | (tileNode[900].Position.z < tileNode[2700].Position.z))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(2);
+
                         CreateModule(2, true, tileNode[2700].Position.x, 0, tileNode[2700].Position.z + mapSize);
                         d4d.zoneGroup[1].Position = new Vector3(d4d.zoneGroup[3].Position.x, 0, d4d.zoneGroup[3].Position.z + mapSize*2);
                     }
@@ -1677,9 +1641,6 @@ namespace SmartMap
                     Window.DebugText = string.Format("Zone: 36");
                     if ((tileNode[0].Position.x != tileNode[2700].Position.x + mapSize) | (tileNode[0].Position.z != tileNode[2700].Position.z + mapSize))
                     {
-                        this.sm.GeneratePath(10, 10);
-                        this.sm.SearchPath();
-                        RemoveTileset(1);
                         CreateModule(1, true, tileNode[2700].Position.x + mapSize, 0, tileNode[2700].Position.z + mapSize);
                         d4d.zoneGroup[0].Position = new Vector3(d4d.zoneGroup[3].Position.x + mapSize*2, 0, d4d.zoneGroup[3].Position.z + mapSize*2);
                     }
@@ -1687,9 +1648,7 @@ namespace SmartMap
                 */
 
             #endregion Camera Clipping Events
-
         }
-
         #endregion
     }
 }

@@ -158,7 +158,7 @@ namespace SmartMap
                     entity.ShowBoundingBox = true;
                     objectsVisible++;
                 }
-                else {
+                else { 
                     entity.ShowBoundingBox = false;
                 }
             }

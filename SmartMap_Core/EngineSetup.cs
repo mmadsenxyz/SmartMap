@@ -251,7 +251,8 @@ namespace SmartMap
 
             m_frustum = new Frustum();
             m_frustum.Near = 10;
-            m_frustum.Far = 400;
+            m_frustum.Far = 4000;
+            m_frustum.FieldOfView = 360;
             m_frustum.IsVisible = true;
             m_frustum.Name = "Frustum";
 
@@ -548,7 +549,7 @@ namespace SmartMap
                 Root.Instance.QueueEndRendering();
                 //return false;
             }
-
+           
             if (Input.IsKeyPressed(KeyCodes.A))
             {
                 camAccel.x = -0.5f;
@@ -571,29 +572,53 @@ namespace SmartMap
 
             //camAccel.y += (float)( input.RelativeMouseZ * 0.1f );
 
+            float speed = 350 * e.TimeSinceLastFrame;
+            float change = 15 * e.TimeSinceLastFrame;
+
+            if (Input.IsKeyPressed(KeyCodes.I))
+            {
+                frustumNode.Translate(new Vector3(0, 0, -speed), TransformSpace.Local);
+            }
+            if (Input.IsKeyPressed(KeyCodes.K))
+            {
+                frustumNode.Translate(new Vector3(0, 0, speed), TransformSpace.Local);
+            }
+            if (Input.IsKeyPressed(KeyCodes.J))
+            {
+                frustumNode.Rotate(Vector3.UnitY, speed, TransformSpace.Local);
+            }
+            if (Input.IsKeyPressed(KeyCodes.L))
+            {
+                frustumNode.Rotate(Vector3.UnitY, -speed, TransformSpace.Local);
+            }
+
             // knock out the mouse stuff here
             isUsingKbCameraLook = false;
             if (Input.IsKeyPressed(KeyCodes.Left))
             {
-                Camera.Yaw(cameraScale);
+                frustumNode.Yaw(cameraScale);
+                //Camera.Yaw(cameraScale);
                 isUsingKbCameraLook = true;
             }
 
             if (Input.IsKeyPressed(KeyCodes.Right))
             {
-                Camera.Yaw(-cameraScale);
+                frustumNode.Yaw(-cameraScale);
+                //Camera.Yaw(-cameraScale);
                 isUsingKbCameraLook = true;
             }
 
             if (Input.IsKeyPressed(KeyCodes.Up))
             {
-                Camera.Pitch(cameraScale);
+                frustumNode.Pitch(cameraScale);
+                //Camera.Pitch(cameraScale);
                 isUsingKbCameraLook = true;
             }
 
             if (Input.IsKeyPressed(KeyCodes.Down))
             {
-                Camera.Pitch(-cameraScale);
+                frustumNode.Pitch(-cameraScale);
+                //Camera.Pitch(-cameraScale);
                 isUsingKbCameraLook = true;
             }
 
@@ -603,8 +628,10 @@ namespace SmartMap
                 mouseRotateVector = Vector3.Zero;
                 mouseRotateVector.x += Input.RelativeMouseX * 0.13f;
                 mouseRotateVector.y += Input.RelativeMouseY * 0.13f;
-                Camera.Yaw(-mouseRotateVector.x);
-                Camera.Pitch(-mouseRotateVector.y);
+                frustumNode.Yaw(-mouseRotateVector.x);
+                frustumNode.Pitch(-mouseRotateVector.y);
+                //Camera.Yaw(-mouseRotateVector.x);
+                //Camera.Pitch(-mouseRotateVector.y);
             }
             isUsingKbCameraLook = false;
 
@@ -701,7 +728,8 @@ namespace SmartMap
             camVelocity += (camAccel * scaleMove * camSpeed);
 
             // move the camera based on the accumulated movement vector
-            Camera.MoveRelative(camVelocity * e.TimeSinceLastFrame);
+            this.frustumNode.SetDirection(camVelocity * e.TimeSinceLastFrame);
+            //Camera.MoveRelative(camVelocity * e.TimeSinceLastFrame);
 
             // Now dampen the Velocity - only if user is not accelerating
             if (camAccel == Vector3.Zero)
