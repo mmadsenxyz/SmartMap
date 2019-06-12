@@ -252,7 +252,7 @@ namespace SmartMap
             m_frustum = new Frustum();
             m_frustum.Near = 10;
             m_frustum.Far = 10000;
-            m_frustum.FieldOfView = 90;
+            m_frustum.FieldOfView = 110;
             m_frustum.IsVisible = true;
             m_frustum.Name = "Frustum";
 
@@ -585,11 +585,11 @@ namespace SmartMap
             }
             if (Input.IsKeyPressed(KeyCodes.J))
             {
-                frustumNode.Rotate(Vector3.UnitY, speed, TransformSpace.Local);
+                frustumNode.Rotate(Vector3.UnitY, speed, TransformSpace.Parent);
             }
             if (Input.IsKeyPressed(KeyCodes.L))
             {
-                frustumNode.Rotate(Vector3.UnitY, -speed, TransformSpace.Local);
+                frustumNode.Rotate(Vector3.UnitY, -speed, TransformSpace.Parent);
             }
 
             // knock out the mouse stuff here
@@ -728,8 +728,9 @@ namespace SmartMap
             camVelocity += (camAccel * scaleMove * camSpeed);
 
             // move the camera based on the accumulated movement vector
-            this.frustumNode.SetDirection(camVelocity * e.TimeSinceLastFrame);
-            //Camera.MoveRelative(camVelocity * e.TimeSinceLastFrame);
+            //this.frustumNode.SetDirection(camVelocity * e.TimeSinceLastFrame, TransformSpace.Parent);
+            Camera.MoveRelative(camVelocity * e.TimeSinceLastFrame);
+            //this.frustumNode.Translate(Camera.WorldPosition);
 
             // Now dampen the Velocity - only if user is not accelerating
             if (camAccel == Vector3.Zero)

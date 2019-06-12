@@ -131,26 +131,26 @@ namespace SmartMap
 
             // LOAD UP YER MESHES           
             Console.WriteLine("LOADING...interiorTileSide");
-            CreateGraphics(interiorTileSide, "Room_Side", "Room_Side.mesh", "TileSet/Room", 1500, 1500);
+            CreateGraphics(interiorTileSide, "Room_Side", "Room_Side.mesh", "TileSet/Room", 1500, 1500, RenderQueueGroupID.One);
             Console.WriteLine("LOADING...interiorTileHall");
-            CreateGraphics(interiorTileHall, "Room_Hall", "Room_Hall.mesh", "TileSet/Room", 1500, 1500);
+            CreateGraphics(interiorTileHall, "Room_Hall", "Room_Hall.mesh", "TileSet/Room", 1500, 1500, RenderQueueGroupID.Two);
             Console.WriteLine("LOADING...interiorTileCorner");
-            CreateGraphics(interiorTileCorner, "Room_Corner", "Room_Corner.mesh", "TileSet/Room", 1500, 1500);
+            CreateGraphics(interiorTileCorner, "Room_Corner", "Room_Corner.mesh", "TileSet/Room", 1500, 1500, RenderQueueGroupID.Three);
             Console.WriteLine("LOADING...interiorTileEnd");
-            CreateGraphics(interiorTileEnd, "Room_End", "Room_End.mesh", "TileSet/Room", 1500, 1500);
+            CreateGraphics(interiorTileEnd, "Room_End", "Room_End.mesh", "TileSet/Room", 1500, 1500, RenderQueueGroupID.Four);
             Console.WriteLine("LOADING...interiorTileFloor");
-            CreateGraphics(interiorTileFloor, "Room_Floor", "Room_Floor.mesh", "TileSet/Room", 1500, 1500);
+            CreateGraphics(interiorTileFloor, "Room_Floor", "Room_Floor.mesh", "TileSet/Room", 1500, 1500, RenderQueueGroupID.Six);
             // outer wall resources
             Console.WriteLine("LOADING...exteriorTileSide");
-            CreateGraphics(exteriorTileSide, "Wall_Side", "Room_Side.mesh", "TileSet/Wall", 1000, 1000);
+            CreateGraphics(exteriorTileSide, "Wall_Side", "Room_Side.mesh", "TileSet/Wall", 1000, 1000, RenderQueueGroupID.Seven);
             Console.WriteLine("LOADING...exteriorTileHall");
-            CreateGraphics(exteriorTileHall, "Wall_Hall", "Room_Hall.mesh", "TileSet/Wall", 1000, 1000);
+            CreateGraphics(exteriorTileHall, "Wall_Hall", "Room_Hall.mesh", "TileSet/Wall", 1000, 1000, RenderQueueGroupID.Eight);
             Console.WriteLine("LOADING...exteriorTileCorner");
-            CreateGraphics(exteriorTileCorner, "Wall_Corner", "Room_Corner.mesh", "TileSet/Wall", 1000, 1000);
+            CreateGraphics(exteriorTileCorner, "Wall_Corner", "Room_Corner.mesh", "TileSet/Wall", 1000, 1000, RenderQueueGroupID.Nine);
             Console.WriteLine("LOADING...exteriorTileEnd");
-            CreateGraphics(exteriorTileEnd, "Wall_End", "Room_End.mesh", "TileSet/Wall", 1000, 1000);
+            CreateGraphics(exteriorTileEnd, "Wall_End", "Room_End.mesh", "TileSet/Wall", 1000, 1000, RenderQueueGroupID.Nine);
             Console.WriteLine("LOADING...exteriorTileFloor");
-            CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 1000, 1000);
+            CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 1000, 1000, RenderQueueGroupID.Nine);
 
             // LOAD UP YER MESHES           
             /*Console.WriteLine("LOADING...interiorTileSide");
@@ -178,7 +178,7 @@ namespace SmartMap
             //CreateInstanceGeom();
 
             CreateWorld(0, 0, 0, 0, 0);
-            this.moduleNode[0].ShowBoundingBox = true;
+
             // =Draw 4D= - For dynamic objects in scene
             // TODO: set up clipping regions for 4 tileSets
             //this.d4d = new Draw4D(base.SceneManager);
@@ -266,6 +266,7 @@ namespace SmartMap
             waterNode.Translate(new Vector3(-999, 10, -999));
 
             frustumNode.Position = new Vector3(128, 500, 128);
+            
             Camera.LookAt(new Vector3(0, 0, -300));
 
             // instance optimization
@@ -287,11 +288,12 @@ namespace SmartMap
         /// <param name="meshAmount">The amount of meshes you want - Must match tile creation</param>
         /// <param name="textureAmount">The amount of textures you want - Must match tile creation</param>
         /// <param name="newEntity">Reset Entity count to zero for a new Entity or not stack entity numbers</param>
-        public void CreateGraphics(Dictionary<int, Entity> entityList, string tileName, string tileFileName, string materialName, int meshAmount, int textureAmount)
+        public void CreateGraphics(Dictionary<int, Entity> entityList, string tileName, string tileFileName, string materialName, int meshAmount, int textureAmount, RenderQueueGroupID rqid)
         {
             for (int i = meshCount; i < meshAmount; ++i)
             {
                 entityList[i] = SceneManager.CreateEntity(tileName + i, tileFileName);
+                entityList[i].RenderQueueGroup = rqid;
                 //CreateInstanceGeom(entity[i]);
             }
             for (int i = textureCount; i < textureAmount; ++i)
@@ -965,7 +967,7 @@ namespace SmartMap
             base.Dispose();
         }
 
-        #region RENDERING QUEUE
+        #region RENDERING QUEUE CULLS
         
         /// <summary>
 		///	When RenderQueue 6 is starting, we will begin the occlusion query.
@@ -975,7 +977,35 @@ namespace SmartMap
 		private void scene_QueueStarted(object sender, SceneManager.BeginRenderQueueEventArgs e)
         {
             // begin the occlusion query
+            if (e.RenderQueueId == RenderQueueGroupID.One)
+            {
+                query.Begin();
+            }
+            if (e.RenderQueueId == RenderQueueGroupID.Two)
+            {
+                query.Begin();
+            }
+            if (e.RenderQueueId == RenderQueueGroupID.Three)
+            {
+                query.Begin();
+            }
+            if (e.RenderQueueId == RenderQueueGroupID.Four)
+            {
+                query.Begin();
+            }
             if (e.RenderQueueId == RenderQueueGroupID.Six)
+            {
+                query.Begin();
+            }
+            if (e.RenderQueueId == RenderQueueGroupID.Seven)
+            {
+                query.Begin();
+            }
+            if (e.RenderQueueId == RenderQueueGroupID.Eight)
+            {
+                query.Begin();
+            }
+            if (e.RenderQueueId == RenderQueueGroupID.Nine)
             {
                 query.Begin();
             }
@@ -991,23 +1021,219 @@ namespace SmartMap
         private void scene_QueueEnded(object sender, SceneManager.EndRenderQueueEventArgs e)
         {
             // end our occlusion query
+            if (e.RenderQueueId == RenderQueueGroupID.One)
+            {
+                query.End();
+                int count = query.PullResults();
+
+                // report the results
+                if (count <= 0)
+                { // get the fragment count from the query
+                    debugText = string.Format("Queue One: Object is occluded. ");
+                    for (int i = 0; i < interiorTileSide.Count; i++)
+                    {
+                        if (interiorTileSide[i].IsAttached && interiorTileSide[i].IsVisible)
+                        {
+
+                            interiorTileSide[i].IsVisible = false;
+                        }
+                    }
+                }
+                else
+                {
+                    debugText = string.Format("Queue One: Visible fragments = {0}", count);
+                    for (int i = 0; i < interiorTileSide.Count; i++)
+                    {
+                        if (interiorTileSide[i].IsAttached && !interiorTileSide[i].IsVisible)
+                        {
+
+                            interiorTileSide[i].IsVisible = true;
+                        }
+                    }
+                }
+            }
+
+            // end our occlusion query
+            if (e.RenderQueueId == RenderQueueGroupID.Two)
+            {
+                query.End();
+                int count = query.PullResults();
+
+                // report the results
+                if (count <= 0)
+                { // get the fragment count from the query
+                    debugText = string.Format("Queue Two: Object is occluded. ");
+                    for (int i = 0; i < interiorTileHall.Count; i++)
+                    {
+                        if (interiorTileHall[i].IsAttached && interiorTileHall[i].IsVisible)
+                        {
+
+                            interiorTileHall[i].IsVisible = false;
+                        }
+                    }
+                }
+                else
+                {
+                    debugText = string.Format("Queue Two: Visible fragments = {0}", count);
+                    for (int i = 0; i < interiorTileHall.Count; i++)
+                    {
+                        if (interiorTileHall[i].IsAttached && !interiorTileHall[i].IsVisible)
+                        {
+
+                            interiorTileHall[i].IsVisible = true;
+                        }
+                    }
+                }
+            }
+
+            // end our occlusion query
+            if (e.RenderQueueId == RenderQueueGroupID.Three)
+            {
+                query.End();
+                int count = query.PullResults();
+
+                // report the results
+                if (count <= 0)
+                { // get the fragment count from the query
+                    debugText = string.Format("Queue Three: Object is occluded. ");
+                    for (int i = 0; i < interiorTileCorner.Count; i++)
+                    {
+                        if (interiorTileCorner[i].IsAttached && interiorTileCorner[i].IsVisible)
+                        {
+
+                            interiorTileCorner[i].IsVisible = false;
+                        }
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < interiorTileCorner.Count; i++)
+                    {
+                        if (interiorTileCorner[i].IsAttached && !interiorTileCorner[i].IsVisible)
+                        {
+
+                            interiorTileCorner[i].IsVisible = true;
+                        }
+                    }
+                    debugText = string.Format("Queue Three: Visible fragments = {0}", count);
+                }
+            }
+
+            // end our occlusion query
+            if (e.RenderQueueId == RenderQueueGroupID.Four)
+            {
+                query.End();
+                int count = query.PullResults();
+
+                // report the results
+                if (count <= 0)
+                { // get the fragment count from the query
+                    debugText = string.Format("Queue Four: Object is occluded. ");
+                    for (int i = 0; i < interiorTileEnd.Count; i++)
+                    {
+                        if (interiorTileEnd[i].IsAttached && interiorTileEnd[i].IsVisible)
+                        {
+
+                            interiorTileEnd[i].IsVisible = false;
+                        }
+                    }
+                }
+                else
+                {
+                    debugText = string.Format("Queue Four: Visible fragments = {0}", count);
+                    for (int i = 0; i < interiorTileEnd.Count; i++)
+                    {
+                        if (interiorTileEnd[i].IsAttached && !interiorTileEnd[i].IsVisible)
+                        {
+
+                            interiorTileEnd[i].IsVisible = true;
+                        }
+                    }
+                }
+            }
+
+            // end our occlusion query
             if (e.RenderQueueId == RenderQueueGroupID.Six)
             {
                 query.End();
+                int count = query.PullResults();
+
+                // report the results
+                if (count <= 0)
+                { // get the fragment count from the query
+                    debugText = string.Format("Queue Six: Object is occluded. ");
+                    for (int i = 0; i < interiorTileFloor.Count; i++)
+                    {
+                        if (interiorTileFloor[i].IsAttached & interiorTileFloor[i].IsVisible)
+                        {
+
+                            interiorTileFloor[i].IsVisible = true;
+                        }
+                    }
+                }
+                else
+                {
+                    debugText = string.Format("Queue Six: Visible fragments = {0}", count);
+                    for (int i = 0; i < interiorTileFloor.Count; i++)
+                    {
+                        if (interiorTileFloor[i].IsAttached & !interiorTileFloor[i].IsVisible)
+                        {
+
+                            interiorTileFloor[i].IsVisible = false;
+                        }
+                    }
+                }
             }
 
-            // get the fragment count from the query
-
-            int count = query.PullResults();
-
-            // report the results
-            if (count <= 0)
+            // end our occlusion query
+            if (e.RenderQueueId == RenderQueueGroupID.Seven)
             {
-                debugText = "Object is occluded. ";
+                query.End();
+                int count = query.PullResults();
+
+                // report the results
+                if (count <= 0)
+                { // get the fragment count from the query
+                    debugText = string.Format("Queue Seven: Object is occluded. ");
+                }
+                else
+                {
+                    debugText = string.Format("Queue Seven: Visible fragments = {0}", count);
+                }
             }
-            else
+
+            // end our occlusion query
+            if (e.RenderQueueId == RenderQueueGroupID.Eight)
             {
-                debugText = string.Format("Visible fragments = {0}", count);
+                query.End();
+                int count = query.PullResults();
+
+                // report the results
+                if (count <= 0)
+                { // get the fragment count from the query
+                    debugText = string.Format("Queue Eight: Object is occluded. ");
+                }
+                else
+                {
+                    debugText = string.Format("Queue Eight: Visible fragments = {0}", count);
+                }
+            }
+
+            // end our occlusion query
+            if (e.RenderQueueId == RenderQueueGroupID.Nine)
+            {
+                query.End();
+                int count = query.PullResults();
+
+                // report the results
+                if (count <= 0)
+                { // get the fragment count from the query
+                    debugText = string.Format("Queue Nine: Object is occluded. ");
+                }
+                else
+                {
+                    debugText = string.Format("Queue Nine: Visible fragments = {0}", count);
+                }
             }
 
             return;
