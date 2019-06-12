@@ -543,6 +543,8 @@ namespace SmartMap
             // set the scaling of camera motion
             cameraScale = 100 * e.TimeSinceLastFrame;
 
+            float speed = 350 * e.TimeSinceLastFrame;
+            float change = 15 * e.TimeSinceLastFrame;
 
             if (Input.IsKeyPressed(KeyCodes.Escape))
             {
@@ -552,30 +554,33 @@ namespace SmartMap
            
             if (Input.IsKeyPressed(KeyCodes.A))
             {
-                camAccel.x = -0.5f;
+                frustumNode.Rotate(Vector3.UnitY, speed, TransformSpace.Parent);
+                //camAccel.x = -0.5f;
             }
 
             if (Input.IsKeyPressed(KeyCodes.D))
             {
-                camAccel.x = 0.5f;
+                frustumNode.Rotate(Vector3.UnitY, -speed, TransformSpace.Parent);
+                //camAccel.x = 0.5f;
             }
 
             if (Input.IsKeyPressed(KeyCodes.W))
             {
-                camAccel.z = -1.0f;
+                frustumNode.Translate(new Vector3(0, 0, -speed), TransformSpace.Local);
+                //camAccel.z = -1.0f;
             }
 
             if (Input.IsKeyPressed(KeyCodes.S))
             {
-                camAccel.z = 1.0f;
+                frustumNode.Translate(new Vector3(0, 0, speed), TransformSpace.Local);
+                //camAccel.z = 1.0f;
             }
 
             //camAccel.y += (float)( input.RelativeMouseZ * 0.1f );
 
-            float speed = 350 * e.TimeSinceLastFrame;
-            float change = 15 * e.TimeSinceLastFrame;
 
-            if (Input.IsKeyPressed(KeyCodes.I))
+
+            /*if (Input.IsKeyPressed(KeyCodes.I))
             {
                 frustumNode.Translate(new Vector3(0, 0, -speed), TransformSpace.Local);
             }
@@ -590,20 +595,20 @@ namespace SmartMap
             if (Input.IsKeyPressed(KeyCodes.L))
             {
                 frustumNode.Rotate(Vector3.UnitY, -speed, TransformSpace.Parent);
-            }
+            }*/
 
             // knock out the mouse stuff here
             isUsingKbCameraLook = false;
             if (Input.IsKeyPressed(KeyCodes.Left))
             {
-                frustumNode.Yaw(cameraScale);
+                frustumNode.Yaw(cameraScale, TransformSpace.World);
                 //Camera.Yaw(cameraScale);
                 isUsingKbCameraLook = true;
             }
 
             if (Input.IsKeyPressed(KeyCodes.Right))
             {
-                frustumNode.Yaw(-cameraScale);
+                frustumNode.Yaw(-cameraScale, TransformSpace.World);
                 //Camera.Yaw(-cameraScale);
                 isUsingKbCameraLook = true;
             }

@@ -977,7 +977,7 @@ namespace SmartMap
 		private void scene_QueueStarted(object sender, SceneManager.BeginRenderQueueEventArgs e)
         {
             // begin the occlusion query
-            if (e.RenderQueueId == RenderQueueGroupID.One)
+            /*if (e.RenderQueueId == RenderQueueGroupID.One)
             {
                 query.Begin();
             }
@@ -1008,7 +1008,7 @@ namespace SmartMap
             if (e.RenderQueueId == RenderQueueGroupID.Nine)
             {
                 query.Begin();
-            }
+            }*/
 
             return;
         }
@@ -1021,7 +1021,7 @@ namespace SmartMap
         private void scene_QueueEnded(object sender, SceneManager.EndRenderQueueEventArgs e)
         {
             // end our occlusion query
-            if (e.RenderQueueId == RenderQueueGroupID.One)
+           /* if (e.RenderQueueId == RenderQueueGroupID.One)
             {
                 query.End();
                 int count = query.PullResults();
@@ -1234,7 +1234,7 @@ namespace SmartMap
                 {
                     debugText = string.Format("Queue Nine: Visible fragments = {0}", count);
                 }
-            }
+            }*/
 
             return;
         }
