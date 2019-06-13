@@ -153,27 +153,26 @@ namespace SmartMap
             CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 1000, 1000, RenderQueueGroupID.Nine);
 
             // LOAD UP YER MESHES           
-            /*Console.WriteLine("LOADING...interiorTileSide");
-            CreateGraphics(interiorTileSide, "Room_Side", "Room_Side.mesh", "TileSet/Room", 200, 200);
+            /*CreateGraphics(interiorTileSide, "Room_Side", "Room_Side.mesh", "TileSet/Room", 200, 200, RenderQueueGroupID.One);
             Console.WriteLine("LOADING...interiorTileHall");
-            CreateGraphics(interiorTileHall, "Room_Hall", "Room_Hall.mesh", "TileSet/Room", 200, 200);
+            CreateGraphics(interiorTileHall, "Room_Hall", "Room_Hall.mesh", "TileSet/Room", 200, 200, RenderQueueGroupID.Two);
             Console.WriteLine("LOADING...interiorTileCorner");
-            CreateGraphics(interiorTileCorner, "Room_Corner", "Room_Corner.mesh", "TileSet/Room", 200, 200);
+            CreateGraphics(interiorTileCorner, "Room_Corner", "Room_Corner.mesh", "TileSet/Room", 200, 200, RenderQueueGroupID.Three);
             Console.WriteLine("LOADING...interiorTileEnd");
-            CreateGraphics(interiorTileEnd, "Room_End", "Room_End.mesh", "TileSet/Room", 200, 200);
+            CreateGraphics(interiorTileEnd, "Room_End", "Room_End.mesh", "TileSet/Room", 200, 200, RenderQueueGroupID.Four);
             Console.WriteLine("LOADING...interiorTileFloor");
-            CreateGraphics(interiorTileFloor, "Room_Floor", "Room_Floor2.mesh", "Room_Floor2", 200, 200);
+            CreateGraphics(interiorTileFloor, "Room_Floor", "Room_Floor.mesh", "TileSet/Room", 200, 200, RenderQueueGroupID.Six);
             // outer wall resources
             Console.WriteLine("LOADING...exteriorTileSide");
-            CreateGraphics(exteriorTileSide, "Wall_Side", "Room_Side.mesh", "TileSet/Wall", 200, 200);
+            CreateGraphics(exteriorTileSide, "Wall_Side", "Room_Side.mesh", "TileSet/Wall", 200, 200, RenderQueueGroupID.Seven);
             Console.WriteLine("LOADING...exteriorTileHall");
-            CreateGraphics(exteriorTileHall, "Wall_Hall", "Room_Hall.mesh", "TileSet/Wall", 200, 200);
+            CreateGraphics(exteriorTileHall, "Wall_Hall", "Room_Hall.mesh", "TileSet/Wall", 200, 200, RenderQueueGroupID.Eight);
             Console.WriteLine("LOADING...exteriorTileCorner");
-            CreateGraphics(exteriorTileCorner, "Wall_Corner", "Room_Corner.mesh", "TileSet/Wall", 200, 200);
+            CreateGraphics(exteriorTileCorner, "Wall_Corner", "Room_Corner.mesh", "TileSet/Wall", 200, 200, RenderQueueGroupID.Nine);
             Console.WriteLine("LOADING...exteriorTileEnd");
-            CreateGraphics(exteriorTileEnd, "Wall_End", "Room_End.mesh", "TileSet/Wall", 200, 200);
+            CreateGraphics(exteriorTileEnd, "Wall_End", "Room_End.mesh", "TileSet/Wall", 200, 200, RenderQueueGroupID.Nine);
             Console.WriteLine("LOADING...exteriorTileFloor");
-            CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor2.mesh", "Room_Floor2", 200, 200);*/
+            CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 200, 200, RenderQueueGroupID.Nine);*/
 
             //CreateInstanceGeom();
 
@@ -232,10 +231,10 @@ namespace SmartMap
             // set some ambient light
             SceneManager.AmbientLight = new ColorEx(1.0f, 0.4f, 0.4f, 0.4f);
 
-            SceneManager.SetFog(FogMode.Linear, new ColorEx(1.0f, 1.0f, 1.0f), 0, 100000, 200000);
+            SceneManager.SetFog(FogMode.Linear, new ColorEx(0.8f, 0.8f, 0.8f), -7, 15000, 100000);
 
             // create a skydome
-            SceneManager.SetSkyDome(true, "Examples/CloudySky", 5, 8);
+            SceneManager.SetSkyBox(true, "Skybox/CloudyHills", 8);
 
             // create a simple default point light
             Light light = SceneManager.CreateLight("MainLight");
@@ -246,6 +245,7 @@ namespace SmartMap
 
             MaterialManager.Instance.SetDefaultTextureFiltering(TexFilter);
             MaterialManager.Instance.DefaultAnisotropy = anisoNumber;
+            
             // water plane setup
             Plane waterPlane = new Plane(Vector3.UnitY, 1.5f);
 
@@ -264,6 +264,24 @@ namespace SmartMap
             var waterNode = SceneManager.RootSceneNode.CreateChildSceneNode("WaterNode");
             waterNode.AttachObject(waterEntity);
             waterNode.Translate(new Vector3(-999, 10, -999));
+            // seafloor plane setup
+            /*Plane seaFloorPlane = new Plane(Vector3.UnitY, 1.5f);
+
+            MeshManager.Instance.CreatePlane("SeaFloorPlane",
+                                             ResourceGroupManager.DefaultResourceGroupName,
+                                             seaFloorPlane,
+                                             256000, 256000, 20, 20, true, 1, 10, 10, Vector3.UnitZ);
+
+            Entity seaFloorEntity = SceneManager.CreateEntity("SeaFloor", "SeaFloorPlane");
+            seaFloorEntity.MaterialName = "Terrain/SeaFloor";
+            // do not frustum cull Water
+            seaFloorEntity.BoundingBox.IsInfinite = true;
+            // do not frustum cull Water
+            seaFloorEntity.BoundingBox.IsNull = true;
+
+            var seaFloorNode = SceneManager.RootSceneNode.CreateChildSceneNode("SeaFloorNode");
+            seaFloorNode.AttachObject(seaFloorEntity);
+            seaFloorNode.Translate(new Vector3(-999, -500, -999));*/
 
             frustumNode.Position = new Vector3(128, 500, 128);
             
@@ -730,7 +748,7 @@ namespace SmartMap
                         this.tileNode[nodeCount].ResetToInitialState(); // set mesh North as created in modeler
                         this.tileNode[nodeCount].Position = new Vector3(x, 0, z);
                         // add exterior tile if adjacent edge is empty. Corner for two. 
-                        if (this.sm.NearbyVerticesEmpty(v) == "empty_corner")
+                        if (this.sm.NoNearbyVertices(v) == "empty_corner")
                         {          
                             this.tileNode[nodeCount].AttachObject(exteriorTileEnd[outEndTileCount]);
                             Console.WriteLine("Exterior EndTile Entity {0} attached", outEndTileCount);
@@ -775,7 +793,7 @@ namespace SmartMap
                             this.tileNode[nodeCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Tile " + nodeCount);
                             this.tileNode[nodeCount].ResetToInitialState();
                             this.tileNode[nodeCount].Position = new Vector3(x, 0, z);
-                            if (this.sm.NearbyVerticesEmpty(v) == "empty_corner")
+                            if (this.sm.NoNearbyVertices(v) == "empty_corner")
                             {
                                 this.tileNode[nodeCount].AttachObject(exteriorTileHall[outHallTileCount]);
                                 outHallTileCount++;
@@ -793,7 +811,7 @@ namespace SmartMap
                             this.tileNode[nodeCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Tile " + nodeCount);
                             this.tileNode[nodeCount].ResetToInitialState();
                             this.tileNode[nodeCount].Position = new Vector3(x, 0, z);
-                            if (this.sm.NearbyVerticesEmpty(v) == "empty_corner")
+                            if (this.sm.NoNearbyVertices(v) == "empty_corner")
                             {
                                 this.tileNode[nodeCount].AttachObject(exteriorTileCorner[outCornerTileCount]);
                                 outCornerTileCount++;
@@ -849,7 +867,7 @@ namespace SmartMap
                             this.tileNode[nodeCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Tile " + nodeCount);
                             this.tileNode[nodeCount].ResetToInitialState();
                             this.tileNode[nodeCount].Position = new Vector3(x, 0, z);
-                            if (this.sm.NearbyVerticesEmpty(v) == "empty_corner")
+                            if (this.sm.NoNearbyVertices(v) == "empty_corner")
                             {
                                 this.tileNode[nodeCount].AttachObject(exteriorTileSide[outSideTileCount]);
                                 outSideTileCount++;
@@ -883,7 +901,7 @@ namespace SmartMap
                         this.tileNode[nodeCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Tile " + nodeCount);
                         this.tileNode[nodeCount].ResetToInitialState();
                         this.tileNode[nodeCount].Position = new Vector3(x, 0, z);
-                        if (this.sm.NearbyVerticesEmpty(v) == "empty_corner")
+                        if (this.sm.NoNearbyVertices(v) == "empty_corner")
                         {
                             this.tileNode[nodeCount].AttachObject(exteriorTileFloor[outFloorTileCount]);
                             outFloorTileCount++;
@@ -967,7 +985,7 @@ namespace SmartMap
             base.Dispose();
         }
 
-        #region RENDERING QUEUE CULLS
+        #region RENDERING QUEUE HARDWARE OCCLUSION
         
         /// <summary>
 		///	When RenderQueue 6 is starting, we will begin the occlusion query.
@@ -1497,7 +1515,7 @@ namespace SmartMap
 
             #endregion ANIMATION
 
-            #region Camera Clipping Events and CREATING PATHS
+            #region MODEL NODE COLLISIONS
             /*
                 // PAGING ZONE SYSTEM (dependant on pure engine coordinates, meant for massive worlds)
                 // Essentially a Random Zone creator as you explore

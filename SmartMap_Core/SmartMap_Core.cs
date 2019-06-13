@@ -144,11 +144,11 @@ namespace SmartMap
         }
        
         /// <summary>
-        /// Non-adjacent (not connected) but nearby vertices checked for empty edges
+        /// Check for no verteces nearby to discover an outer wall
         /// </summary>
-        /// <param name="v">Initial edged vertex</param>
+        /// <param name="v">Edged vertex to check around</param>
         /// <returns></returns>
-        public string NearbyVerticesEmpty(Point<int> v)
+        public string NoNearbyVertices(Point<int> v)
         {
             if ((!this.graph.ContainsVertex(new Point<int>(v.Width + 1, v.Length - 1)))
                  & (!this.graph.ContainsVertex(new Point<int>(v.Width + 1, v.Length)))
@@ -177,7 +177,27 @@ namespace SmartMap
                 {
                     return "empty_corner"; // SW
                 }
-          
+
+            if (!this.graph.ContainsVertex(new Point<int>(v.Width, v.Length - 1)))
+                {
+                    return "empty_north"; // N
+                }
+
+            if (!this.graph.ContainsVertex(new Point<int>(v.Width - 1, v.Length)))
+                {
+                    return "empty_west"; // W
+                }
+
+            if (!this.graph.ContainsVertex(new Point<int>(v.Width + 1, v.Length)))
+                {
+                    return "empty_east"; // E
+                }
+
+            if (!this.graph.ContainsVertex(new Point<int>(v.Width, v.Length + 1)))
+                {
+                    return "empty_south"; // S
+                }
+
             return "not_empty";
         }
         

@@ -554,61 +554,38 @@ namespace SmartMap
            
             if (Input.IsKeyPressed(KeyCodes.A))
             {
-                frustumNode.Rotate(Vector3.UnitY, speed, TransformSpace.Parent);
-                //camAccel.x = -0.5f;
+                camAccel.x = -0.5f;
             }
 
             if (Input.IsKeyPressed(KeyCodes.D))
             {
-                frustumNode.Rotate(Vector3.UnitY, -speed, TransformSpace.Parent);
-                //camAccel.x = 0.5f;
+                camAccel.x = 0.5f;
             }
 
             if (Input.IsKeyPressed(KeyCodes.W))
             {
-                frustumNode.Translate(new Vector3(0, 0, -speed), TransformSpace.Local);
-                //camAccel.z = -1.0f;
+                camAccel.z = -1.0f;
             }
 
             if (Input.IsKeyPressed(KeyCodes.S))
             {
-                frustumNode.Translate(new Vector3(0, 0, speed), TransformSpace.Local);
-                //camAccel.z = 1.0f;
+                camAccel.z = 1.0f;
             }
 
             //camAccel.y += (float)( input.RelativeMouseZ * 0.1f );
-
-
-
-            /*if (Input.IsKeyPressed(KeyCodes.I))
-            {
-                frustumNode.Translate(new Vector3(0, 0, -speed), TransformSpace.Local);
-            }
-            if (Input.IsKeyPressed(KeyCodes.K))
-            {
-                frustumNode.Translate(new Vector3(0, 0, speed), TransformSpace.Local);
-            }
-            if (Input.IsKeyPressed(KeyCodes.J))
-            {
-                frustumNode.Rotate(Vector3.UnitY, speed, TransformSpace.Parent);
-            }
-            if (Input.IsKeyPressed(KeyCodes.L))
-            {
-                frustumNode.Rotate(Vector3.UnitY, -speed, TransformSpace.Parent);
-            }*/
 
             // knock out the mouse stuff here
             isUsingKbCameraLook = false;
             if (Input.IsKeyPressed(KeyCodes.Left))
             {
-                frustumNode.Yaw(cameraScale, TransformSpace.World);
+                frustumNode.Yaw(cameraScale, TransformSpace.Local);
                 //Camera.Yaw(cameraScale);
                 isUsingKbCameraLook = true;
             }
 
             if (Input.IsKeyPressed(KeyCodes.Right))
             {
-                frustumNode.Yaw(-cameraScale, TransformSpace.World);
+                frustumNode.Yaw(-cameraScale, TransformSpace.Local);
                 //Camera.Yaw(-cameraScale);
                 isUsingKbCameraLook = true;
             }
@@ -633,7 +610,7 @@ namespace SmartMap
                 mouseRotateVector = Vector3.Zero;
                 mouseRotateVector.x += Input.RelativeMouseX * 0.13f;
                 mouseRotateVector.y += Input.RelativeMouseY * 0.13f;
-                frustumNode.Yaw(-mouseRotateVector.x);
+                frustumNode.Yaw(-mouseRotateVector.x, TransformSpace.Local);
                 frustumNode.Pitch(-mouseRotateVector.y);
                 //Camera.Yaw(-mouseRotateVector.x);
                 //Camera.Pitch(-mouseRotateVector.y);
@@ -733,9 +710,10 @@ namespace SmartMap
             camVelocity += (camAccel * scaleMove * camSpeed);
 
             // move the camera based on the accumulated movement vector
-            //this.frustumNode.SetDirection(camVelocity * e.TimeSinceLastFrame, TransformSpace.Parent);
-            Camera.MoveRelative(camVelocity * e.TimeSinceLastFrame);
-            //this.frustumNode.Translate(Camera.WorldPosition);
+            //Camera.MoveRelative(camVelocity * e.TimeSinceLastFrame);
+            // move in current body direction (not the goal direction)
+            this.frustumNode.Translate(camVelocity * e.TimeSinceLastFrame,
+                                     TransformSpace.Local);
 
             // Now dampen the Velocity - only if user is not accelerating
             if (camAccel == Vector3.Zero)
