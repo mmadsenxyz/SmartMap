@@ -13,7 +13,7 @@ namespace SmartMap
     /// </summary>
     /// <remarks>Interfaced with CreateGraphics method</remarks>
 	public class Draw4D
-	{
+    {
 		// IDraw interface
 		public IDraw idraw;
 		private SceneManager scene;
@@ -25,8 +25,11 @@ namespace SmartMap
 		// Models
 		public Dictionary<int, Entity> model;
 		public Dictionary<int, SceneNode> modelNode;
+        public SinbadCharacterController sinbad;
+        // Cameras
+        Camera camera;
 
-		public Draw4D(SceneManager man)
+        public Draw4D(SceneManager man)
 		{
 			this.scene = man;
 
@@ -35,9 +38,14 @@ namespace SmartMap
 			this.zoneGroup = new Dictionary<int, SceneNode> (4);
 			this.model = new Dictionary<int, Entity>(10);
 			this.modelNode = new Dictionary<int, SceneNode>(10);
+            this.sinbad = new SinbadCharacterController(camera);
         }
 
-		public void CreateModel()
+        #region Properties
+
+        #endregion
+        
+        public void CreateModel()
 		{
             idraw.CreateGraphics(model, "Model", "ogrehead.mesh", "Ogre/Skin", 1, 1, RenderQueueGroupID.One);
 			// for main player

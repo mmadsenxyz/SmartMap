@@ -319,6 +319,12 @@
     <Reference Include="Axiom.RenderSystems.OpenGL">
       <HintPath>Libraries\Axiom.RenderSystems.OpenGL.dll</HintPath>
     </Reference>
+    <Reference Include="Axiom.Samples.Common">
+      <HintPath>Libraries\Axiom.Samples.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Axiom.Samples.Core">
+      <HintPath>Libraries\Axiom.Samples.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Axiom.SceneManagers.Octree">
       <HintPath>Libraries\Axiom.SceneManagers.Octree.dll</HintPath>
     </Reference>
@@ -329,8 +335,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\QuickGraph.dll</HintPath>
     </Reference>
-    <Reference Include="SharpInputSystem">
-      <HintPath>Libraries\SharpInputSystem.dll</HintPath>
+    <Reference Include="SharpInputSystem.Core">
+      <HintPath>Libraries\SharpInputSystem.Core.dll</HintPath>
     </Reference>
     <Reference Include="SynapticEffect.Forms">
       <HintPath>Libraries\SynapticEffect.Forms.dll</HintPath>

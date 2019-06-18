@@ -4,7 +4,6 @@
  * Starport Media llc
 */
 using System;
-using System.Windows.Forms;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -12,14 +11,10 @@ using QuickGraph;
 using Axiom.Animating;
 using Axiom.Core;
 using Axiom.Core.InstanceGeometry;
-using Axiom.Collections;
 using Axiom.Math;
 using Axiom.Graphics;
-using Axiom.Input;
-using Axiom;
 using Axiom.Configuration;
 using Axiom.ParticleSystems;
-using Axiom.SceneManagers.Octree;
 
 namespace SmartMap
 {
@@ -174,28 +169,13 @@ namespace SmartMap
             CreateGraphics(exteriorTileEnd, "Wall_End", "Room_End.mesh", "TileSet/Wall", 200, 200, RenderQueueGroupID.Nine);
             Console.WriteLine("LOADING...exteriorTileFloor");
             CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 200, 200, RenderQueueGroupID.Nine);
-
+       
+            
+            
             //CreateInstanceGeom();
 
             CreateWorld(0, 0, 0, 0, 0);
             
-            // =Draw 4D= - For dynamic objects in scene
-            // TODO: set up clipping regions for 4 tileSets
-            //this.d4d = new Draw4D(base.SceneManager);
-            //this.d4d.idraw = this;
-            // Tileset
-            //this.d4d.CreateModel();
-            //this.d4d.modelNode[0].Position = new Vector3(0, tileSetHeight + 500, 0);
-
-            // Object animation. Set idle animation
-            //modelAnimationState = d4d.model[0].GetAnimationState("Idle");
-            //modelAnimationState.Loop = true;
-            //modelAnimationState.IsEnabled = true;
-
-            // TODO: for the saving and loading of our level.
-            // =Save/Load= from XML
-            /* this.sm.Save();*/
-
             #region DEBUG
             // Debug.Assert(DebugStatements == true,"{0}, {1}", d4d.zoneGroup[0].Position, d4d.zoneGroup[2].Position);
             //Console.ReadLine();
@@ -225,8 +205,8 @@ namespace SmartMap
         protected virtual void CreateEnvironment()
         {
             // set up queue event handlers to run the query
-            //SceneManager.QueueStarted += scene_QueueStarted;
-            //SceneManager.QueueEnded += scene_QueueEnded;
+            SceneManager.QueueStarted += scene_QueueStarted;
+            SceneManager.QueueEnded += scene_QueueEnded;
           
             // set some ambient light
             SceneManager.AmbientLight = new ColorEx(1.0f, 0.4f, 0.4f, 0.4f);
@@ -264,26 +244,29 @@ namespace SmartMap
             var waterNode = SceneManager.RootSceneNode.CreateChildSceneNode("WaterNode");
             waterNode.AttachObject(waterEntity);
             waterNode.Translate(new Vector3(-999, 10, -999));
-            // seafloor plane setup
-            /*Plane seaFloorPlane = new Plane(Vector3.UnitY, 1.5f);
 
-            MeshManager.Instance.CreatePlane("SeaFloorPlane",
-                                             ResourceGroupManager.DefaultResourceGroupName,
-                                             seaFloorPlane,
-                                             256000, 256000, 20, 20, true, 1, 10, 10, Vector3.UnitZ);
+            // =Draw 4D= - For dynamic objects in scene
+            // TODO: set up clipping regions for 4 tileSets
+            this.d4d = new Draw4D(base.SceneManager);
+            this.d4d.idraw = this;
+            // Model
+            this.d4d.sinbad = new SinbadCharacterController(Camera);
+            this.d4d.sinbad.cameraNode.AttachObject(m_frustum);
+            // initial position
+            this.d4d.sinbad.cameraNode.Position = new Vector3(128, 500, 128);
+            //this.d4d.CreateModel();
+            //this.d4d.modelNode[0].Position = new Vector3(0, tileSetHeight + 500, 0);
+            // Animation
+            // Object animation. Set idle animation
+            //modelAnimationState = d4d.model[0].GetAnimationState("Idle");
+            //modelAnimationState.Loop = true;
+            //modelAnimationState.IsEnabled = true;
 
-            Entity seaFloorEntity = SceneManager.CreateEntity("SeaFloor", "SeaFloorPlane");
-            seaFloorEntity.MaterialName = "Terrain/SeaFloor";
-            // do not frustum cull Water
-            seaFloorEntity.BoundingBox.IsInfinite = true;
-            // do not frustum cull Water
-            seaFloorEntity.BoundingBox.IsNull = true;
+            // TODO: for the saving and loading of our level.
+            // =Save/Load= from XML
+            /* this.sm.Save();*/
 
-            var seaFloorNode = SceneManager.RootSceneNode.CreateChildSceneNode("SeaFloorNode");
-            seaFloorNode.AttachObject(seaFloorEntity);
-            seaFloorNode.Translate(new Vector3(-999, -500, -999));*/
-
-            frustumNode.Position = new Vector3(128, 500, 128);
+            //frustumNode.Position = new Vector3(128, 500, 128);
             Camera.LookAt(new Vector3(0, 0, -300));
 
             // instance optimization
@@ -418,6 +401,7 @@ namespace SmartMap
         /// <summary>
         /// Create Quadrants for Maps
         /// </summary>
+        /// </summary>
         /// <param name="quadrantDispersion">Distance of dispersed Tilesets</param>
         /// <param name="quadrantAmountNorth"></param>
         /// <param name="quadtrantAmountEast"></param>
@@ -430,7 +414,8 @@ namespace SmartMap
             Debug.Assert(DebugStatements == true,"--------EXITING PATH GENERATION FOR QUADRANT--------");
             //Console.ReadLine();
             CreateMap(0, 10000, 0, 10000, 3);
-            frustumNode.Translate(moduleNode[0].Position);
+            //frustumNode.Translate(moduleNode[0].Position);
+            this.d4d.sinbad.cameraNode.Translate(moduleNode[0].Position);
         }
 
         #endregion Create Scene
@@ -987,17 +972,87 @@ namespace SmartMap
             base.Dispose();
         }
 
-        #region RENDERING QUEUE HARDWARE OCCLUSION
-        
+        #region MODEL CONTROLS
+
         /// <summary>
-		///	When RenderQueue 6 is starting, we will begin the occlusion query.
-		/// </summary>
-		/// <param name="priority"></param>
-		/// <returns></returns>
-		private void scene_QueueStarted(object sender, SceneManager.BeginRenderQueueEventArgs e)
+        /// 
+        /// </summary>
+        /// <param name="evt"></param>
+        /// <returns></returns>
+        public override bool KeyPressed(SharpInputSystem.KeyEventArgs evt)
         {
+            // relay input events to character controller
+            if (!TrayManager.IsDialogVisible)
+            {
+                this.d4d.sinbad.InjectKeyDown(evt);
+            }
+
+            return base.KeyPressed(evt);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="evt"></param>
+        /// <returns></returns>
+        public override bool KeyReleased(SharpInputSystem.KeyEventArgs evt)
+        {
+            if (!TrayManager.IsDialogVisible)
+            {
+                this.d4d.sinbad.InjectKeyUp(evt);
+            }
+
+            return base.KeyReleased(evt);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="evt"></param>
+        /// <returns></returns>
+        public override bool MouseMoved(SharpInputSystem.MouseEventArgs evt)
+        {
+            // relay input events to character controller
+            if (!TrayManager.IsDialogVisible)
+            {
+                this.d4d.sinbad.InjectMouseMove(evt);
+            }
+
+            return base.MouseMoved(evt);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="evt"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public override bool MousePressed(SharpInputSystem.MouseEventArgs evt, SharpInputSystem.MouseButtonID id)
+        {
+            // relay input events to character controller
+            if (!TrayManager.IsDialogVisible)
+            {
+                this.d4d.sinbad.InjectMouseDown(evt, id);
+            }
+
+            return base.MousePressed(evt, id);
+        }
+
+        #endregion
+
+        #region RENDERING QUEUE HARDWARE OCCLUSION
+
+        /// <summary>
+        ///	When RenderQueue 6 is starting, we will begin the occlusion query.
+        /// </summary>
+        /// <param name="priority"></param>
+        /// <returns></returns>
+        private void scene_QueueStarted(object sender, SceneManager.BeginRenderQueueEventArgs e)
+        {
+
+            #region OCCLUSIONQEURY BEGIN
             // begin the occlusion query
-            if (e.RenderQueueId == RenderQueueGroupID.One)
+            /*if (e.RenderQueueId == RenderQueueGroupID.One)
             {
                 query.Begin();
             }
@@ -1028,7 +1083,8 @@ namespace SmartMap
             if (e.RenderQueueId == RenderQueueGroupID.Nine)
             {
                 query.Begin();
-            }
+            }*/
+            #endregion
 
             return;
         }
@@ -1040,8 +1096,9 @@ namespace SmartMap
         /// <returns></returns>
         private void scene_QueueEnded(object sender, SceneManager.EndRenderQueueEventArgs e)
         {
+            #region OCCLUSION QUERY END
             // end our occlusion query
-            if (e.RenderQueueId == RenderQueueGroupID.One)
+            /*if (e.RenderQueueId == RenderQueueGroupID.One)
             {
                 query.End();
                 int count = query.PullResults();
@@ -1362,7 +1419,8 @@ namespace SmartMap
                         }
                     }
                 }
-            }
+            }*/
+            #endregion
 
             return;
         }
@@ -1373,6 +1431,9 @@ namespace SmartMap
 
         protected override void OnFrameStarted(object source, FrameEventArgs e)
         {
+            // let sinbad character update animations and camera
+            this.d4d.sinbad.AddTime(e.TimeSinceLastFrame);
+
             //timeSinceLastFrame = e.TimeSinceLastFrame;
             base.OnFrameStarted(source, e);
 

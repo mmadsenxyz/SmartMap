@@ -12,6 +12,7 @@ using Axiom.Input;
 using Axiom.Overlays;
 using Axiom.Math;
 using Axiom.Graphics;
+using Axiom.Samples;
 using Axiom.Platforms.OpenTK;
 using MouseButtons = Axiom.Input.MouseButtons;
 
@@ -202,12 +203,12 @@ namespace SmartMap
     }
 
     #endregion
-
+    
     /// <summary>
     ///     Base class for Axiom examples.
     /// </summary>
-    public abstract class EngineSetup : IDisposable
-    {
+    public abstract class EngineSetup : SdkSample, IDisposable
+    { 
         #region Protected Fields
         protected Root Root;
         protected Camera Camera;
@@ -234,14 +235,14 @@ namespace SmartMap
         protected TextureFiltering filtering = TextureFiltering.Bilinear;
         private const string CONFIG_FILE = @"EngineConfig.xml";
         #endregion Protected Fields
-
+        
         #region Protected Methods
-
+        
         /// <summary>
         /// Creates the Camera object for the scene.
         /// </summary>
         protected virtual void CreateCamera()
-        {
+        { 
             // create a camera and initialize its position
             Camera = m_sceneManager.CreateCamera("MainCamera");
             Camera.Position = new Vector3(0, 0, 500);
@@ -272,7 +273,7 @@ namespace SmartMap
 
             frustumNode.AttachObject(m_frustum);
             frustumNode.AttachObject(u_frustum);
-            frustumNode.AttachObject(Camera);
+            //frustumNode.AttachObject(Camera);
         }
 
         /// <summary>
@@ -308,7 +309,7 @@ namespace SmartMap
         }
 
         #endregion Protected Methods
-
+        
         #region Protected Virtual Methods
         /// <summary>
         /// SceneManager (Axiom.Core.SceneManager)
@@ -345,7 +346,6 @@ namespace SmartMap
         /// </summary>
         protected virtual void SetupFrameHandlers()
         {
-
             // add event handlers for frame events
             Root.FrameStarted += new EventHandler<FrameEventArgs>(OnFrameStarted);
             Root.FrameEnded += new EventHandler<FrameEventArgs>(OnFrameEnded);
@@ -407,7 +407,7 @@ namespace SmartMap
 
             return true;
         }
-
+        
         /// <summary>
         /// Handles the setup of the Input system for the ExampleApplication
         /// </summary>
@@ -472,8 +472,6 @@ namespace SmartMap
         #endregion Protected Abstract Methods
 
         #region Public Methods
-
-    
 
         /// <summary>
         /// Begins the execution the application.
@@ -561,7 +559,7 @@ namespace SmartMap
                 //return false;
             }
            
-            if (Input.IsKeyPressed(KeyCodes.A))
+            /*if (Input.IsKeyPressed(KeyCodes.A))
             {
                 camAccel.x = -0.5f;
             }
@@ -625,7 +623,7 @@ namespace SmartMap
                 //Camera.Pitch(-mouseRotateVector.y);
             }
             isUsingKbCameraLook = false;
-
+            */
             // subtract the time since last frame to delay specific key presses
             toggleDelay -= e.TimeSinceLastFrame;
 
@@ -722,7 +720,7 @@ namespace SmartMap
             //Camera.MoveRelative(camVelocity * e.TimeSinceLastFrame);
             // move in current body direction (not the goal direction)
 
-            this.frustumNode.Translate(camVelocity * e.TimeSinceLastFrame, TransformSpace.Local);
+            //this.frustumNode.Translate(camVelocity * e.TimeSinceLastFrame, TransformSpace.Local);
 
             // Now dampen the Velocity - only if user is not accelerating
             if (camAccel == Vector3.Zero)
