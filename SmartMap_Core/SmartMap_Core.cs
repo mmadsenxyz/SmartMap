@@ -154,48 +154,48 @@ namespace SmartMap
                  & (!this.graph.ContainsVertex(new Point<int>(v.Width + 1, v.Length)))
                  & (!this.graph.ContainsVertex(new Point<int>(v.Width, v.Length - 1))))
                 {
-                    return "empty_corner"; // NE
+                    return "outerwall"; // NE
                 }
 
             if ((!this.graph.ContainsVertex(new Point<int>(v.Width - 1, v.Length - 1)))
                  & (!this.graph.ContainsVertex(new Point<int>(v.Width - 1, v.Length)))
                  & (!this.graph.ContainsVertex(new Point<int>(v.Width, v.Length - 1))))
                 {
-                    return "empty_corner"; // NW
+                    return "outerwall"; // NW
                 }
 
             if ((!this.graph.ContainsVertex(new Point<int>(v.Width + 1, v.Length + 1)))
                  & (!this.graph.ContainsVertex(new Point<int>(v.Width + 1, v.Length)))
                  & (!this.graph.ContainsVertex(new Point<int>(v.Width, v.Length + 1))))
                 {
-                    return "empty_corner"; // SE
+                    return "outerwall"; // SE
                 }
 
             if ((!this.graph.ContainsVertex(new Point<int>(v.Width - 1, v.Length + 1)))
                  & (!this.graph.ContainsVertex(new Point<int>(v.Width - 1, v.Length)))
                  & (!this.graph.ContainsVertex(new Point<int>(v.Width, v.Length + 1))))
                 {
-                    return "empty_corner"; // SW
+                    return "outerwall"; // SW
                 }
 
             if (!this.graph.ContainsVertex(new Point<int>(v.Width, v.Length - 1)))
                 {
-                    return "empty_north"; // N
+                    return "outerwall"; // N
                 }
 
             if (!this.graph.ContainsVertex(new Point<int>(v.Width - 1, v.Length)))
                 {
-                    return "empty_west"; // W
+                    return "outerwall"; // W
                 }
 
             if (!this.graph.ContainsVertex(new Point<int>(v.Width + 1, v.Length)))
                 {
-                    return "empty_east"; // E
+                    return "outerwall"; // E
                 }
 
             if (!this.graph.ContainsVertex(new Point<int>(v.Width, v.Length + 1)))
                 {
-                    return "empty_south"; // S
+                    return "outerwall"; // S
                 }
 
             return "not_empty";

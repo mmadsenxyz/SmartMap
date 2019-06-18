@@ -109,6 +109,7 @@
     <Compile Include="Graphics\IDraw.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Graphics\Draw4D\SinbadCharacterController.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -327,6 +328,9 @@
     <Reference Include="QuickGraph, Version=3.2.40122.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\QuickGraph.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpInputSystem">
+      <HintPath>Libraries\SharpInputSystem.dll</HintPath>
     </Reference>
     <Reference Include="SynapticEffect.Forms">
       <HintPath>Libraries\SynapticEffect.Forms.dll</HintPath>

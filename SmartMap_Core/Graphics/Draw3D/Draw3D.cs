@@ -54,7 +54,7 @@ namespace SmartMap
         //private int nextPathnode = 0;
         // Sizeing and quantity of structures.
         public int tileAmountNorth = 5, tileAmountEast = 5;
-        public int moduleAmountSouth = 9, moduleAmountEast = 9;
+        public int moduleAmountSouth = 2, moduleAmountEast = 2;
         //////////
         private int /*tileThreshhold = 80,*/ tileClippingAngle = 300;
         private float moduleSizeNorth = 0, moduleSizeEast = 0, tileSetHeight = 150;
@@ -131,7 +131,7 @@ namespace SmartMap
             CreateEnvironment();
 
             // LOAD UP YER MESHES           
-            Console.WriteLine("LOADING...interiorTileSide");
+            /*Console.WriteLine("LOADING...interiorTileSide");
             CreateGraphics(interiorTileSide, "Room_Side", "Room_Side.mesh", "TileSet/Room", 1500, 1500, RenderQueueGroupID.One);
             Console.WriteLine("LOADING...interiorTileHall");
             CreateGraphics(interiorTileHall, "Room_Hall", "Room_Hall.mesh", "TileSet/Room", 1500, 1500, RenderQueueGroupID.Two);
@@ -143,17 +143,17 @@ namespace SmartMap
             CreateGraphics(interiorTileFloor, "Room_Floor", "Room_Floor.mesh", "TileSet/Room", 1500, 1500, RenderQueueGroupID.Six);
             // outer wall resources
             Console.WriteLine("LOADING...exteriorTileSide");
-            CreateGraphics(exteriorTileSide, "Wall_Side", "Room_Side.mesh", "TileSet/Wall", 1000, 1000, RenderQueueGroupID.Seven);
+            CreateGraphics(exteriorTileSide, "Wall_Side", "Room_Side.mesh", "TileSet/Wall", 1500, 1500, RenderQueueGroupID.Seven);
             Console.WriteLine("LOADING...exteriorTileHall");
-            CreateGraphics(exteriorTileHall, "Wall_Hall", "Room_Hall.mesh", "TileSet/Wall", 1000, 1000, RenderQueueGroupID.Eight);
+            CreateGraphics(exteriorTileHall, "Wall_Hall", "Room_Hall.mesh", "TileSet/Wall", 1500, 1500, RenderQueueGroupID.Eight);
             Console.WriteLine("LOADING...exteriorTileCorner");
-            CreateGraphics(exteriorTileCorner, "Wall_Corner", "Room_Corner.mesh", "TileSet/Wall", 1000, 1000, RenderQueueGroupID.Nine);
+            CreateGraphics(exteriorTileCorner, "Wall_Corner", "Room_Corner.mesh", "TileSet/Wall", 1500, 1500, RenderQueueGroupID.Nine);
             Console.WriteLine("LOADING...exteriorTileEnd");
-            CreateGraphics(exteriorTileEnd, "Wall_End", "Room_End.mesh", "TileSet/Wall", 1000, 1000, RenderQueueGroupID.Nine);
+            CreateGraphics(exteriorTileEnd, "Wall_End", "Room_End.mesh", "TileSet/Wall", 1500, 1500, RenderQueueGroupID.Nine);
             Console.WriteLine("LOADING...exteriorTileFloor");
-            CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 1000, 1000, RenderQueueGroupID.Nine);
+            CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 1500, 1500, RenderQueueGroupID.Nine);*/
 
-            /*// LOAD UP YER MESHES           
+            // LOAD UP YER MESHES           
             CreateGraphics(interiorTileSide, "Room_Side", "Room_Side.mesh", "TileSet/Room", 200, 200, RenderQueueGroupID.One);
             Console.WriteLine("LOADING...interiorTileHall");
             CreateGraphics(interiorTileHall, "Room_Hall", "Room_Hall.mesh", "TileSet/Room", 200, 200, RenderQueueGroupID.Two);
@@ -173,7 +173,7 @@ namespace SmartMap
             Console.WriteLine("LOADING...exteriorTileEnd");
             CreateGraphics(exteriorTileEnd, "Wall_End", "Room_End.mesh", "TileSet/Wall", 200, 200, RenderQueueGroupID.Nine);
             Console.WriteLine("LOADING...exteriorTileFloor");
-            CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 200, 200, RenderQueueGroupID.Nine);*/
+            CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 200, 200, RenderQueueGroupID.Nine);
 
             //CreateInstanceGeom();
 
@@ -202,8 +202,7 @@ namespace SmartMap
             //Frustum.IsVisible = true;
             // show some Bounding Boxes as Zone corners
             /*tileNode[0].ShowBoundingBox = true;
-            tileNode[9
-            ].ShowBoundingBox = true;
+            tileNode[9].ShowBoundingBox = true;
             tileNode[1800].ShowBoundingBox = true;
             tileNode[2701].ShowBoundingBox = true;
             // Models
@@ -748,7 +747,7 @@ namespace SmartMap
                         this.tileNode[nodeCount].ResetToInitialState(); // set mesh North as created in modeler
                         this.tileNode[nodeCount].Position = new Vector3(x, 0, z);
                         // add exterior tile if adjacent edge is empty. Corner for two. 
-                        if (this.sm.NoNearbyVertices(v) == "empty_corner")
+                        if (this.sm.NoNearbyVertices(v) == "outerwall")
                         {          
                             this.tileNode[nodeCount].AttachObject(exteriorTileEnd[outEndTileCount]);  
                             Console.WriteLine("Exterior EndTile Entity {0} attached", outEndTileCount);
@@ -793,7 +792,7 @@ namespace SmartMap
                             this.tileNode[nodeCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Tile " + nodeCount);
                             this.tileNode[nodeCount].ResetToInitialState();
                             this.tileNode[nodeCount].Position = new Vector3(x, 0, z);
-                            if (this.sm.NoNearbyVertices(v) == "empty_corner")
+                            if (this.sm.NoNearbyVertices(v) == "outerwall")
                             {
                                 this.tileNode[nodeCount].AttachObject(exteriorTileHall[outHallTileCount]);
                                 outHallTileCount++;
@@ -811,7 +810,7 @@ namespace SmartMap
                             this.tileNode[nodeCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Tile " + nodeCount);
                             this.tileNode[nodeCount].ResetToInitialState();
                             this.tileNode[nodeCount].Position = new Vector3(x, 0, z);
-                            if (this.sm.NoNearbyVertices(v) == "empty_corner")
+                            if (this.sm.NoNearbyVertices(v) == "outerwall")
                             {
                                 this.tileNode[nodeCount].AttachObject(exteriorTileCorner[outCornerTileCount]);
                                 outCornerTileCount++;
@@ -867,7 +866,7 @@ namespace SmartMap
                             this.tileNode[nodeCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Tile " + nodeCount);
                             this.tileNode[nodeCount].ResetToInitialState();
                             this.tileNode[nodeCount].Position = new Vector3(x, 0, z);
-                            if (this.sm.NoNearbyVertices(v) == "empty_corner")
+                            if (this.sm.NoNearbyVertices(v) == "outerwall")
                             {
                                 this.tileNode[nodeCount].AttachObject(exteriorTileSide[outSideTileCount]);
                                 outSideTileCount++;
@@ -901,7 +900,7 @@ namespace SmartMap
                         this.tileNode[nodeCount] = SceneManager.RootSceneNode.CreateChildSceneNode("Tile " + nodeCount);
                         this.tileNode[nodeCount].ResetToInitialState();
                         this.tileNode[nodeCount].Position = new Vector3(x, 0, z);
-                        if (this.sm.NoNearbyVertices(v) == "empty_corner")
+                        if (this.sm.NoNearbyVertices(v) == "outerwall")
                         {
                             this.tileNode[nodeCount].AttachObject(exteriorTileFloor[outFloorTileCount]);
                             outFloorTileCount++;
@@ -1053,7 +1052,7 @@ namespace SmartMap
                     debugText = string.Format("Queue One: Object is occluded. ");
                     for (int i = 0; i < interiorTileSide.Count; i++)
                     {
-                        if (interiorTileSide[i].IsAttached && interiorTileSide[i].IsVisible)
+                        if (interiorTileSide[i] != null && interiorTileSide[i].IsAttached && interiorTileSide[i].IsVisible)
                         {
 
                             interiorTileSide[i].IsVisible = false;
@@ -1065,7 +1064,7 @@ namespace SmartMap
                     debugText = string.Format("Queue One: Visible fragments = {0}", count);
                     for (int i = 0; i < interiorTileSide.Count; i++)
                     {
-                        if (interiorTileSide[i].IsAttached && !interiorTileSide[i].IsVisible)
+                        if (interiorTileSide[i] != null && interiorTileSide[i].IsAttached && !interiorTileSide[i].IsVisible)
                         {
 
                             interiorTileSide[i].IsVisible = true;
@@ -1086,7 +1085,7 @@ namespace SmartMap
                     debugText = string.Format("Queue Two: Object is occluded. ");
                     for (int i = 0; i < interiorTileHall.Count; i++)
                     {
-                        if (interiorTileHall[i].IsAttached && interiorTileHall[i].IsVisible)
+                        if (interiorTileHall[i] != null && interiorTileHall[i].IsAttached && interiorTileHall[i].IsVisible)
                         {
 
                             interiorTileHall[i].IsVisible = false;
@@ -1098,7 +1097,7 @@ namespace SmartMap
                     debugText = string.Format("Queue Two: Visible fragments = {0}", count);
                     for (int i = 0; i < interiorTileHall.Count; i++)
                     {
-                        if (interiorTileHall[i].IsAttached && !interiorTileHall[i].IsVisible)
+                        if (interiorTileHall[i] != null && interiorTileHall[i].IsAttached && !interiorTileHall[i].IsVisible)
                         {
 
                             interiorTileHall[i].IsVisible = true;
@@ -1119,7 +1118,7 @@ namespace SmartMap
                     debugText = string.Format("Queue Three: Object is occluded. ");
                     for (int i = 0; i < interiorTileCorner.Count; i++)
                     {
-                        if (interiorTileCorner[i].IsAttached && interiorTileCorner[i].IsVisible)
+                        if (interiorTileCorner[i] != null && interiorTileCorner[i].IsAttached && interiorTileCorner[i].IsVisible)
                         {
 
                             interiorTileCorner[i].IsVisible = false;
@@ -1130,7 +1129,7 @@ namespace SmartMap
                 {
                     for (int i = 0; i < interiorTileCorner.Count; i++)
                     {
-                        if (interiorTileCorner[i].IsAttached && !interiorTileCorner[i].IsVisible)
+                        if (interiorTileCorner[i] != null && interiorTileCorner[i].IsAttached && !interiorTileCorner[i].IsVisible)
                         {
 
                             interiorTileCorner[i].IsVisible = true;
@@ -1152,7 +1151,7 @@ namespace SmartMap
                     debugText = string.Format("Queue Four: Object is occluded. ");
                     for (int i = 0; i < interiorTileEnd.Count; i++)
                     {
-                        if (interiorTileEnd[i].IsAttached && interiorTileEnd[i].IsVisible)
+                        if (interiorTileEnd[i] != null && interiorTileEnd[i].IsAttached && interiorTileEnd[i].IsVisible)
                         {
 
                             interiorTileEnd[i].IsVisible = false;
@@ -1164,7 +1163,7 @@ namespace SmartMap
                     debugText = string.Format("Queue Four: Visible fragments = {0}", count);
                     for (int i = 0; i < interiorTileEnd.Count; i++)
                     {
-                        if (interiorTileEnd[i].IsAttached && !interiorTileEnd[i].IsVisible)
+                        if (interiorTileEnd[i] != null && interiorTileEnd[i].IsAttached && !interiorTileEnd[i].IsVisible)
                         {
 
                             interiorTileEnd[i].IsVisible = true;
@@ -1185,10 +1184,10 @@ namespace SmartMap
                     debugText = string.Format("Queue Six: Object is occluded. ");
                     for (int i = 0; i < interiorTileFloor.Count; i++)
                     {
-                        if (interiorTileFloor[i].IsAttached & interiorTileFloor[i].IsVisible)
+                        if (interiorTileFloor[i] != null && interiorTileFloor[i].IsAttached & interiorTileFloor[i].IsVisible)
                         {
 
-                            interiorTileFloor[i].IsVisible = true;
+                            interiorTileFloor[i].IsVisible = false;
                         }
                     }
                 }
@@ -1197,10 +1196,10 @@ namespace SmartMap
                     debugText = string.Format("Queue Six: Visible fragments = {0}", count);
                     for (int i = 0; i < interiorTileFloor.Count; i++)
                     {
-                        if (interiorTileFloor[i].IsAttached & !interiorTileFloor[i].IsVisible)
+                        if (interiorTileFloor[i] != null && interiorTileFloor[i].IsAttached & !interiorTileFloor[i].IsVisible)
                         {
 
-                            interiorTileFloor[i].IsVisible = false;
+                            interiorTileFloor[i].IsVisible = true;
                         }
                     }
                 }
@@ -1216,10 +1215,26 @@ namespace SmartMap
                 if (count <= 0)
                 { // get the fragment count from the query
                     debugText = string.Format("Queue Seven: Object is occluded. ");
+                    for (int i = 0; i < exteriorTileSide.Count; i++)
+                    {
+                        if (exteriorTileSide[i] != null && exteriorTileSide[i].IsAttached & exteriorTileSide[i].IsVisible)
+                        {
+
+                            exteriorTileSide[i].IsVisible = false;
+                        }
+                    }
                 }
                 else
                 {
                     debugText = string.Format("Queue Seven: Visible fragments = {0}", count);
+                    for (int i = 0; i < exteriorTileSide.Count; i++)
+                    {
+                        if (exteriorTileSide[i] != null && exteriorTileSide[i].IsAttached & !exteriorTileSide[i].IsVisible)
+                        {
+
+                            exteriorTileSide[i].IsVisible = true;
+                        }
+                    }
                 }
             }
 
@@ -1233,10 +1248,26 @@ namespace SmartMap
                 if (count <= 0)
                 { // get the fragment count from the query
                     debugText = string.Format("Queue Eight: Object is occluded. ");
+                    for (int i = 0; i < exteriorTileHall.Count; i++)
+                    {
+                        if (exteriorTileHall[i] != null && exteriorTileHall[i].IsAttached & exteriorTileHall[i].IsVisible)
+                        {
+
+                            exteriorTileHall[i].IsVisible = false;
+                        }
+                    }
                 }
                 else
                 {
                     debugText = string.Format("Queue Eight: Visible fragments = {0}", count);
+                    for (int i = 0; i < exteriorTileHall.Count; i++)
+                    {
+                        if (exteriorTileHall[i] != null && exteriorTileHall[i].IsAttached & !exteriorTileHall[i].IsVisible)
+                        {
+
+                            exteriorTileHall[i].IsVisible = true;
+                        }
+                    }
                 }
             }
 
@@ -1250,10 +1281,86 @@ namespace SmartMap
                 if (count <= 0)
                 { // get the fragment count from the query
                     debugText = string.Format("Queue Nine: Object is occluded. ");
+                    for (int i = 0; i < exteriorTileCorner.Count; i++)
+                    {
+                        if (exteriorTileCorner[i] != null && exteriorTileCorner[i].IsAttached & exteriorTileCorner[i].IsVisible)
+                        {
+
+                            exteriorTileCorner[i].IsVisible = false;
+                        }
+                    }
                 }
                 else
                 {
                     debugText = string.Format("Queue Nine: Visible fragments = {0}", count);
+                    for (int i = 0; i < exteriorTileCorner.Count; i++)
+                    {
+                        if (exteriorTileCorner[i] != null && exteriorTileCorner[i].IsAttached & !exteriorTileCorner[i].IsVisible)
+                        {
+
+                            exteriorTileCorner[i].IsVisible = true;
+                        }
+                    }
+                }
+            }// end our occlusion query
+            if (e.RenderQueueId == RenderQueueGroupID.Nine)
+            {
+                int count = query.PullResults();
+
+                // report the results
+                if (count <= 0)
+                { // get the fragment count from the query
+                    debugText = string.Format("Queue Nine: Object is occluded. ");
+                    for (int i = 0; i < exteriorTileEnd.Count; i++)
+                    {
+                        if (exteriorTileEnd[i] != null && exteriorTileEnd[i].IsAttached & exteriorTileEnd[i].IsVisible)
+                        {
+
+                            exteriorTileEnd[i].IsVisible = false;
+                        }
+                    }
+                }
+                else
+                {
+                    debugText = string.Format("Queue Nine: Visible fragments = {0}", count);
+                    for (int i = 0; i < exteriorTileEnd.Count; i++)
+                    {
+                        if (exteriorTileEnd[i] != null && exteriorTileEnd[i].IsAttached & !exteriorTileEnd[i].IsVisible)
+                        {
+
+                            exteriorTileEnd[i].IsVisible = true;
+                        }
+                    }
+                }
+            }// end our occlusion query
+            if (e.RenderQueueId == RenderQueueGroupID.Nine)
+            {
+                int count = query.PullResults();
+
+                // report the results
+                if (count <= 0)
+                { // get the fragment count from the query
+                    debugText = string.Format("Queue Nine: Object is occluded. ");
+                    for (int i = 0; i < exteriorTileFloor.Count; i++)
+                    {
+                        if (exteriorTileFloor[i] != null && exteriorTileFloor[i].IsAttached & exteriorTileFloor[i].IsVisible)
+                        {
+
+                            exteriorTileFloor[i].IsVisible = false;
+                        }
+                    }
+                }
+                else
+                {
+                    debugText = string.Format("Queue Nine: Visible fragments = {0}", count);
+                    for (int i = 0; i < exteriorTileFloor.Count; i++)
+                    {
+                        if (exteriorTileFloor[i] != null && exteriorTileFloor[i].IsAttached & !exteriorTileFloor[i].IsVisible)
+                        {
+
+                            exteriorTileFloor[i].IsVisible = true;
+                        }
+                    }
                 }
             }
 
