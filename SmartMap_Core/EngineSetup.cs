@@ -578,14 +578,14 @@ namespace SmartMap
             isUsingKbCameraLook = false;
             if (Input.IsKeyPressed(KeyCodes.Left))
             {
-                frustumNode.Yaw(cameraScale, TransformSpace.Local);
+                frustumNode.Yaw(cameraScale, TransformSpace.World);
                 //Camera.Yaw(cameraScale);
                 isUsingKbCameraLook = true;
             }
 
             if (Input.IsKeyPressed(KeyCodes.Right))
             {
-                frustumNode.Yaw(-cameraScale, TransformSpace.Local);
+                frustumNode.Yaw(-cameraScale, TransformSpace.World);
                 //Camera.Yaw(-cameraScale);
                 isUsingKbCameraLook = true;
             }
@@ -610,7 +610,7 @@ namespace SmartMap
                 mouseRotateVector = Vector3.Zero;
                 mouseRotateVector.x += Input.RelativeMouseX * 0.13f;
                 mouseRotateVector.y += Input.RelativeMouseY * 0.13f;
-                frustumNode.Yaw(-mouseRotateVector.x, TransformSpace.Local);
+                frustumNode.Yaw(-mouseRotateVector.x, TransformSpace.World);
                 frustumNode.Pitch(-mouseRotateVector.y);
                 //Camera.Yaw(-mouseRotateVector.x);
                 //Camera.Pitch(-mouseRotateVector.y);

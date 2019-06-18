@@ -260,6 +260,7 @@
     <None Include="Libraries\zlib1.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Media\Configuration\Terrain.xml" />
     <Content Include="readme.txt" />
     <None Include="DOCS\TEST\CodeFile2.cs" />
     <None Include="Libraries\Axiom.dll.config" />
@@ -337,8 +338,6 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Media\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

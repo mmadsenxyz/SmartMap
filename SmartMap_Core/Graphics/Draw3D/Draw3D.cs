@@ -19,6 +19,7 @@ using Axiom.Input;
 using Axiom;
 using Axiom.Configuration;
 using Axiom.ParticleSystems;
+using Axiom.SceneManagers.Octree;
 
 namespace SmartMap
 {
@@ -152,8 +153,8 @@ namespace SmartMap
             Console.WriteLine("LOADING...exteriorTileFloor");
             CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 1000, 1000, RenderQueueGroupID.Nine);
 
-            // LOAD UP YER MESHES           
-            /*CreateGraphics(interiorTileSide, "Room_Side", "Room_Side.mesh", "TileSet/Room", 200, 200, RenderQueueGroupID.One);
+            /*// LOAD UP YER MESHES           
+            CreateGraphics(interiorTileSide, "Room_Side", "Room_Side.mesh", "TileSet/Room", 200, 200, RenderQueueGroupID.One);
             Console.WriteLine("LOADING...interiorTileHall");
             CreateGraphics(interiorTileHall, "Room_Hall", "Room_Hall.mesh", "TileSet/Room", 200, 200, RenderQueueGroupID.Two);
             Console.WriteLine("LOADING...interiorTileCorner");
@@ -177,7 +178,7 @@ namespace SmartMap
             //CreateInstanceGeom();
 
             CreateWorld(0, 0, 0, 0, 0);
-
+            
             // =Draw 4D= - For dynamic objects in scene
             // TODO: set up clipping regions for 4 tileSets
             //this.d4d = new Draw4D(base.SceneManager);
@@ -225,9 +226,9 @@ namespace SmartMap
         protected virtual void CreateEnvironment()
         {
             // set up queue event handlers to run the query
-            SceneManager.QueueStarted += scene_QueueStarted;
-            SceneManager.QueueEnded += scene_QueueEnded;
-
+            //SceneManager.QueueStarted += scene_QueueStarted;
+            //SceneManager.QueueEnded += scene_QueueEnded;
+          
             // set some ambient light
             SceneManager.AmbientLight = new ColorEx(1.0f, 0.4f, 0.4f, 0.4f);
 
@@ -284,7 +285,6 @@ namespace SmartMap
             seaFloorNode.Translate(new Vector3(-999, -500, -999));*/
 
             frustumNode.Position = new Vector3(128, 500, 128);
-            
             Camera.LookAt(new Vector3(0, 0, -300));
 
             // instance optimization
@@ -750,7 +750,7 @@ namespace SmartMap
                         // add exterior tile if adjacent edge is empty. Corner for two. 
                         if (this.sm.NoNearbyVertices(v) == "empty_corner")
                         {          
-                            this.tileNode[nodeCount].AttachObject(exteriorTileEnd[outEndTileCount]);
+                            this.tileNode[nodeCount].AttachObject(exteriorTileEnd[outEndTileCount]);  
                             Console.WriteLine("Exterior EndTile Entity {0} attached", outEndTileCount);
                             outEndTileCount++;
                         }
@@ -915,8 +915,11 @@ namespace SmartMap
                 if (this.tileNode[nodeCount] != null)
                 {
                     this.moduleNode[moduleCount].AddChild(this.tileNode[nodeCount]);
+                    this.moduleNode[moduleCount].DetachAllObjects();
+                    
+                    //this.moduleNode[moduleCount].AddChild(this.tileNode[nodeCount]);
                     assertMessage = string.Format("[][][] New tile {0} has been created [][][]", nodeCount);
-                    //Console.WriteLine("TileNode {0} has been created", this.tileNode[nodeCount].Name);
+                    Console.WriteLine("TileNode {0} has been created", this.tileNode[nodeCount].Name);
                     Debug.Assert(DebugStatements == true, assertMessage);
                 }
                 nodeCount++;
@@ -995,7 +998,7 @@ namespace SmartMap
 		private void scene_QueueStarted(object sender, SceneManager.BeginRenderQueueEventArgs e)
         {
             // begin the occlusion query
-            /*if (e.RenderQueueId == RenderQueueGroupID.One)
+            if (e.RenderQueueId == RenderQueueGroupID.One)
             {
                 query.Begin();
             }
@@ -1026,7 +1029,7 @@ namespace SmartMap
             if (e.RenderQueueId == RenderQueueGroupID.Nine)
             {
                 query.Begin();
-            }*/
+            }
 
             return;
         }
@@ -1039,7 +1042,7 @@ namespace SmartMap
         private void scene_QueueEnded(object sender, SceneManager.EndRenderQueueEventArgs e)
         {
             // end our occlusion query
-           /* if (e.RenderQueueId == RenderQueueGroupID.One)
+            if (e.RenderQueueId == RenderQueueGroupID.One)
             {
                 query.End();
                 int count = query.PullResults();
@@ -1070,7 +1073,7 @@ namespace SmartMap
                     }
                 }
             }
-
+            
             // end our occlusion query
             if (e.RenderQueueId == RenderQueueGroupID.Two)
             {
@@ -1252,7 +1255,7 @@ namespace SmartMap
                 {
                     debugText = string.Format("Queue Nine: Visible fragments = {0}", count);
                 }
-            }*/
+            }
 
             return;
         }
@@ -1268,175 +1271,176 @@ namespace SmartMap
 
             #region FRUSTUM CULL
             //objectsVisible = 0;
-            for (int i = 0; i < exteriorTileEnd.Count; i++) 
-            {
-                if (exteriorTileEnd[i].IsAttached)
-                {
-                    if (this.m_frustum.IsObjectVisible(exteriorTileEnd[i].GetWorldBoundingBox()))
-                    {
-                        exteriorTileEnd[i].ShowBoundingBox = false;
-                        exteriorTileEnd[i].IsVisible = true;
-                    }
-                    else // make sure entity is attached before attempting to use it
-                    {
-                        exteriorTileEnd[i].ShowBoundingBox = false;
-                        exteriorTileEnd[i].IsVisible = false;
-                    }
-                }
-            }
 
-            for (int i = 0; i < exteriorTileCorner.Count; i++)
-            {
-                if (exteriorTileCorner[i].IsAttached)
-                {
-                    if (this.m_frustum.IsObjectVisible(exteriorTileCorner[i].GetWorldBoundingBox()))
-                    {
-                        exteriorTileCorner[i].ShowBoundingBox = false;
-                        exteriorTileCorner[i].IsVisible = true;
-                    }
-                    else // make sure entity is attached before attempting to use it
-                    {
-                        exteriorTileCorner[i].ShowBoundingBox = false;
-                        exteriorTileCorner[i].IsVisible = false;
-                    }
-                }
-            }
+           for (int i = 0; i < exteriorTileEnd.Count; i++) 
+           {
+               if (exteriorTileEnd[i].IsAttached)
+               {
+                   if (this.m_frustum.IsObjectVisible(exteriorTileEnd[i].GetWorldBoundingBox()))
+                   {
+                       //exteriorTileEnd[i].ShowBoundingBox = false;
+                       exteriorTileEnd[i].IsVisible = true;
+                   }
+                   else // make sure entity is attached before attempting to use it
+                   {
+                       //exteriorTileEnd[i].ShowBoundingBox = false;
+                       exteriorTileEnd[i].IsVisible = false;
+                   }
+               }
+           }
 
-            for (int i = 0; i < exteriorTileFloor.Count; i++)
-            {
-                if (exteriorTileFloor[i].IsAttached)
-                {
-                    if (this.m_frustum.IsObjectVisible(exteriorTileFloor[i].GetWorldBoundingBox()))
-                    {
-                        exteriorTileFloor[i].ShowBoundingBox = false;
-                        exteriorTileFloor[i].IsVisible = true;
-                    }
-                    else // make sure entity is attached before attempting to use it
-                    {
-                        exteriorTileFloor[i].ShowBoundingBox = false;
-                        exteriorTileFloor[i].IsVisible = false;
-                    }
-                }
-            }
+           for (int i = 0; i < exteriorTileCorner.Count; i++)
+           {
+               if (exteriorTileCorner[i].IsAttached)
+               {
+                   if (this.m_frustum.IsObjectVisible(exteriorTileCorner[i].GetWorldBoundingBox()))
+                   {
+                       //exteriorTileCorner[i].ShowBoundingBox = false;
+                       exteriorTileCorner[i].IsVisible = true;
+                   }
+                   else // make sure entity is attached before attempting to use it
+                   {
+                       //exteriorTileCorner[i].ShowBoundingBox = false;
+                       exteriorTileCorner[i].IsVisible = false;
+                   }
+               }
+           }
 
-            for (int i = 0; i < exteriorTileHall.Count; i++)
-            {
-                if (exteriorTileHall[i].IsAttached)
-                {
-                    if (this.m_frustum.IsObjectVisible(exteriorTileHall[i].GetWorldBoundingBox()))
-                    {
-                        exteriorTileHall[i].ShowBoundingBox = false;
-                        exteriorTileHall[i].IsVisible = true;
-                    }
-                    else // make sure entity is attached before attempting to use it
-                    {
-                        exteriorTileHall[i].ShowBoundingBox = false;
-                        exteriorTileHall[i].IsVisible = false;
-                    }
-                }
-            }
+           for (int i = 0; i < exteriorTileFloor.Count; i++)
+           {
+               if (exteriorTileFloor[i].IsAttached)
+               {
+                   if (this.m_frustum.IsObjectVisible(exteriorTileFloor[i].GetWorldBoundingBox()))
+                   {
+                       //exteriorTileFloor[i].ShowBoundingBox = false;
+                       exteriorTileFloor[i].IsVisible = true;
+                   }
+                   else // make sure entity is attached before attempting to use it
+                   {
+                       //exteriorTileFloor[i].ShowBoundingBox = false;
+                       exteriorTileFloor[i].IsVisible = false;
+                   }
+               }
+           }
 
-            for (int i = 0; i < exteriorTileSide.Count; i++)
-            {
-                if (exteriorTileSide[i].IsAttached)
-                {
-                    if (this.m_frustum.IsObjectVisible(exteriorTileSide[i].GetWorldBoundingBox()))
-                    {
-                        exteriorTileSide[i].ShowBoundingBox = false;
-                        exteriorTileSide[i].IsVisible = true;
-                    }
-                    else // make sure entity is attached before attempting to use it
-                    {
-                        exteriorTileSide[i].ShowBoundingBox = false;
-                        exteriorTileSide[i].IsVisible = false;
-                    }
-                }
-            }
+           for (int i = 0; i < exteriorTileHall.Count; i++)
+           {
+               if (exteriorTileHall[i].IsAttached)
+               {
+                   if (this.m_frustum.IsObjectVisible(exteriorTileHall[i].GetWorldBoundingBox()))
+                   {
+                       //exteriorTileHall[i].ShowBoundingBox = false;
+                       exteriorTileHall[i].IsVisible = true;
+                   }
+                   else // make sure entity is attached before attempting to use it
+                   {
+                       //exteriorTileHall[i].ShowBoundingBox = false;
+                       exteriorTileHall[i].IsVisible = false;
+                   }
+               }
+           }
 
-            for (int i = 0; i < interiorTileCorner.Count; i++)
-            {
-                if (interiorTileCorner[i].IsAttached)
-                {
-                    if (this.m_frustum.IsObjectVisible(interiorTileCorner[i].GetWorldBoundingBox()))
-                    {
-                        interiorTileCorner[i].ShowBoundingBox = false;
-                        interiorTileCorner[i].IsVisible = true;
-                    }
-                    else // make sure entity is attached before attempting to use it
-                    {
-                        interiorTileCorner[i].ShowBoundingBox = false;
-                        interiorTileCorner[i].IsVisible = false;
-                    }
-                }
-            }
+           for (int i = 0; i < exteriorTileSide.Count; i++)
+           {
+               if (exteriorTileSide[i].IsAttached)
+               {
+                   if (this.m_frustum.IsObjectVisible(exteriorTileSide[i].GetWorldBoundingBox()))
+                   {
+                       //exteriorTileSide[i].ShowBoundingBox = false;
+                       exteriorTileSide[i].IsVisible = true;
+                   }
+                   else // make sure entity is attached before attempting to use it
+                   {
+                       //exteriorTileSide[i].ShowBoundingBox = false;
+                       exteriorTileSide[i].IsVisible = false;
+                   }
+               }
+           }
 
-            for (int i = 0; i < interiorTileEnd.Count; i++)
-            {
-                if (interiorTileEnd[i].IsAttached)
-                {
-                    if (this.m_frustum.IsObjectVisible(interiorTileEnd[i].GetWorldBoundingBox()))
-                    {
-                        interiorTileEnd[i].ShowBoundingBox = false;
-                        interiorTileEnd[i].IsVisible = true;
-                    }
-                    else // make sure entity is attached before attempting to use it
-                    {
-                        interiorTileEnd[i].ShowBoundingBox = false;
-                        interiorTileEnd[i].IsVisible = false;
-                    }
-                }
-            }
+           for (int i = 0; i < interiorTileCorner.Count; i++)
+           {
+               if (interiorTileCorner[i].IsAttached)
+               {
+                   if (this.m_frustum.IsObjectVisible(interiorTileCorner[i].GetWorldBoundingBox()))
+                   {
+                       //interiorTileCorner[i].ShowBoundingBox = false;
+                       interiorTileCorner[i].IsVisible = true;
+                   }
+                   else // make sure entity is attached before attempting to use it
+                   {
+                       //interiorTileCorner[i].ShowBoundingBox = false;
+                       interiorTileCorner[i].IsVisible = false;
+                   }
+               }
+           }
 
-            for (int i = 0; i < interiorTileFloor.Count; i++)
-            {
-                if (interiorTileFloor[i].IsAttached)
-                {
-                    if (this.m_frustum.IsObjectVisible(interiorTileFloor[i].GetWorldBoundingBox()))
-                    {
-                        interiorTileFloor[i].ShowBoundingBox = false;
-                        interiorTileFloor[i].IsVisible = true;
-                    }
-                    else // make sure entity is attached before attempting to use it
-                    {
-                        interiorTileFloor[i].ShowBoundingBox = false;
-                        interiorTileFloor[i].IsVisible = false;
-                    }
-                }
-            }
+           for (int i = 0; i < interiorTileEnd.Count; i++)
+           {
+               if (interiorTileEnd[i].IsAttached)
+               {
+                   if (this.m_frustum.IsObjectVisible(interiorTileEnd[i].GetWorldBoundingBox()))
+                   {
+                       //interiorTileEnd[i].ShowBoundingBox = false;
+                       interiorTileEnd[i].IsVisible = true;
+                   }
+                   else // make sure entity is attached before attempting to use it
+                   {
+                       //interiorTileEnd[i].ShowBoundingBox = false;
+                       interiorTileEnd[i].IsVisible = false;
+                   }
+               }
+           }
 
-            for (int i = 0; i < interiorTileHall.Count; i++)
-            {
-                if (interiorTileHall[i].IsAttached)
-                {
-                    if (this.m_frustum.IsObjectVisible(interiorTileHall[i].GetWorldBoundingBox()))
-                    {
-                        interiorTileHall[i].ShowBoundingBox = false;
-                        interiorTileHall[i].IsVisible = true;
-                    }
-                    else // make sure entity is attached before attempting to use it
-                    {
-                        interiorTileHall[i].ShowBoundingBox = false;
-                        interiorTileHall[i].IsVisible = false;
-                    }
-                }
-            }
+           for (int i = 0; i < interiorTileFloor.Count; i++)
+           {
+               if (interiorTileFloor[i].IsAttached)
+               {
+                   if (this.m_frustum.IsObjectVisible(interiorTileFloor[i].GetWorldBoundingBox()))
+                   {
+                       //interiorTileFloor[i].ShowBoundingBox = false;
+                       interiorTileFloor[i].IsVisible = true;
+                   }
+                   else // make sure entity is attached before attempting to use it
+                   {
+                       //interiorTileFloor[i].ShowBoundingBox = false;
+                       interiorTileFloor[i].IsVisible = false;
+                   }
+               }
+           }
 
-            for (int i = 0; i < interiorTileSide.Count; i++)
-            {
-                if (interiorTileSide[i].IsAttached)
-                {
-                    if (this.m_frustum.IsObjectVisible(interiorTileSide[i].GetWorldBoundingBox()))
-                    {
-                        interiorTileSide[i].ShowBoundingBox = false;
-                        interiorTileSide[i].IsVisible = true;
-                    }
-                    else // make sure entity is attached before attempting to use it
-                    {
-                        interiorTileSide[i].ShowBoundingBox = false;
-                        interiorTileSide[i].IsVisible = false;
-                    }
-                }
-            }
+           for (int i = 0; i < interiorTileHall.Count; i++)
+           {
+               if (interiorTileHall[i].IsAttached)
+               {
+                   if (this.m_frustum.IsObjectVisible(interiorTileHall[i].GetWorldBoundingBox()))
+                   {
+                       //interiorTileHall[i].ShowBoundingBox = false;
+                       interiorTileHall[i].IsVisible = true;
+                   }
+                   else // make sure entity is attached before attempting to use it
+                   {
+                       //interiorTileHall[i].ShowBoundingBox = false;
+                       interiorTileHall[i].IsVisible = false;
+                   }
+               }
+           }
+
+           for (int i = 0; i < interiorTileSide.Count; i++)
+           {
+               if (interiorTileSide[i].IsAttached)
+               {
+                   if (this.m_frustum.IsObjectVisible(interiorTileSide[i].GetWorldBoundingBox()))
+                   {
+                       //interiorTileSide[i].ShowBoundingBox = false;
+                       interiorTileSide[i].IsVisible = true;
+                   }
+                   else // make sure entity is attached before attempting to use it
+                   {
+                       //interiorTileSide[i].ShowBoundingBox = false;
+                       interiorTileSide[i].IsVisible = false;
+                   }
+               }
+           }
             // report the number of objects within the frustum 
             //debugText = string.Format("Objects visible: {0}", objectsVisible);
             #endregion
@@ -1489,7 +1493,7 @@ namespace SmartMap
                 //}
             } else // if isModelWalking, determine how far to move this frame
             {
-                move = modelWalkSpeed * timeSinceLastFrame;
+                move = modelWalkS  peed * timeSinceLastFrame;
                 distanceToNextWaypoint -= move;                                 
             }
             // you have reached a pathnode
