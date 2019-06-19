@@ -202,9 +202,9 @@ namespace SmartMap
         /// 
         /// </summary>
         /// <param name="cam"></param>
-        public SinbadCharacterController(Camera cam)
+        public SinbadCharacterController(Camera cam, SceneManager sm)
         {
-            SetupBody(cam.SceneManager);
+            SetupBody(sm);
             SetupCamera(cam);
             SetupAnimations();
         }

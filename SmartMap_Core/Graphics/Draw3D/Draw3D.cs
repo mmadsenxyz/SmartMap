@@ -169,9 +169,7 @@ namespace SmartMap
             CreateGraphics(exteriorTileEnd, "Wall_End", "Room_End.mesh", "TileSet/Wall", 200, 200, RenderQueueGroupID.Nine);
             Console.WriteLine("LOADING...exteriorTileFloor");
             CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 200, 200, RenderQueueGroupID.Nine);
-       
-            
-            
+        
             //CreateInstanceGeom();
 
             CreateWorld(0, 0, 0, 0, 0);
@@ -247,10 +245,9 @@ namespace SmartMap
 
             // =Draw 4D= - For dynamic objects in scene
             // TODO: set up clipping regions for 4 tileSets
-            this.d4d = new Draw4D(base.SceneManager);
+            this.d4d = new Draw4D(base.Camera, base.SceneManager);
             this.d4d.idraw = this;
             // Model
-            this.d4d.sinbad = new SinbadCharacterController(Camera);
             this.d4d.sinbad.cameraNode.AttachObject(m_frustum);
             // initial position
             this.d4d.sinbad.cameraNode.Position = new Vector3(128, 500, 128);
@@ -982,10 +979,10 @@ namespace SmartMap
         public override bool KeyPressed(SharpInputSystem.KeyEventArgs evt)
         {
             // relay input events to character controller
-            if (!TrayManager.IsDialogVisible)
-            {
+            //if (!TrayManager.IsDialogVisible)
+            //{
                 this.d4d.sinbad.InjectKeyDown(evt);
-            }
+            //}
 
             return base.KeyPressed(evt);
         }
@@ -997,10 +994,10 @@ namespace SmartMap
         /// <returns></returns>
         public override bool KeyReleased(SharpInputSystem.KeyEventArgs evt)
         {
-            if (!TrayManager.IsDialogVisible)
-            {
+           // if (!TrayManager.IsDialogVisible)
+            //{
                 this.d4d.sinbad.InjectKeyUp(evt);
-            }
+            //}
 
             return base.KeyReleased(evt);
         }
@@ -1013,10 +1010,10 @@ namespace SmartMap
         public override bool MouseMoved(SharpInputSystem.MouseEventArgs evt)
         {
             // relay input events to character controller
-            if (!TrayManager.IsDialogVisible)
-            {
+            //if (!TrayManager.IsDialogVisible)
+            //{
                 this.d4d.sinbad.InjectMouseMove(evt);
-            }
+            //}
 
             return base.MouseMoved(evt);
         }
@@ -1030,10 +1027,10 @@ namespace SmartMap
         public override bool MousePressed(SharpInputSystem.MouseEventArgs evt, SharpInputSystem.MouseButtonID id)
         {
             // relay input events to character controller
-            if (!TrayManager.IsDialogVisible)
-            {
+            //if (!TrayManager.IsDialogVisible)
+            //{
                 this.d4d.sinbad.InjectMouseDown(evt, id);
-            }
+            //}
 
             return base.MousePressed(evt, id);
         }

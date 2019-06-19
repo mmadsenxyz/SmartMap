@@ -322,9 +322,6 @@
     <Reference Include="Axiom.Samples.Common">
       <HintPath>Libraries\Axiom.Samples.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Axiom.Samples.Core">
-      <HintPath>Libraries\Axiom.Samples.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Axiom.SceneManagers.Octree">
       <HintPath>Libraries\Axiom.SceneManagers.Octree.dll</HintPath>
     </Reference>
