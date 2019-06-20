@@ -22,6 +22,7 @@
 
 #endregion License
 
+using System;
 using Axiom.Core;
 using Axiom.Math;
 using Axiom.Graphics;
@@ -179,12 +180,12 @@ namespace SmartMap
         /// <summary>
         /// player's local intended direction based on WASD keys
         /// </summary>
-        protected Axiom.Math.Vector3 keyDirection;
+        protected Vector3 keyDirection;
 
         /// <summary>
         /// actual intended direction in world-space
         /// </summary>
-        protected Axiom.Math.Vector3 goalDirection;
+        protected Vector3 goalDirection;
 
         /// <summary>
         /// for jumping
@@ -195,6 +196,13 @@ namespace SmartMap
         /// general timer to see how long animations have been playing
         /// </summary>
         protected Real timer;
+
+        protected Vector3 cameraVector = Vector3.Zero;
+        protected float cameraScale;
+        protected Vector3 camVelocity = Vector3.Zero;
+        protected Vector3 camAccel = Vector3.Zero;
+        protected Vector3 mouseRotateVector = Vector3.Zero;
+        protected float camSpeed = 2.5f;
 
         #endregion
 
@@ -208,13 +216,14 @@ namespace SmartMap
             SetupCamera(cam);
             SetupAnimations();
         }
-
+        
         /// <summary>
         /// 
         /// </summary>
         /// <param name="e"></param>
         public void InjectKeyDown(SharpInputSystem.KeyEventArgs e)
         {
+            // CAMERA NODE ANIMATIONS
             if (e.Key == SharpInputSystem.KeyCode.Key_Q && (topAnimID == AnimationID.IdleTop || topAnimID == AnimationID.RunTop))
             {
                 // take swords out (or put them back, since it's the same animation but reversed)
@@ -243,18 +252,24 @@ namespace SmartMap
             // keep track of the player's intended direction
             else if (e.Key == SharpInputSystem.KeyCode.Key_W)
             {
+                Root.Instance.QueueEndRendering();
+                Console.WriteLine("Pressing Forward");
+                camAccel.z = -1.0f;
                 keyDirection.z = -1;
             }
             else if (e.Key == SharpInputSystem.KeyCode.Key_A)
             {
+                camAccel.x = -0.5f;
                 keyDirection.x = -1;
             }
             else if (e.Key == SharpInputSystem.KeyCode.Key_S)
             {
+                camAccel.z = 1.0f;
                 keyDirection.z = 1;
             }
             else if (e.Key == SharpInputSystem.KeyCode.Key_D)
             {
+                camAccel.x = 0.5f;
                 keyDirection.x = 1;
             }
 
@@ -286,6 +301,8 @@ namespace SmartMap
             // keep track of the player's intended direction
             if (e.Key == SharpInputSystem.KeyCode.Key_W && keyDirection.z == -1)
             {
+                Console.WriteLine("Pressing Forward");
+                Root.Instance.QueueEndRendering();
                 keyDirection.z = 0;
             }
             else if (e.Key == SharpInputSystem.KeyCode.Key_A && keyDirection.x == -1)
@@ -362,7 +379,7 @@ namespace SmartMap
         private void SetupBody(SceneManager sceneMgr)
         {
             // create main model
-            bodyNode = sceneMgr.RootSceneNode.CreateChildSceneNode(Axiom.Math.Vector3.UnitY * CharHeight);
+            bodyNode = sceneMgr.RootSceneNode.CreateChildSceneNode(Vector3.UnitY * CharHeight);
             bodyEnt = sceneMgr.CreateEntity("SinbadBody", "Sinbad.mesh");
             bodyNode.AttachObject(bodyEnt);
 
@@ -390,7 +407,7 @@ namespace SmartMap
                 swordTrail.SetInitialWidth(i, 0.5f);
             }
 
-            keyDirection = Axiom.Math.Vector3.Zero;
+            keyDirection = Vector3.Zero;
             verticalVelocity = 0;
         }
 
@@ -434,7 +451,7 @@ namespace SmartMap
             // create a pivot at roughly the character's shoulder
             cameraPivot = cam.SceneManager.RootSceneNode.CreateChildSceneNode();
             // this is where the camera should be soon, and it spins around the pivot
-            cameraGoal = cameraPivot.CreateChildSceneNode(new Axiom.Math.Vector3(0, 0, 15));
+            cameraGoal = cameraPivot.CreateChildSceneNode(new Vector3(0, 0, 15));
             // this is where the camera actually is
             cameraNode = cam.SceneManager.RootSceneNode.CreateChildSceneNode();
             cameraNode.Position = cameraPivot.Position + cameraGoal.Position;
@@ -444,8 +461,8 @@ namespace SmartMap
             cameraNode.SetFixedYawAxis(true);
 
             // our model is quite small, so reduce the clipping planes
-            cam.Near = 0.1f;
-            cam.Far = 100;
+            //cam.Near = 0.1f;
+            //cam.Far = 10000;
             cameraNode.AttachObject(cam);
             pivotPitch = 0;
         }
@@ -457,9 +474,9 @@ namespace SmartMap
         private void UpdateBody(Real deltaTime)
         {
             // we will calculate this
-            goalDirection = Axiom.Math.Vector3.Zero;
+            goalDirection = Vector3.Zero;
 
-            if (keyDirection != Axiom.Math.Vector3.Zero && baseAnimID != AnimationID.Dance)
+            if (keyDirection != Vector3.Zero && baseAnimID != AnimationID.Dance)
             {
                 // calculate actually goal direction in world based on player's key directions
                 goalDirection += keyDirection.z * cameraNode.Orientation.ZAxis;
@@ -491,16 +508,16 @@ namespace SmartMap
                 bodyNode.Yaw(yawToGlobal);
 
                 // move in current body direction (not the goal direction)
-                bodyNode.Translate(new Axiom.Math.Vector3(0, 0, deltaTime * RunSpeed * anims[(int)baseAnimID].Weight), TransformSpace.Local);
+                bodyNode.Translate(new Vector3(0, 0, deltaTime * RunSpeed * anims[(int)baseAnimID].Weight), TransformSpace.Local);
             }
 
             if (baseAnimID == AnimationID.JumpLoop)
             {
                 // if we're jumping, add a vertical offset too, and apply gravity
-                bodyNode.Translate(new Axiom.Math.Vector3(0, verticalVelocity * deltaTime, 0), TransformSpace.Local);
+                bodyNode.Translate(new Vector3(0, verticalVelocity * deltaTime, 0), TransformSpace.Local);
                 verticalVelocity -= Gravity * deltaTime;
 
-                Axiom.Math.Vector3 pos = bodyNode.Position;
+                Vector3 pos = bodyNode.Position;
                 if (pos.y <= CharHeight)
                 {
                     // if we've hit the ground, change to landing state
@@ -607,7 +624,7 @@ namespace SmartMap
                 if (timer >= anims[(int)baseAnimID].Length)
                 {
                     // safely landed, so go back to running or idling
-                    if (keyDirection == Axiom.Math.Vector3.Zero)
+                    if (keyDirection == Vector3.Zero)
                     {
                         SetBaseAnimation(AnimationID.IdleBase);
                         SetTopAnimation(AnimationID.IdleTop);
@@ -673,13 +690,28 @@ namespace SmartMap
         private void UpdateCamera(Real deltaTime)
         {
             // place the camera pivot roughly at the character's shoulder
-            cameraPivot.Position = bodyNode.Position + Axiom.Math.Vector3.UnitY * CamHeight;
-            // move the camera smoothly to the goal
-            Axiom.Math.Vector3 goalOffset = cameraGoal.DerivedPosition - cameraNode.Position;
-            cameraNode.Translate(goalOffset * deltaTime * 9.0f);
-            // always look at the pivot
-            cameraNode.LookAt(cameraPivot.DerivedPosition, TransformSpace.World);
+            cameraPivot.Position = bodyNode.Position + Vector3.UnitY * CamHeight;
+            // VELOCITY
+            // CAMERA NODE ACCELERATIONS
+            float scaleMove = 200 * deltaTime;
+            // reset acceleration zero
+            camAccel = Vector3.Zero;
+            // set the scaling of camera motion
+            cameraScale = 100 * deltaTime;
+            float speed = 350 * deltaTime;
+            float change = 15 * deltaTime;
 
+            camVelocity += (camAccel * scaleMove * camSpeed);
+            this.cameraNode.Translate(camVelocity * deltaTime, TransformSpace.Local);
+
+            // Now dampen the Velocity - only if user is not accelerating
+            if (camAccel == Vector3.Zero) { camVelocity *= (1 - (6 * deltaTime)); }
+
+            // ANIMATIONS move the camera smoothly to the goal
+            Vector3 goalOffset = cameraGoal.DerivedPosition - cameraNode.Position;
+            //cameraNode.Translate(goalOffset * deltaTime * 9.0f);
+            // always look at the pivot
+            //cameraNode.LookAt(cameraPivot.DerivedPosition, TransformSpace.World);
         }
 
         /// <summary>
@@ -707,7 +739,7 @@ namespace SmartMap
             if (!(dist + distChange < 8 && distChange < 0) &&
                 !(dist + distChange > 25 && distChange > 0))
             {
-                cameraGoal.Translate(new Axiom.Math.Vector3(0, 0, distChange), TransformSpace.Local);
+                cameraGoal.Translate(new Vector3(0, 0, distChange), TransformSpace.Local);
             }
         }
 

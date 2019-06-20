@@ -208,29 +208,23 @@ namespace SmartMap
     ///     Base class for Axiom examples.
     /// </summary>
     public abstract class EngineSetup : SdkSample, IDisposable
-    { 
+    {
         #region Protected Fields
-        protected Root Root;
         protected Camera Camera;
+        protected Root Root;
         protected Frustum m_frustum;
         protected Frustum u_frustum;
         public SceneNode frustumNode;
         protected Viewport Viewport;
         protected RenderWindow Window;
         protected InputReader Input;
-        protected TerrainSceneManager m_sceneManager;
-        protected Vector3 cameraVector = Vector3.Zero;
-        protected float cameraScale;
+        protected TerrainSceneManager m_sceneManager;      
         protected bool showDebugOverlay = true;
         protected float statDelay = 0.0f;
         protected float debugTextDelay = 0.0f;
         protected string debugText = "";
-        protected float toggleDelay = 0.0f;
-        protected Vector3 camVelocity = Vector3.Zero;
-        protected Vector3 camAccel = Vector3.Zero;
-        protected Vector3 mouseRotateVector = Vector3.Zero;
-        protected bool isUsingKbCameraLook = false;
-        protected float camSpeed = 2.5f;
+        protected float toggleDelay = 0.0f;      
+        protected bool isUsingKbCameraLook = false;    
         protected int aniso = 1;
         protected TextureFiltering filtering = TextureFiltering.Bilinear;
         private const string CONFIG_FILE = @"EngineConfig.xml";
@@ -247,7 +241,6 @@ namespace SmartMap
             Camera = m_sceneManager.CreateCamera("MainCamera");
             Camera.Position = new Vector3(0, 0, 500);
             Camera.LookAt(new Vector3(0, 0, -300));
-
             // set the near clipping plane to be very close
             Camera.Near = 5;
 
@@ -266,14 +259,14 @@ namespace SmartMap
             u_frustum.Name = "Frustum Underbrush";
 
             // create a node for the frustum and attach it
-            frustumNode = m_sceneManager.RootSceneNode.CreateChildSceneNode(new Vector3(0, 2000, 2000), Quaternion.Identity);
+            /*frustumNode = m_sceneManager.RootSceneNode.CreateChildSceneNode(new Vector3(0, 2000, 2000), Quaternion.Identity);
 
             frustumNode.Yaw(0);
             frustumNode.Position = new Vector3(8000, -7000, 8000);
 
             frustumNode.AttachObject(m_frustum);
             frustumNode.AttachObject(u_frustum);
-            //frustumNode.AttachObject(Camera);
+            //frustumNode.AttachObject(Camera);*/
         }
 
         /// <summary>
@@ -314,7 +307,7 @@ namespace SmartMap
         /// <summary>
         /// SceneManager (Axiom.Core.SceneManager)
         /// </summary>
-        protected TerrainSceneManager SceneManager
+        protected new TerrainSceneManager SceneManager
         {
             get { return m_sceneManager; }
             set { m_sceneManager = value; }
@@ -539,16 +532,15 @@ namespace SmartMap
 
         protected void UpdateInput(Object source, FrameEventArgs e)
         {
-
             Input.Capture();
 
-            float scaleMove = 200 * e.TimeSinceLastFrame;
+            //float scaleMove = 200 * e.TimeSinceLastFrame;
 
             // reset acceleration zero
-            camAccel = Vector3.Zero;
+            //camAccel = Vector3.Zero;
 
             // set the scaling of camera motion
-            cameraScale = 100 * e.TimeSinceLastFrame;
+            //cameraScale = 100 * e.TimeSinceLastFrame;
 
             float speed = 350 * e.TimeSinceLastFrame;
             float change = 15 * e.TimeSinceLastFrame;
@@ -714,19 +706,17 @@ namespace SmartMap
             //    cameraVector.x += input.RelativeMouseX * 0.13f;
             //}
 
-            camVelocity += (camAccel * scaleMove * camSpeed);
+            //camVelocity += (camAccel * scaleMove * camSpeed);
 
             // move the camera based on the accumulated movement vector
             //Camera.MoveRelative(camVelocity * e.TimeSinceLastFrame);
-            // move in current body direction (not the goal direction)
-
             //this.frustumNode.Translate(camVelocity * e.TimeSinceLastFrame, TransformSpace.Local);
 
             // Now dampen the Velocity - only if user is not accelerating
-            if (camAccel == Vector3.Zero)
+            /*if (camAccel == Vector3.Zero)
             {
                 camVelocity *= (1 - (6 * e.TimeSinceLastFrame));
-            }
+            }*/
         }
 
         protected void UpdateDebugOverlay(object source, FrameEventArgs e)

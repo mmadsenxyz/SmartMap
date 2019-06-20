@@ -332,7 +332,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\QuickGraph.dll</HintPath>
     </Reference>
-    <Reference Include="SharpInputSystem.Core">
+    <Reference Include="SharpInputSystem.Core, Version=0.4.0.19506, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\SharpInputSystem.Core.dll</HintPath>
     </Reference>
     <Reference Include="SynapticEffect.Forms">
