@@ -28,10 +28,11 @@ using Axiom.Math;
 using Axiom.Graphics;
 using Axiom.Collections;
 using Axiom.Animating;
+using Axiom.Samples;
 
 namespace SmartMap
 {
-    public class SinbadCharacterController
+    public class CharacterController : SdkSample
     {
         /// <summary>
         /// number of animations the character has
@@ -210,7 +211,7 @@ namespace SmartMap
         /// 
         /// </summary>
         /// <param name="cam"></param>
-        public SinbadCharacterController(Camera cam, SceneManager sm)
+        public CharacterController(Camera cam, SceneManager sm)
         {
             SetupBody(sm);
             SetupCamera(cam);

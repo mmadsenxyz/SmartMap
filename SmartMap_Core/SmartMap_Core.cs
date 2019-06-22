@@ -15,6 +15,14 @@ using QuickGraph.Algorithms.Search;
 using QuickGraph.Algorithms.RandomWalks;
 using QuickGraph.Collections;
 using Wintellect.PowerCollections;
+using Axiom.Samples;
+using System.Linq;
+using System.Globalization;
+using System.Security.Permissions;
+using System.Threading;
+using Axiom.Framework.Exceptions;
+using Axiom.Samples.Core;
+
 
 namespace SmartMap
 {
@@ -530,23 +538,7 @@ namespace SmartMap
         {
         }
 
-        #endregion
-
-        [STAThread]
-        public static void Main()
-        {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            try {
-                using (Draw3D d3d = new Draw3D()) {
-                    d3d.Run();
-                }
-            }
-            catch (Exception ex) {
-                Debug.Assert(false, ex.ToString(), Environment.StackTrace.ToString());
-            }
-        }
+        #endregion     
     }
 
     #region STRUCTS 

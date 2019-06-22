@@ -4,6 +4,11 @@
 // Copyright (c) Microsoft Corp. All rights reserved.
 //-----------------------------------------------------------------------------
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Linq;
+using System.Text;
 using System.Drawing;
 using System.Collections;
 using System.Windows.Forms;

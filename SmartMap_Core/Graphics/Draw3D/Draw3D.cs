@@ -15,6 +15,7 @@ using Axiom.Math;
 using Axiom.Graphics;
 using Axiom.Configuration;
 using Axiom.ParticleSystems;
+using Axiom.Samples;
 
 namespace SmartMap
 {
@@ -22,7 +23,7 @@ namespace SmartMap
     /// Creates the 3D objects for the 3D graphics renderer
     /// </summary>
     [System.ComponentModel.DesignerCategory("")]
-    public class Draw3D : EngineSetup, IDraw, IDisposable
+    public class Draw3D : SdkSample, IDraw
     {
         #region objects
         // Map
@@ -87,6 +88,9 @@ namespace SmartMap
         private List<Entity> renderEntity;
         private List<SceneNode> nodes;
         private List<List<Vector3>> posMatrices;*/
+        // Camera and Frustum
+        protected Frustum m_frustum;
+        protected Frustum u_frustum;
         // Debug
         public bool DebugStatements = true;
         private string assertMessage;
@@ -121,7 +125,7 @@ namespace SmartMap
 
         #region Create Scene
 
-        protected override void CreateScene()
+        protected override void SetupContent()
         {
             CreateEnvironment();
 
@@ -171,7 +175,7 @@ namespace SmartMap
             CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 200, 200, RenderQueueGroupID.Nine);
         
             //CreateInstanceGeom();
-
+            
             CreateWorld(0, 0, 0, 0, 0);
             
             #region DEBUG
@@ -937,20 +941,20 @@ namespace SmartMap
 
             // needs to stop frame animation to build tiles properly
             //Window.DebugText = string.Format("Press E to enter Edit Mode");
-            Root.FrameStarted += OnFrameStarted;
-            Root.FrameEnded += OnFrameEnded;
-            Root.FrameStarted += UpdateInput;
-            Window.IsActive = true;
+            //Root.FrameStarted += OnFrameStarted;
+            //Root.FrameEnded += OnFrameEnded;
+            //Root.FrameStarted += UpdateInput;
+            //Window.IsActive = true;
         }
 
-        protected virtual void ExitEditor()
+        /*protected virtual void ExitEditor()
         {
             //Window.DebugText = string.Format("Press E to enter Edit Mode");
             Root.FrameStarted += UpdateInput;
             Root.FrameStarted += OnFrameStarted;
             Root.FrameEnded += OnFrameEnded;
             Window.IsActive = true;
-        }
+        }*/
 
         protected bool nextLocation()
         {
@@ -960,14 +964,44 @@ namespace SmartMap
                 return true;
         }
 
-        public override void Dispose()
+        protected override void CleanupContent()
         {
             if (query != null)
             {
                 query.Dispose();
             }
-            base.Dispose();
+            if (this.d4d.sinbad != null)
+            {
+                this.d4d.sinbad = null;
+            }
+
+            MeshManager.Instance.Remove("floor");
+
+            base.CleanupContent();
         }
+
+        /// <summary>
+        /// Begins the execution the application.
+        /// </summary>
+        /*public void Run()
+        {
+            try
+            {
+                if (Setup())
+                {
+                    // start the engines rendering loop
+                    Root.StartRendering();
+                }
+            }
+            catch (Exception ex)
+            {
+                // try logging the error here first, before Root is disposed of
+                if (LogManager.Instance != null)
+                {
+                    LogManager.Instance.Write(LogManager.BuildExceptionString(ex));
+                }
+            }
+        }*/
 
         #region MODEL CONTROLS
 
@@ -1046,7 +1080,6 @@ namespace SmartMap
         /// <returns></returns>
         private void scene_QueueStarted(object sender, SceneManager.BeginRenderQueueEventArgs e)
         {
-
             #region OCCLUSIONQEURY BEGIN
             // begin the occlusion query
             /*if (e.RenderQueueId == RenderQueueGroupID.One)
@@ -1421,18 +1454,18 @@ namespace SmartMap
 
             return;
         }
-        
+
         #endregion
 
         #region Frame Animation   
 
-        protected override void OnFrameStarted(object source, FrameEventArgs e)
+        public override bool FrameRenderingQueued(FrameEventArgs evt)
         {
-            // let sinbad character update animations and camera
-            this.d4d.sinbad.AddTime(e.TimeSinceLastFrame);
-
             //timeSinceLastFrame = e.TimeSinceLastFrame;
-            base.OnFrameStarted(source, e);
+            base.FrameRenderingQueued(evt);
+
+            // let sinbad character update animations and camera
+            this.d4d.sinbad.AddTime(evt.TimeSinceLastFrame);
 
             #region FRUSTUM CULL
             //objectsVisible = 0;
@@ -2061,6 +2094,9 @@ namespace SmartMap
                 */
 
             #endregion Camera Clipping Events
+
+            // true if we should stop rendering
+            return false;
         }
         #endregion
     }

@@ -25,7 +25,7 @@ namespace SmartMap
 		// Models
 		public Dictionary<int, Entity> model;
 		public Dictionary<int, SceneNode> modelNode;
-        public SinbadCharacterController sinbad;
+        public CharacterController sinbad;
 
         public Draw4D(Camera cam, SceneManager man)
 		{
@@ -36,7 +36,7 @@ namespace SmartMap
 			this.zoneGroup = new Dictionary<int, SceneNode> (4);
 			this.model = new Dictionary<int, Entity>(10);
 			this.modelNode = new Dictionary<int, SceneNode>(10);
-            this.sinbad = new SinbadCharacterController(cam, man);
+            this.sinbad = new CharacterController(cam, man);
         }
 
         #region Properties

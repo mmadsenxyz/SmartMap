@@ -12,7 +12,7 @@
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <OutputType>Exe</OutputType>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
-    <StartupObject>SmartMap.SmartMap_Core</StartupObject>
+    <StartupObject>Axiom.Samples.Program</StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -85,6 +85,9 @@
       <DependentUpon>SoundPanel.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Compile Include="Browser\Program.cs" />
+    <Compile Include="Browser\SampleBrowser.cs" />
+    <Compile Include="Browser\SampleBrowser.XBox.cs" />
     <Compile Include="Configuration\EngineConfig.cs">
       <DependentUpon>EngineConfig.xsd</DependentUpon>
     </Compile>
@@ -96,8 +99,26 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EngineConfig.xsd</DependentUpon>
     </Compile>
-    <Compile Include="EngineSetup.cs">
-    </Compile>
+    <Compile Include="EngineSetup\Sample.cs" />
+    <Compile Include="EngineSetup\SampleContext.cs" />
+    <Compile Include="EngineSetup\SamplePlugin.cs" />
+    <Compile Include="EngineSetup\SdkCameraManager.cs" />
+    <Compile Include="EngineSetup\SdkSample.cs" />
+    <Compile Include="EngineSetup\Tray\Button.cs" />
+    <Compile Include="EngineSetup\Tray\CheckBox.cs" />
+    <Compile Include="EngineSetup\Tray\DecorWidget.cs" />
+    <Compile Include="EngineSetup\Tray\ISdkTrayListener.cs" />
+    <Compile Include="EngineSetup\Tray\Label.cs" />
+    <Compile Include="EngineSetup\Tray\LogoWidget.cs" />
+    <Compile Include="EngineSetup\Tray\ParamsPanel.cs" />
+    <Compile Include="EngineSetup\Tray\ProgressBar.cs" />
+    <Compile Include="EngineSetup\Tray\SdkTrays.cs" />
+    <Compile Include="EngineSetup\Tray\SelectMenu.cs" />
+    <Compile Include="EngineSetup\Tray\Separator.cs" />
+    <Compile Include="EngineSetup\Tray\Slider.cs" />
+    <Compile Include="EngineSetup\Tray\TextBox.cs" />
+    <Compile Include="EngineSetup\Tray\Widget.cs" />
+    <Compile Include="EngineSetup\Tray\WidgetEventArgs.cs" />
     <Compile Include="Graphics\Draw2D\Draw2D.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -109,7 +130,7 @@
     <Compile Include="Graphics\IDraw.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Graphics\Draw4D\SinbadCharacterController.cs" />
+    <Compile Include="Graphics\Draw4D\CharacterController.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -119,11 +140,37 @@
       <SubType>Code</SubType>
     </Compile>
     <None Include="app.config" />
+    <None Include="Browser\Axiom.Samples.Browser.vshost.exe.Config" />
+    <None Include="Browser\Content\Content.contentproj" />
+    <None Include="Browser\Content\SdkTrays\Fonts\SdkTrays.fontdef" />
+    <None Include="Browser\Content\SdkTrays\Materials\Scripts\SdkTrays.material" />
+    <None Include="Browser\Content\SdkTrays\Overlays\SdkTrays.overlay" />
     <None Include="ClassDiagram.cd" />
     <None Include="DOCS\PowerCollections.chm" />
     <None Include="DOCS\QuickGraph.Documentation.chm" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Browser\Content\SdkTrays\Fonts\Caption.png" />
+    <Content Include="Browser\Content\SdkTrays\Fonts\Value.png" />
+    <Content Include="Browser\Content\SdkTrays\Materials\Textures\sdk_bands.png" />
+    <Content Include="Browser\Content\SdkTrays\Materials\Textures\sdk_button_down.png" />
+    <Content Include="Browser\Content\SdkTrays\Materials\Textures\sdk_button_over.png" />
+    <Content Include="Browser\Content\SdkTrays\Materials\Textures\sdk_button_up.png" />
+    <Content Include="Browser\Content\SdkTrays\Materials\Textures\sdk_cursor.png" />
+    <Content Include="Browser\Content\SdkTrays\Materials\Textures\sdk_frame.png" />
+    <Content Include="Browser\Content\SdkTrays\Materials\Textures\sdk_handle.png" />
+    <Content Include="Browser\Content\SdkTrays\Materials\Textures\sdk_label.png" />
+    <Content Include="Browser\Content\SdkTrays\Materials\Textures\sdk_logo.png" />
+    <Content Include="Browser\Content\SdkTrays\Materials\Textures\sdk_mini_text_box.png" />
+    <Content Include="Browser\Content\SdkTrays\Materials\Textures\sdk_mini_text_box_over.png" />
+    <Content Include="Browser\Content\SdkTrays\Materials\Textures\sdk_mini_tray.png" />
+    <Content Include="Browser\Content\SdkTrays\Materials\Textures\sdk_pulse.png" />
+    <Content Include="Browser\Content\SdkTrays\Materials\Textures\sdk_separator.png" />
+    <Content Include="Browser\Content\SdkTrays\Materials\Textures\sdk_shade.png" />
+    <Content Include="Browser\Content\SdkTrays\Materials\Textures\sdk_text_box.png" />
+    <Content Include="Browser\Content\SdkTrays\Materials\Textures\sdk_track.png" />
+    <Content Include="Browser\Content\SdkTrays\Materials\Textures\sdk_tray.png" />
+    <Content Include="Browser\Resources\AxiomIcon.ico" />
     <Content Include="DOCS\License.htm" />
     <Content Include="DOCS\NOTES\Notes.txt" />
     <Content Include="DOCS\NOTES\Notes_Draw2D.txt" />
@@ -183,6 +230,10 @@
     <Content Include="Libraries\Axiom.RenderSystems.DirectX9.pdb" />
     <Content Include="Libraries\Axiom.RenderSystems.OpenGL.dll" />
     <Content Include="Libraries\Axiom.RenderSystems.OpenGL.pdb" />
+    <Content Include="Libraries\Axiom.RenderSystems.Xna.Content.dll" />
+    <Content Include="Libraries\Axiom.RenderSystems.Xna.Content.pdb" />
+    <Content Include="Libraries\Axiom.RenderSystems.Xna.dll" />
+    <Content Include="Libraries\Axiom.RenderSystems.Xna.pdb" />
     <Content Include="Libraries\Axiom.SceneManagers.Bsp.dll" />
     <Content Include="Libraries\Axiom.SceneManagers.Bsp.pdb" />
     <Content Include="Libraries\Axiom.SceneManagers.Octree.dll" />
@@ -193,6 +244,12 @@
       <Link>cg.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="Libraries\Axiom.Samples.Browser.exe.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Libraries\Axiom.Samples.Browser.vshost.exe.Config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Libraries\cg.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -307,6 +364,10 @@
     <Reference Include="Axiom">
       <HintPath>Libraries\Axiom.dll</HintPath>
     </Reference>
+    <Reference Include="Axiom.Framework, Version=1.0.0.0, Culture=neutral, processorArchitecture=x86">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libraries\Axiom.Framework.dll</HintPath>
+    </Reference>
     <Reference Include="Axiom.Platforms.OpenTK">
       <HintPath>Libraries\Axiom.Platforms.OpenTK.dll</HintPath>
     </Reference>
@@ -321,6 +382,9 @@
     </Reference>
     <Reference Include="Axiom.Samples.Common">
       <HintPath>Libraries\Axiom.Samples.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Axiom.Samples.Core">
+      <HintPath>Libraries\Axiom.Samples.Core.dll</HintPath>
     </Reference>
     <Reference Include="Axiom.SceneManagers.Octree">
       <HintPath>Libraries\Axiom.SceneManagers.Octree.dll</HintPath>
