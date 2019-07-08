@@ -7,6 +7,7 @@ using System.Diagnostics;
 using Axiom.SceneManagers.Octree;
 using Axiom.Configuration;
 using Axiom.Core;
+using Axiom.Core.InstanceGeometry;
 using Axiom.Input;
 using Axiom.Overlays;
 using Axiom.Math;
@@ -211,6 +212,7 @@ namespace SmartMap
         protected Root Root;
         protected Camera Camera;
         protected Frustum m_frustum;
+        protected Frustum u_frustum;
         public SceneNode frustumNode;
         protected Viewport Viewport;
         protected RenderWindow Window;
@@ -250,9 +252,17 @@ namespace SmartMap
 
             m_frustum = new Frustum();
             m_frustum.Near = 10;
-            m_frustum.Far = 40000;
+            m_frustum.Far = 10000;
+            m_frustum.FieldOfView = 110;
             m_frustum.IsVisible = true;
             m_frustum.Name = "Frustum";
+
+            u_frustum = new Frustum();
+            u_frustum.Near = 10;
+            u_frustum.Far = 100;
+            u_frustum.FieldOfView = 110;
+            u_frustum.IsVisible = true;
+            u_frustum.Name = "Frustum Underbrush";
 
             // create a node for the frustum and attach it
             frustumNode = m_sceneManager.RootSceneNode.CreateChildSceneNode(new Vector3(0, 2000, 2000), Quaternion.Identity);
@@ -261,6 +271,7 @@ namespace SmartMap
             frustumNode.Position = new Vector3(8000, -7000, 8000);
 
             frustumNode.AttachObject(m_frustum);
+            frustumNode.AttachObject(u_frustum);
             frustumNode.AttachObject(Camera);
         }
 
@@ -462,6 +473,8 @@ namespace SmartMap
 
         #region Public Methods
 
+    
+
         /// <summary>
         /// Begins the execution the application.
         /// </summary>
@@ -485,7 +498,7 @@ namespace SmartMap
             }
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             if (Root != null)
             {
@@ -539,13 +552,15 @@ namespace SmartMap
             // set the scaling of camera motion
             cameraScale = 100 * e.TimeSinceLastFrame;
 
+            float speed = 350 * e.TimeSinceLastFrame;
+            float change = 15 * e.TimeSinceLastFrame;
 
             if (Input.IsKeyPressed(KeyCodes.Escape))
             {
                 Root.Instance.QueueEndRendering();
                 //return false;
             }
-
+           
             if (Input.IsKeyPressed(KeyCodes.A))
             {
                 camAccel.x = -0.5f;
@@ -572,25 +587,29 @@ namespace SmartMap
             isUsingKbCameraLook = false;
             if (Input.IsKeyPressed(KeyCodes.Left))
             {
-                Camera.Yaw(cameraScale);
+                frustumNode.Yaw(cameraScale, TransformSpace.Parent);
+                //Camera.Yaw(cameraScale);
                 isUsingKbCameraLook = true;
             }
 
             if (Input.IsKeyPressed(KeyCodes.Right))
             {
-                Camera.Yaw(-cameraScale);
+                frustumNode.Yaw(-cameraScale, TransformSpace.Parent);
+                //Camera.Yaw(-cameraScale);
                 isUsingKbCameraLook = true;
             }
 
             if (Input.IsKeyPressed(KeyCodes.Up))
             {
-                Camera.Pitch(cameraScale);
+                frustumNode.Pitch(cameraScale);
+                //Camera.Pitch(cameraScale);
                 isUsingKbCameraLook = true;
             }
 
             if (Input.IsKeyPressed(KeyCodes.Down))
             {
-                Camera.Pitch(-cameraScale);
+                frustumNode.Pitch(-cameraScale);
+                //Camera.Pitch(-cameraScale);
                 isUsingKbCameraLook = true;
             }
 
@@ -600,8 +619,10 @@ namespace SmartMap
                 mouseRotateVector = Vector3.Zero;
                 mouseRotateVector.x += Input.RelativeMouseX * 0.13f;
                 mouseRotateVector.y += Input.RelativeMouseY * 0.13f;
-                Camera.Yaw(-mouseRotateVector.x);
-                Camera.Pitch(-mouseRotateVector.y);
+                frustumNode.Yaw(-mouseRotateVector.x, TransformSpace.Parent);
+                frustumNode.Pitch(-mouseRotateVector.y);
+                //Camera.Yaw(-mouseRotateVector.x);
+                //Camera.Pitch(-mouseRotateVector.y);
             }
             isUsingKbCameraLook = false;
 
@@ -698,7 +719,10 @@ namespace SmartMap
             camVelocity += (camAccel * scaleMove * camSpeed);
 
             // move the camera based on the accumulated movement vector
-            Camera.MoveRelative(camVelocity * e.TimeSinceLastFrame);
+            //Camera.MoveRelative(camVelocity * e.TimeSinceLastFrame);
+            // move in current body direction (not the goal direction)
+
+            this.frustumNode.Translate(camVelocity * e.TimeSinceLastFrame, TransformSpace.Local);
 
             // Now dampen the Velocity - only if user is not accelerating
             if (camAccel == Vector3.Zero)

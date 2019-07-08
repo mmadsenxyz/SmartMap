@@ -46,7 +46,7 @@ namespace SmartMap
         //private ConnectedComponentsAlgorithm<Point<int>, Edge<Point<int>>> cca;
         private CyclePoppingRandomTreeAlgorithm<Point<int>, Edge<Point<int>>> pop;
         // Debug
-        public bool DebugStatements = false;
+        public bool DebugStatements = true;
         private string assertMessage;
          // Save
 
@@ -144,40 +144,60 @@ namespace SmartMap
         }
        
         /// <summary>
-        /// Non-adjacent (not connected) but nearby vertices checked for empty edges
+        /// Check for no verteces nearby to discover an outer wall
         /// </summary>
-        /// <param name="v">Initial edged vertex</param>
+        /// <param name="v">Edged vertex to check around</param>
         /// <returns></returns>
-        public string NearbyVerticesEmpty(Point<int> v)
+        public string NoNearbyVertices(Point<int> v)
         {
             if ((!this.graph.ContainsVertex(new Point<int>(v.Width + 1, v.Length - 1)))
                  & (!this.graph.ContainsVertex(new Point<int>(v.Width + 1, v.Length)))
                  & (!this.graph.ContainsVertex(new Point<int>(v.Width, v.Length - 1))))
                 {
-                    return "empty_corner"; // NE
+                    return "outerwall"; // NE
                 }
 
             if ((!this.graph.ContainsVertex(new Point<int>(v.Width - 1, v.Length - 1)))
                  & (!this.graph.ContainsVertex(new Point<int>(v.Width - 1, v.Length)))
                  & (!this.graph.ContainsVertex(new Point<int>(v.Width, v.Length - 1))))
                 {
-                    return "empty_corner"; // NW
+                    return "outerwall"; // NW
                 }
 
             if ((!this.graph.ContainsVertex(new Point<int>(v.Width + 1, v.Length + 1)))
                  & (!this.graph.ContainsVertex(new Point<int>(v.Width + 1, v.Length)))
                  & (!this.graph.ContainsVertex(new Point<int>(v.Width, v.Length + 1))))
                 {
-                    return "empty_corner"; // SE
+                    return "outerwall"; // SE
                 }
 
             if ((!this.graph.ContainsVertex(new Point<int>(v.Width - 1, v.Length + 1)))
                  & (!this.graph.ContainsVertex(new Point<int>(v.Width - 1, v.Length)))
                  & (!this.graph.ContainsVertex(new Point<int>(v.Width, v.Length + 1))))
                 {
-                    return "empty_corner"; // SW
+                    return "outerwall"; // SW
                 }
-          
+
+            if (!this.graph.ContainsVertex(new Point<int>(v.Width, v.Length - 1)))
+                {
+                    return "outerwall"; // N
+                }
+
+            if (!this.graph.ContainsVertex(new Point<int>(v.Width - 1, v.Length)))
+                {
+                    return "outerwall"; // W
+                }
+
+            if (!this.graph.ContainsVertex(new Point<int>(v.Width + 1, v.Length)))
+                {
+                    return "outerwall"; // E
+                }
+
+            if (!this.graph.ContainsVertex(new Point<int>(v.Width, v.Length + 1)))
+                {
+                    return "outerwall"; // S
+                }
+
             return "not_empty";
         }
         
