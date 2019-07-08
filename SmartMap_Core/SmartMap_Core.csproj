@@ -109,6 +109,7 @@
     <Compile Include="Graphics\IDraw.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Graphics\Draw4D\SinbadCharacterController.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -260,6 +261,7 @@
     <None Include="Libraries\zlib1.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Media\Configuration\Terrain.xml" />
     <Content Include="readme.txt" />
     <None Include="DOCS\TEST\CodeFile2.cs" />
     <None Include="Libraries\Axiom.dll.config" />
@@ -327,6 +329,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>Libraries\QuickGraph.dll</HintPath>
     </Reference>
+    <Reference Include="SharpInputSystem">
+      <HintPath>Libraries\SharpInputSystem.dll</HintPath>
+    </Reference>
     <Reference Include="SynapticEffect.Forms">
       <HintPath>Libraries\SynapticEffect.Forms.dll</HintPath>
     </Reference>
@@ -337,8 +342,6 @@
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.XML" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Media\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
