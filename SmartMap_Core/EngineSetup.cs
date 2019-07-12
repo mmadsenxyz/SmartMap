@@ -244,14 +244,14 @@ namespace SmartMap
         {
             // create a camera and initialize its position
             Camera = m_sceneManager.CreateCamera("MainCamera");
-            Camera.Position = new Vector3(0, 0, 500);
+            Camera.Position = new Vector3(0, 0, 100);
             Camera.LookAt(new Vector3(0, 0, -300));
 
             // set the near clipping plane to be very close
             Camera.Near = 5;
 
             m_frustum = new Frustum();
-            m_frustum.Near = 10;
+            m_frustum.Near = 5;
             m_frustum.Far = 10000;
             m_frustum.FieldOfView = 110;
             m_frustum.IsVisible = true;
@@ -548,7 +548,7 @@ namespace SmartMap
 
             // reset acceleration zero
             camAccel = Vector3.Zero;
-
+          
             // set the scaling of camera motion
             cameraScale = 100 * e.TimeSinceLastFrame;
 
@@ -721,8 +721,12 @@ namespace SmartMap
             // move the camera based on the accumulated movement vector
             //Camera.MoveRelative(camVelocity * e.TimeSinceLastFrame);
             // move in current body direction (not the goal direction)
+            var height = SceneManager.GetHeightAt(new Vector3(frustumNode.DerivedPosition.x, 0, frustumNode.DerivedPosition.z), 0);
+            var vec2 = new Vector3(frustumNode.DerivedPosition.x, height + 400, frustumNode.DerivedPosition.z);
+            this.frustumNode.Position = vec2;
 
-            this.frustumNode.Translate(camVelocity * e.TimeSinceLastFrame, TransformSpace.Local);
+            var vec = new Vector3(camVelocity.x * e.TimeSinceLastFrame, 0, camVelocity.z * e.TimeSinceLastFrame);
+            this.frustumNode.Translate(vec, TransformSpace.Local);
 
             // Now dampen the Velocity - only if user is not accelerating
             if (camAccel == Vector3.Zero)
