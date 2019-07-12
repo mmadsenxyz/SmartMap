@@ -722,11 +722,11 @@ namespace SmartMap
             //Camera.MoveRelative(camVelocity * e.TimeSinceLastFrame);
             // move in current body direction (not the goal direction)
             var height = SceneManager.GetHeightAt(new Vector3(frustumNode.DerivedPosition.x, 0, frustumNode.DerivedPosition.z), 0);
-            var vec2 = new Vector3(frustumNode.DerivedPosition.x, height + 400, frustumNode.DerivedPosition.z);
-            this.frustumNode.Position = vec2;
+            var vecPos = new Vector3(frustumNode.DerivedPosition.x, height + 400, frustumNode.DerivedPosition.z);
+            this.frustumNode.Position = vecPos;
 
-            var vec = new Vector3(camVelocity.x * e.TimeSinceLastFrame, 0, camVelocity.z * e.TimeSinceLastFrame);
-            this.frustumNode.Translate(vec, TransformSpace.Local);
+            var vecTrans = new Vector3(camVelocity.x * e.TimeSinceLastFrame, 0, camVelocity.z * e.TimeSinceLastFrame);
+            this.frustumNode.Translate(vecTrans, TransformSpace.Local);
 
             // Now dampen the Velocity - only if user is not accelerating
             if (camAccel == Vector3.Zero)

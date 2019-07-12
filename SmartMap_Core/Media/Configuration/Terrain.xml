@@ -4,7 +4,7 @@
   <DetailTexture>terrain_detail.jpg</DetailTexture>
   <DetailTile>3</DetailTile>
   <TileSize>65</TileSize>
-  <PageSize>513</PageSize>
+  <PageSize>1500</PageSize>
   <PageWorldX>1500</PageWorldX>
   <MaxHeight>100</MaxHeight>
   <PageWorldZ>1500</PageWorldZ>

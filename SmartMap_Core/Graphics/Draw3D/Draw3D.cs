@@ -29,7 +29,7 @@ namespace SmartMap
     [System.ComponentModel.DesignerCategory("")]
     public class Draw3D : EngineSetup, IDraw, IDisposable
     {
-        #region objects
+        #region Fields
         // Map
         SmartMap_Core sm;
         private Draw4D d4d;
@@ -54,7 +54,7 @@ namespace SmartMap
         //private int nextPathnode = 0;
         // Sizeing and quantity of structures.
         public int tileAmountNorth = 5, tileAmountEast = 5;
-        public int moduleAmountSouth = 2, moduleAmountEast = 2;
+        public int moduleAmountSouth = 5, moduleAmountEast = 5;
         //////////
         private int /*tileThreshhold = 80,*/ tileClippingAngle = 300;
         private float moduleSizeNorth = 0, moduleSizeEast = 0, tileSetHeight = 150;
@@ -131,30 +131,30 @@ namespace SmartMap
             CreateEnvironment();
 
             // LOAD UP YER MESHES           
-            /*Console.WriteLine("LOADING...interiorTileSide");
-            CreateGraphics(interiorTileSide, "Room_Side", "Room_Side.mesh", "TileSet/Room", 1500, 1500, RenderQueueGroupID.One);
+            Console.WriteLine("LOADING...interiorTileSide");
+            CreateGraphics(interiorTileSide, "Room_Side", "Room_Side.mesh", "TileSet/Room", 2000, 2000, RenderQueueGroupID.One);
             Console.WriteLine("LOADING...interiorTileHall");
-            CreateGraphics(interiorTileHall, "Room_Hall", "Room_Hall.mesh", "TileSet/Room", 1500, 1500, RenderQueueGroupID.Two);
+            CreateGraphics(interiorTileHall, "Room_Hall", "Room_Hall.mesh", "TileSet/Room", 2000, 2000, RenderQueueGroupID.Two);
             Console.WriteLine("LOADING...interiorTileCorner");
-            CreateGraphics(interiorTileCorner, "Room_Corner", "Room_Corner.mesh", "TileSet/Room", 1500, 1500, RenderQueueGroupID.Three);
+            CreateGraphics(interiorTileCorner, "Room_Corner", "Room_Corner.mesh", "TileSet/Room", 2000, 2000, RenderQueueGroupID.Three);
             Console.WriteLine("LOADING...interiorTileEnd");
-            CreateGraphics(interiorTileEnd, "Room_End", "Room_End.mesh", "TileSet/Room", 1500, 1500, RenderQueueGroupID.Four);
+            CreateGraphics(interiorTileEnd, "Room_End", "Room_End.mesh", "TileSet/Room", 2000, 2000, RenderQueueGroupID.Four);
             Console.WriteLine("LOADING...interiorTileFloor");
-            CreateGraphics(interiorTileFloor, "Room_Floor", "Room_Floor.mesh", "TileSet/Room", 1500, 1500, RenderQueueGroupID.Six);
+            CreateGraphics(interiorTileFloor, "Room_Floor", "Room_Floor.mesh", "TileSet/Room", 2000, 2000, RenderQueueGroupID.Six);
             // outer wall resources
             Console.WriteLine("LOADING...exteriorTileSide");
-            CreateGraphics(exteriorTileSide, "Wall_Side", "Room_Side.mesh", "TileSet/Wall", 1500, 1500, RenderQueueGroupID.Seven);
+            CreateGraphics(exteriorTileSide, "Wall_Side", "Room_Side.mesh", "TileSet/Wall", 2000, 2000, RenderQueueGroupID.Seven);
             Console.WriteLine("LOADING...exteriorTileHall");
-            CreateGraphics(exteriorTileHall, "Wall_Hall", "Room_Hall.mesh", "TileSet/Wall", 1500, 1500, RenderQueueGroupID.Eight);
+            CreateGraphics(exteriorTileHall, "Wall_Hall", "Room_Hall.mesh", "TileSet/Wall", 2000, 2000, RenderQueueGroupID.Eight);
             Console.WriteLine("LOADING...exteriorTileCorner");
-            CreateGraphics(exteriorTileCorner, "Wall_Corner", "Room_Corner.mesh", "TileSet/Wall", 1500, 1500, RenderQueueGroupID.Nine);
+            CreateGraphics(exteriorTileCorner, "Wall_Corner", "Room_Corner.mesh", "TileSet/Wall", 2000, 2000, RenderQueueGroupID.Nine);
             Console.WriteLine("LOADING...exteriorTileEnd");
-            CreateGraphics(exteriorTileEnd, "Wall_End", "Room_End.mesh", "TileSet/Wall", 1500, 1500, RenderQueueGroupID.Nine);
+            CreateGraphics(exteriorTileEnd, "Wall_End", "Room_End.mesh", "TileSet/Wall", 2000, 2000, RenderQueueGroupID.Nine);
             Console.WriteLine("LOADING...exteriorTileFloor");
-            CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 1500, 1500, RenderQueueGroupID.Nine);*/
+            CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 2000, 2000, RenderQueueGroupID.Nine);
 
             // LOAD UP YER MESHES           
-            CreateGraphics(interiorTileSide, "Room_Side", "Room_Side.mesh", "TileSet/Room", 200, 200, RenderQueueGroupID.One);
+            /*CreateGraphics(interiorTileSide, "Room_Side", "Room_Side.mesh", "TileSet/Room", 200, 200, RenderQueueGroupID.One);
             Console.WriteLine("LOADING...interiorTileHall");
             CreateGraphics(interiorTileHall, "Room_Hall", "Room_Hall.mesh", "TileSet/Room", 200, 200, RenderQueueGroupID.Two);
             Console.WriteLine("LOADING...interiorTileCorner");
@@ -173,7 +173,7 @@ namespace SmartMap
             Console.WriteLine("LOADING...exteriorTileEnd");
             CreateGraphics(exteriorTileEnd, "Wall_End", "Room_End.mesh", "TileSet/Wall", 200, 200, RenderQueueGroupID.Nine);
             Console.WriteLine("LOADING...exteriorTileFloor");
-            CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 200, 200, RenderQueueGroupID.Nine);
+            CreateGraphics(exteriorTileFloor, "Wall_Floor", "Room_Floor.mesh", "TileSet/Wall", 200, 200, RenderQueueGroupID.Nine);*/
 
             //CreateInstanceGeom();
 
@@ -704,15 +704,21 @@ namespace SmartMap
                 Vector3 vec;
                 foreach (SceneNode node in this.moduleNode[moduleCount].Children)
                 { // bring up or lower terrain (terrain deformation) to match all tileNode heights 
-                    SceneManager.SetHeightAt(node.DerivedPosition, node.DerivedPosition.y - (MeshSize / 2));
+                    try
+                    {
+                        SceneManager.SetHeightAt(node.DerivedPosition, node.DerivedPosition.y - (MeshSize / 2));
                         vec = new Vector3(node.DerivedPosition.x - (MeshSize / 2), 0, node.DerivedPosition.z - (MeshSize / 2));
-                    SceneManager.SetHeightAt(vec, node.DerivedPosition.y - (MeshSize / 2));
+                        SceneManager.SetHeightAt(vec, node.DerivedPosition.y - (MeshSize / 2));
                         vec = new Vector3(node.DerivedPosition.x - (MeshSize / 2), 0, node.DerivedPosition.z + (MeshSize / 2));
-                    SceneManager.SetHeightAt(vec, node.DerivedPosition.y - (MeshSize / 2));
+                        SceneManager.SetHeightAt(vec, node.DerivedPosition.y - (MeshSize / 2));
                         vec = new Vector3(node.DerivedPosition.x + (MeshSize / 2), 0, node.DerivedPosition.z - (MeshSize / 2));
-                    SceneManager.SetHeightAt(vec, node.DerivedPosition.y - (MeshSize / 2));
+                        SceneManager.SetHeightAt(vec, node.DerivedPosition.y - (MeshSize / 2));
                         vec = new Vector3(node.DerivedPosition.x + (MeshSize / 2), 0, node.DerivedPosition.z + (MeshSize / 2));
-                    SceneManager.SetHeightAt(vec, node.DerivedPosition.y - (MeshSize / 2));
+                        SceneManager.SetHeightAt(vec, node.DerivedPosition.y - (MeshSize / 2));
+                    } catch
+                    {
+                        break;
+                    } 
                 }
             }
             //clippedTileCount = 0; // reset variables
@@ -1006,7 +1012,7 @@ namespace SmartMap
 		private void scene_QueueStarted(object sender, SceneManager.BeginRenderQueueEventArgs e)
         {
             // begin the occlusion query
-            if (e.RenderQueueId == RenderQueueGroupID.One)
+            /*if (e.RenderQueueId == RenderQueueGroupID.One)
             {
                 query.Begin();
             }
@@ -1037,7 +1043,7 @@ namespace SmartMap
             if (e.RenderQueueId == RenderQueueGroupID.Nine)
             {
                 query.Begin();
-            }
+            }*/
 
             return;
         }
@@ -1050,7 +1056,7 @@ namespace SmartMap
         private void scene_QueueEnded(object sender, SceneManager.EndRenderQueueEventArgs e)
         {
             // end our occlusion query
-            if (e.RenderQueueId == RenderQueueGroupID.One)
+            /*if (e.RenderQueueId == RenderQueueGroupID.One)
             {
                 query.End();
                 int count = query.PullResults();
@@ -1371,7 +1377,7 @@ namespace SmartMap
                         }
                     }
                 }
-            }
+            }*/
 
             return;
         }
