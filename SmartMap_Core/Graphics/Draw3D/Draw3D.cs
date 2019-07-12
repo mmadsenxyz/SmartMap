@@ -683,7 +683,7 @@ namespace SmartMap
             }*/
             if (tilesetDestroyed == false)
             {   // RECREATE NEW MODULES BASED ON CURRENT TERRAIN TRIMMED GRAPH
-                 Debug.Assert(DebugStatements == true,"...Re-Creating " + this.moduleNode[moduleCount].Name + "'s tile-set into maze that fits terrain.");
+                Debug.Assert(DebugStatements == true,"...Re-Creating " + this.moduleNode[moduleCount].Name + "'s tile-set into maze that fits terrain.");
                 // reset node arrays
                 SceneManager.DestroySceneNode(this.moduleNode[moduleCount].Name);
                 assertMessage = string.Format("{0} has {1} children left after being destroyed for re-creation", this.moduleNode[moduleCount].Name, this.moduleNode[moduleCount].ChildCount);
@@ -701,9 +701,18 @@ namespace SmartMap
                 assertMessage = string.Format("{0} has {1} children left after being destroyed for re-creation", this.moduleNode[moduleCount].Name, this.moduleNode[moduleCount].ChildCount);
                 Debug.Assert(DebugStatements == true, assertMessage);
                 // AUTO-MOLD TERRAIN to fit around tileset for a customized Foundation under module
+                Vector3 vec;
                 foreach (SceneNode node in this.moduleNode[moduleCount].Children)
                 { // bring up or lower terrain (terrain deformation) to match all tileNode heights 
                     SceneManager.SetHeightAt(node.DerivedPosition, node.DerivedPosition.y - (MeshSize / 2));
+                        vec = new Vector3(node.DerivedPosition.x - (MeshSize / 2), 0, node.DerivedPosition.z - (MeshSize / 2));
+                    SceneManager.SetHeightAt(vec, node.DerivedPosition.y - (MeshSize / 2));
+                        vec = new Vector3(node.DerivedPosition.x - (MeshSize / 2), 0, node.DerivedPosition.z + (MeshSize / 2));
+                    SceneManager.SetHeightAt(vec, node.DerivedPosition.y - (MeshSize / 2));
+                        vec = new Vector3(node.DerivedPosition.x + (MeshSize / 2), 0, node.DerivedPosition.z - (MeshSize / 2));
+                    SceneManager.SetHeightAt(vec, node.DerivedPosition.y - (MeshSize / 2));
+                        vec = new Vector3(node.DerivedPosition.x + (MeshSize / 2), 0, node.DerivedPosition.z + (MeshSize / 2));
+                    SceneManager.SetHeightAt(vec, node.DerivedPosition.y - (MeshSize / 2));
                 }
             }
             //clippedTileCount = 0; // reset variables

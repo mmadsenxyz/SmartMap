@@ -583,7 +583,7 @@ namespace SmartMap
 
             //camAccel.y += (float)( input.RelativeMouseZ * 0.1f );
 
-            // knock out the mouse stuff here
+            // Arrow Key Movements
             isUsingKbCameraLook = false;
             if (Input.IsKeyPressed(KeyCodes.Left))
             {
@@ -601,26 +601,26 @@ namespace SmartMap
 
             if (Input.IsKeyPressed(KeyCodes.Up))
             {
-                frustumNode.Pitch(cameraScale);
+                frustumNode.Pitch(cameraScale, TransformSpace.Local);
                 //Camera.Pitch(cameraScale);
                 isUsingKbCameraLook = true;
             }
 
             if (Input.IsKeyPressed(KeyCodes.Down))
             {
-                frustumNode.Pitch(-cameraScale);
+                frustumNode.Pitch(-cameraScale, TransformSpace.Local);
                 //Camera.Pitch(-cameraScale);
                 isUsingKbCameraLook = true;
             }
 
-            // Mouse camera movement.
+            // Mouse Camera Movements
             if (!isUsingKbCameraLook)
             {
                 mouseRotateVector = Vector3.Zero;
                 mouseRotateVector.x += Input.RelativeMouseX * 0.13f;
                 mouseRotateVector.y += Input.RelativeMouseY * 0.13f;
-                frustumNode.Yaw(-mouseRotateVector.x, TransformSpace.Parent);
-                frustumNode.Pitch(-mouseRotateVector.y);
+                frustumNode.Yaw(-mouseRotateVector.x, TransformSpace.Local);
+                frustumNode.Pitch(-mouseRotateVector.y, TransformSpace.Parent);
                 //Camera.Yaw(-mouseRotateVector.x);
                 //Camera.Pitch(-mouseRotateVector.y);
             }
