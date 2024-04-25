@@ -6,6 +6,7 @@
 Also included is a 2D world editor with graphical features. 
 SmartMap is currently built in conjunction with the Axiom 3D rendering engine.</p>
 <img width="400px" src="http://www.starportmedia.com/pics/CleanTerrain-2.JPG">
+<img width="400px" src="http://www.starportmedia.com/pics/smartmap-pic1.jpg">
 <div><ul>
 <li>AUTO TERRAIN DEFORMATION</li>
 <li>AUTO CITY AND STRUCTURE CREATION</li>
