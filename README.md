@@ -1,4 +1,4 @@
-<img width="700px" src="http://www.starportmedia.com/pics/SmartMapBanner01.jpg">
+<img width="200px" src="http://www.starportmedia.com/pics/SmartMapLogo-A.jpg">
 <p>SmartMap (C# cross-platform) is a procedural style world-map creation utility or "Desktop World." A simple scene manager is included using plugin style building blocks and object pathfinding. 
 Also included is a 2D world editor with graphical features. 
 SmartMap is currently built in conjunction with the Axiom 3D rendering engine.</p>
