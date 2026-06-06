@@ -3,8 +3,6 @@
 Also included is a 2D world editor with graphical features. 
 SmartMap is currently built in conjunction with the Axiom 3D rendering engine.</p>
 <img width="700px" src="http://www.starportmedia.com/pics/smartmap-unity2.png">
-<img width="700px" src="http://www.starportmedia.com/pics/smartmap-unity-cityb.png">
-<img width="700px" src="http://www.starportmedia.com/pics/CleanTerrain-2.JPG">
 <img width="700px" src="http://www.starportmedia.com/pics/smartmap-pic1.jpg">
 <div><ul>
 <li>AUTO TERRAIN DEFORMATION</li>
